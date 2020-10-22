@@ -1,0 +1,790 @@
+﻿@using System.Data
+@using System.Collections
+@using FIXED_ASSET.DTO
+@using System.Data
+@using System.Collections
+
+@{
+    ViewBag.Title = "Manufacture";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<ViewManufactureDTO> ManufactureGridList = new List<ViewManufactureDTO>();
+
+
+    if (ViewBag.ManufactureGridList != null)
+    {
+        ManufactureGridList = ViewBag.ManufactureGridList;
+    }
+}
+
+
+<link href="~/Content/css/select2.css" rel="stylesheet" />
+<script src="~/Content/js/select2.full.min.js"></script>
+<link href="~/Content/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<script src="~/Content/js/jquery.dataTables.min.js"></script>
+<script src="~/Content/js/dataTables.bootstrap.min.js"></script>
+
+<style type="text/css">
+
+    div.addnew {
+        display: none
+    }
+
+    html {
+        overflow-y: scroll;
+    }
+</style>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        @ViewBag.Title
+        <small>Control panel</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Manufacture</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="center-block col-md-6" style="float: none;">    </div>
+    <div class="box box-primary addnew">
+        <div class="box-header with-border">
+            <h3 class="box-title">@ViewBag.Title</h3>
+            <div class="box-tools pull-right">
+                <button class="btn btn-primary bg-blue-gradient hide-form">Hide</button>
+            </div>
+        </div>
+
+        <form role="form"></form>
+        <div class="box-body">
+            <div class="panel panel-primary col-md-6 center-block" style="float: none;">
+                <div class="panel-body">
+                    <fieldset>
+                        <legend>Manufacture</legend>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="Classification">Manufacture ID</label>
+                                    <input type="text" class="form-control col-sm-4" id="manufactureId" placeholder="Manufacture ID">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="Department">Description</label>
+                                    <input type="text" class="form-control" id="manufactureName" placeholder="Description">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="countryList">Country</label>
+                                    <select type="text" style="width:221.25px" class="form-control " id="countryList"></select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="col-sm-2 control-label no-padding" for="mobile">Mobile</label>
+                                    <input type="text" class="form-control" id="mobile" placeholder="Mobile No">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                @*<div class="col-md-6">
+           <label for="product_image">
+                Product Image
+                <img id="product_image_source" style="width: 210px;height:126px;border: 1px solid #ddd;padding:3px;cursor:pointer;">
+                <i class="fa fa-plus" id="upload_icon" style="position: relative; top: -70px;left: 90px;"></i>
+                <input type="file" id="product_image" style="display:none">
+            </label>
+            <input type="hidden" id="product_image_value" value="">
+
+        </div>*@
+                                <div class="col-md-6">
+                                    <label for="address">Address</label>
+                                    <textarea name="address" class="form-control" id="address" placeholder="Address"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="col-sm-2 control-label no-padding" for="uRL">URL</label>
+                                    <input type="text" class="form-control" id="uRL" placeholder="URL">
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <label for="">Status</label>
+                                <select id="active_status" class="form-control" name="active_status">
+                                    <option value="true">Active</option>
+                                    <option value="false">InActive</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="item image">Product Image:</label><br />
+                                        <div id="valid_msg" />
+                                        <div class="col-md-12"></div>
+                                        <div class="btn btn-primary" style="margin-left: -15px;">
+                                            <input type="file" name="Product_image" id="imageBrowes">
+                                        </div>
+                                        <div id="imgPreview" class="thumbnail">
+                                            <img class="img-responsive" id="targetImg" src="" />
+                                            <div class="caption">
+                                                <a onclick="ClearPreview()"><i class="glyphicon glyphicon-trash"></i></a>
+                                                <span id="description"></span>
+                                            </div>
+                                            <a href="#" class="btn btn-default" @*onclick="UploadImage()"*@> Upload </a>
+                                            <input type="hidden" id="imageName" name="name" />
+                                        </div>
+                                    </div>
+                                </div>
+ 
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                 
+
+                        </div>
+
+
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary" id="submitManufacture" onclick="addcat();">Submit</button>
+                            <button class="btn btn-sm btn-primary " id="updateManufacture">
+                                <i class="ace-icon fa fa-check"></i> Update
+                            </button>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <!-- /.box -->
+    <!-- Default box -->
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">List All Manufacture</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool show-form text-info bg-blue-gradient"><i class="fa fa-plus"></i>Add New</button>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="box-body table-responsive no-padding">
+                <table id="datatable" class="table table-bordered table-striped compact hover" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            @*<th>SL</th>*@
+                            <th>Manufacture ID</th>
+                            <th>Description</th>
+                            <th class="hidden"></th>
+                            <th>Country</th>
+                            <th>Mobile No</th>
+                            <th>URL</th>
+                            <th>Address</th>
+                            <th>Upload Image</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+ 
+
+                </table>
+
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <div class="box-footer">
+            Footer
+        </div>
+        <!-- /.box-footer-->
+    </div>
+    <!-- /.box -->
+
+</section>
+<!-- /.content -->
+
+<script>
+
+
+    $(document).ready(function () {
+
+        //$("#organization").validate();
+        //statusList();
+        $('.select2').select2();
+       // readImageFile();                                                                                                                                                                                         
+       
+        $('#countryList').select2();
+        CountryList("#countryList");
+        CountryList();
+
+        $('.addnew').hide();
+        $('.show-form').click(function () {
+            $('.addnew').show();
+            $('.show-form').hide();
+            $('#updateManufacture').hide();
+        });
+        $('.hide-form').click(function () {
+            $('.addnew').hide();
+            $('.show-form').show();
+        });
+
+
+
+        $('#address-tab').attr('class', 'disabled');
+
+        $('#address-tab').click(function (event) {
+            if ($(this).hasClass('disabled')) {
+                return false;
+            }
+
+        });
+        //  debugger;
+        getData();
+
+    });
+       function CountryList(ID) {
+		debugger;
+		$.ajax({
+			url: '/AssetCategory/CountryList',
+			type: 'POST',
+			contentType: "application/json;charset=utf-8",
+
+			dataType: "json",
+			success: function (response) {
+
+				if (response.length > 0) {
+					$(ID).html('');
+
+					var result = '';
+					result += "<option value=''>Select One</option>";
+					for (var i = 0; response.length > i; i++) {
+						result += "<option id='" + response[i].Country_ID + "' value='" + response[i].Country_ID + "' data-shortname='" + response[i].Country_ID + "'>" + response[i].Country_Name + "</option>";
+					}
+					$(ID).append(result);
+					//$('select.BankName').append(result);
+				}
+			}
+		});
+    }
+    //function CountryList() {
+
+    //    $.ajax({
+    //        url: '/AssetCategory/CountryList',
+    //        type: 'POST',
+    //        contentType: "application/json;charset=utf-8",
+    //        dataType: "json",
+    //        success: function (response) {
+    //            if (response.length > 0) {
+    //                console.log(response);
+    //                $('select#countryList').html('');
+    //                var result = '';
+    //                result += "<option value='0'>--Select--</option>";
+    //                for (var i = 0; response.length > i; i++) {
+
+    //                     result += "<option  value='" + response[i].Country_ID + "'>" + response[i].Country_Name + "</option>";
+
+    //                }
+    //            }
+    //            $('select#countryList').append(result);
+
+
+    //        }
+    //    });
+    //}
+
+
+    function getData() {
+
+        $('#datatable').DataTable({
+            "searching": true,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "language":
+            {
+                "processing": "<div class='overlay custom-loader-background'><i class='fa fa-cog fa-spin custom-loader-color'></i></div>"
+            },
+            "processing": true,
+            "ajax": {
+                "url": "/AssetCategory/ManufactureList",
+                "type": "GET",
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "EXTERNAL_ID", "autoWidth": true },
+                { "data": "DESCRIPTION", "autoWidth": true },
+                { "data": "COUNTRY_NAME", "autoWidth": true },
+                { "data": "PHN_NO", "autoWidth": true },
+                { "data": "URL", "autoWidth": true },
+                { "data": "ADDRESS", "autoWidth": true },
+                  {"data": "LOGO_EXT",
+                         "render": function (data) {
+                             
+                             return '<img src="/images/Products/' + data + '" style="height:150px;width:150px;" />';
+
+                         }  
+                        },
+              
+              
+              //  { < img src : "LOGO_EXT" width = "80" height = "80" />},
+                //{ "data": "LOGO_EXT", "autoWidth": true  },
+                { "data": "STATUS", "autoWidth": true },
+                {
+                    "data": "MANF_ID", "width": "50px", "render": function (data) {
+                        return '<button type="button" class="btn btn-primary" onclick="editManufacture(' + data + ')">Edit</button>';
+                        // return '<div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu"><li><button type="button" class="btn btn-primary" onclick="getbyID(' + data + ')">DETAIL</button></li><li><button type="button" class="btn btn-info" onclick="getOldCategory(' + data + ')"> OLD CATEGORY</button></li><li><button type="button" class="btn btn-info" onclick="getbyInventoryInsert(' + data + ')">INVENTORY INSERT</button></li><li><button type="button" class="btn btn-warning" onclick="getbyInventoryView(' + data+')">INVENTORY VIEW</button></li></ul></div>';
+                    }
+                }
+            ]
+        });
+
+    }
+
+    $("#submitManufacture").click(function () {
+        if ($("#manufactureId").val() == "" || $("#manufactureName").val() == "" || $("#mobile").val() == "") {
+
+            toastr.error('Enter Data', 'Department', {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            });
+            return false;
+        }
+
+        if ($("#manufactureName").val() != $("#manufactureName").val().toUpperCase()) {
+
+            toastr.error("Enter Your Manufacture Name Uppercase");
+            return false;
+        }
+
+        if ($.trim($("#manufactureId").val()).length > 5) {
+            toastr.error('Enter Your Manufacture ID in 5 digit', 'Manufacture ID!', {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            });
+            return false;
+            //event.preventDefault();
+        }
+
+  
+        //var rowStatus = 1;
+        var manufactureId = $('#manufactureId ').val();
+        var manufactureName = $('#manufactureName').val();
+        var countryList = $('#countryList ').val();
+        var mobile = $('#mobile ').val();
+        //var uploadImage = $('#product_image_value').val();
+        var uploadImage = $('#imageName').val();
+        //var uploadImage = $('#uploadImage').val();
+        var uRL = $('#uRL ').val();
+        var address = $('#address ').val();
+        var activeStatus = $('#active_status').val();
+
+
+        if (manufactureId == '') {
+            alert('Manufacture Code  field is empty !!');
+            return false;
+        }
+        else if (manufactureName == '') {
+            alert('Manufacture Name  field is empty!!');
+            return false;
+        }
+        else {
+            //ajax passing data to controller
+            $.ajax({
+
+                type: "POST",
+                url: '/AssetCategory/SaveManufacture',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //alert("Result" + response);
+                    if (response != null) {
+
+
+                        toastr.success(response, 'Manufacture', {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": true,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        });
+                        $("#manufactureId").val("");
+                        $("#manufactureName").val("");
+                        $("#countryList").val("");
+                        $("#mobile").val("");
+                        $("#uRL").val("");
+                        $("#address").val("");
+                        // $("#active_status").val(-1);
+                        $('.addnew').show();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 5000);
+                        // $('#datatable').load(document.URL + ' #datatable');
+
+                    }
+
+                },
+                data: JSON.stringify({
+                    manufactureId: manufactureId,
+                    manufactureName: manufactureName,
+                    countryList: countryList,
+                    mobile: mobile,
+                    uploadImage: uploadImage,
+                    uRL: uRL,
+                    address: address,
+                    activeStatus: activeStatus
+
+                }),
+                //success: function (result) {
+                //    location.reload(true);
+
+                //    $("h2").css({ color: result[1] });
+                //},
+                error: function () {
+                    alert("error");
+                }
+            });
+        }
+
+    });
+
+
+    function editManufacture(manfId) {
+        $("#manufactureId").prop("disabled", true);
+       // $("#ClassList").prop("disabled", true);
+        $('.addnew').show();
+        $('#updateManufacture').show();
+        $('#submitManufacture').hide();
+
+        $.ajax({
+            type: "POST",
+            url: "/AssetCategory/Edit_Manufacture",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                //  obj: asd
+                manfId: manfId
+
+            }),
+            success: function (response) {
+
+                console.log(response);
+               // alert(response.data.DESCRIPTION);
+
+                $("#manufactureId").val(response.data.EXTERNAL_ID);
+                $("#manufactureName").val(response.data.DESCRIPTION);
+                $("#countryList").val(response.data.COUNTRY).trigger('change');
+                //alert(response.data.COUNTRY_NAME);
+                $("#mobile").val(response.data.PHN_NO);
+                $("#imageName").val(response.data.LOGO_EXT);//targetImg
+                $("#targetImg").attr("src", "/images/Products/" + response.data.LOGO_EXT);               
+                //alert(value)
+                $("#uRL").val(response.data.URL);
+                $("#address").val(response.data.ADDRESS);
+               
+                if (response.data.STATUS == 'Active') {
+                    $("#active_status").val('true');
+                } else {
+                    $("#active_status").val('false');
+                }
+
+                $("#btnUpdate").show();
+
+
+            }
+        })
+
+
+    }
+
+
+    $("#updateManufacture").click(function UpdateData() {
+
+        // var rowStatus = 2;
+
+        if ($("#manufactureName").val() != $("#manufactureName").val().toUpperCase()) {
+
+            toastr.error("Enter Your Manufacture Name Uppercase");
+            return false;
+        }
+       var manufactureId = $('#manufactureId ').val();
+        var manufactureName = $('#manufactureName').val();
+        var countryList = $('#countryList ').val();
+        var mobile = $('#mobile ').val();
+        var uploadImage = $('#imageName').val();
+
+
+        var uRL = $('#uRL ').val();
+        var address = $('#address ').val();
+        var activeStatus = $('#active_status').val();
+
+
+
+        if (manufactureId == '') {
+            alert('Department Code  field is empty !!');
+            return false;
+        }
+        else if (manufactureName == '') {
+            alert('Department Name  field is empty!!');
+            return false;
+        }
+        else {
+            //ajax passing data to controller
+            $.ajax({
+                url: '/AssetCategory/updateManufacture',
+                type: 'POST',
+                dataType: "json",
+                traditional: true,
+                success: function (response) {
+                    //alert("Result" + response);
+                    if (response != null) {
+
+
+                        toastr.success(response, 'Manufacture', {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": true,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        });
+                        $("#manufactureId").val("");
+                        $("#manufactureName").val("");
+                        $("#countryList").val("");
+                        $("#mobile").val("");
+                        $("#uRL").val("");
+                        $("#address").val("");
+                        // $("#active_status").val(-1);
+                        $('.addnew').show();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 5000);
+                        // $('#datatable').load(document.URL + ' #datatable');
+
+                    }
+
+                },
+                data: {
+                    manufactureId: manufactureId,
+                    manufactureName: manufactureName,
+                    countryList: countryList,
+                    mobile: mobile,
+                    uploadImage: uploadImage,
+                    uRL: uRL,
+                    address: address,
+                    activeStatus: activeStatus
+
+
+                },
+                //success: function (response) {
+
+                //    if (response == 'Success') {
+                //        location.reload();
+                //        //getData();
+                //    }
+                //},
+                error: function () {
+                    alert("error");
+                }
+            });
+        }
+
+    });
+
+    //    function readURL(input) {
+    //    if (input.files && input.files[0]) {
+    //        var reader = new FileReader();
+
+    //        reader.onload = function (e) {
+    //            $('#uploadImage').attr('src', e.target.result);
+    //        }
+
+    //        reader.readAsDataURL(input.files[0]);
+    //    }
+    //}
+
+    //$("#inputFile").change(function () {
+    //    readURL(this);
+    //});
+
+    //   function readImageFile() {
+
+    //    if (this.files && this.files[0]) {
+
+    //        var FR = new FileReader();
+
+    //        FR.addEventListener("load", function (e) {
+    //            document.getElementById("uploadImage").src = e.target.result;
+    //            document.getElementById("uploadImage").value = e.target.result;
+    //            $('#upload_icon').hide();
+    //        });
+
+    //        FR.readAsDataURL(this.files[0]);
+    //    }
+    //}
+</script>
+<script>
+    //  function readImageFile() {
+
+    //    if (this.files && this.files[0]) {
+
+    //        var FR = new FileReader();
+
+    //        FR.addEventListener("load", function (e) {
+    //            document.getElementById("product_image_source").src = e.target.result;
+    //            document.getElementById("product_image_value").value = e.target.result;
+    //            $('#upload_icon').hide();
+    //        });
+
+    //        FR.readAsDataURL(this.files[0]);
+    //    }
+    //}
+
+    //document.getElementById("product_image").addEventListener("change", readImageFile);
+
+    // display edit image function
+    //function editreadImageFile() {
+
+    //    if (this.files && this.files[0]) {
+
+    //        var FR = new FileReader();
+
+    //        FR.addEventListener("load", function (e) {
+    //            document.getElementById("edit_product_image_source").src = e.target.result;
+    //            document.getElementById("edit_product_image_value").value = e.target.result;
+    //            $('#edit_upload_icon').hide();
+    //        });
+
+    //        FR.readAsDataURL(this.files[0]);
+    //    }
+    //}
+
+    //document.getElementById("edit_product_image").addEventListener("change", editreadImageFile);
+
+        $("#imageBrowes").change(function () {
+            //Only.png, .jpg, .jpeg, .gif, .bmp, .pdf file types allowed.
+
+            //	alert(this.files[0].size);
+
+            var fileSize = this.files[0].size / 1024 / 1024; // in MB
+
+            //if (fileSize > 1) {
+            //	alert('File size exceeds 2 MB');
+            //}
+
+            var allowedFiles = [".png", ".jpg", ".jpeg"];
+            var fileUpload = $("#imageBrowes");
+            //var lblError = $("#lblError");
+            var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(" + allowedFiles.join('|') + ")$");
+            if (!regex.test(fileUpload.val().toLowerCase())) {
+                alert("Please upload files having extensions: <b>" + allowedFiles.join(', ') + "</b> only.");
+                $("#imageBrowes").val("");
+                return false;
+            }
+            else if (fileSize > 1) {
+                alert('File size exceeds 1 MB');
+                $("#imageBrowes").val("");
+                return false;
+            }
+            else {
+
+                var File = this.files;
+                if (File && File[0]) {
+                    ReadImage(File[0]);
+
+                    var file = $("#imageBrowes").get(0).files;
+                    var data = new FormData;
+                    data.append("ImageFile", file[0]);
+                    data.append("ProductName", "Apple");
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/AssetCategory/ImageUpload",
+                        data: data,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            $("#imageName").val(response)
+                        }
+                    })
+                }
+            }
+            //lblError.html('');
+            return true;
+
+
+
+
+        });
+      var ReadImage = function (file) {
+        var reader = new FileReader;
+        var image = new Image;
+
+        reader.readAsDataURL(file);
+        reader.onload = function (_file) {
+            image.src = _file.target.result;
+            image.onload = function () {
+                var height = this.height;
+                var width = this.width;
+                var type = file.type;
+                var size = ~~(file.size / 1024) + "KB";
+
+
+                $("#targetImg").attr('src', _file.target.result);
+                $("#description").text("Size:" + size + ",  " + height + "X " + width + ", " + type + "");
+                $("#imgPreview").show();
+            }
+        }
+    }
+</script>

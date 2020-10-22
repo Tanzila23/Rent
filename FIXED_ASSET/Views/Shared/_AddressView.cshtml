@@ -1,0 +1,239 @@
+﻿<div class="box">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                <form role="form" id="address_form">
+                    <div class="form-group">
+                        <label for="organigation_id">Organization ID</label>
+                        <input class="form-control" value="@ViewBag.Last" name="Organization_ID" id="Organization_ID" type="text" disabled="disabled">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Address Type</label>
+                        <select class="form-control" id="Address_TypeID" name="Address_TypeID" data-plugin="xin_select" data-placeholder="Company Type" tabindex="-1" aria-hidden="true">
+                            <option value="">Select One</option>
+                            <option value="1"> Corporation</option>
+                            <option value="2"> Exempt Organization</option>
+                            <option value="3"> Partnership</option>
+                            <option value="4"> Private Foundation</option>
+                            <option value="5"> Limited Liability Company</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="Country_ID">Country</label>
+                                <select class="form-control select2" style="width:100%;" name="Country_ID" id="Country_ID" data-plugin="xin_select" data-placeholder="Company Type" tabindex="-1" aria-hidden="true" disabled="disabled">
+                                    <option value="1">Bangladesh</option>
+
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="email">City</label>
+                                <select class="form-control select2" style="width:100%;" id="City_ID" name="City_ID" data-plugin="xin_select" tabindex="-1" aria-hidden="true">
+                                    <option value="">Select One</option>
+                                    <option value="1">Dhaka</option>
+                                    <option value="2">Chittagong</option>
+                                    <option value="3">Khulna</option>
+                                    <option value="4">Narayanganj</option>
+                                    <option value="5">Sylhet</option>
+                                    <option value="6">Tongi</option>
+                                    <option value="8">Rajshahi</option>
+                                    <option value="9">Bogra</option>
+                                    <option value="10">Barisal</option>
+                                    <option value="11">Comilla</option>
+                                    <option value="12">Rangpur</option>
+                                    <option value="13">Mymensingh</option>
+                                    <option value="14">Gazipur</option>
+                                    <option value="15">Jessore</option>
+                                    <option value="16">Dinajpur</option>
+                                    <option value="17">Nawabganj</option>
+                                    <option value="18">Brahmanbaria</option>
+                                    <option value="19">Cox's Bazar</option>
+                                    <option value="20">Tangail</option>
+                                    <option value="21">Chandpur</option>
+
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="email">District</label>
+                                <select class="form-control select2" style="width:100%;" id="District_ID" name="District_ID" data-plugin="xin_select" tabindex="-1" aria-hidden="true">
+                                    <option value="">Select One</option>
+                                    <option value="1">Dhaka</option>
+                                    <option value="2">Chittagong</option>
+                                    <option value="3">Khulna</option>
+                                    <option value="4">Sylhet</option>
+                                    <option value="5">Rajshahi</option>
+                                    <option value="6">Barisal</option>
+                                    <option value="7">Rangpur</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="email">Post Code</label>
+                                <input class="form-control" placeholder="Post Code/ Zip Code" name="PostalCode" id="PostalCode" type="email">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="email">Address Line 1</label>
+                                <input class="form-control" placeholder="Address Line 1" id="Address_1" name="Address_1" type="text">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email">Address Line 2</label>
+                                <input class="form-control" placeholder="Address Line 2" id="Address_2" name="Address_2" type="text">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="email">Contact Number One</label>
+                                <input class="form-control" placeholder="Contact Number One" id="Phone_1" name="Phone_1" type="text">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email">Contact Number Two</label>
+                                <input class="form-control" placeholder="Contact Number Two" id="Phone_2" name="Phone_2" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" id="submitAddress" class="btn btn-info pull-right">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#submitAddress").click(function (e) {
+
+            //alert("Address View");
+            e.preventDefault();
+            // debugger;
+
+            if ($("#Address_TypeID").val() == "") {
+                //alert("Enter Your Email Address");
+                toastr.error('Enter Your Address Type', 'Address Type')
+                return false;
+            }
+
+            if ($('#City_ID').val() == "") {
+                //alert("Enter Your Email Address");
+                toastr.error('Enter Your City', 'Address Type')
+                return false;
+            }
+
+            if ($('#District_ID').val() == "") {
+                //alert("Enter Your Email Address");
+                toastr.error('Enter Your District', 'Address Type')
+                return false;
+            }
+
+            if ($("#Address_1").val() == "") {
+                //alert("Enter Your Email Address");
+                toastr.error('Enter Your Address One', 'Address 1')
+                return false;
+            }
+
+            if ($("#Address_2").val() == "") {
+                //alert("Enter Your Email Address");
+                toastr.error('Enter Your Address Two', 'Address 2')
+                return false;
+            }
+
+            if ($("#Phone_1").val() == "") {
+                //alert("Enter Your Email Address");
+                toastr.error('Enter Your Phone Number One', 'Phone 1')
+                return false;
+            }
+
+            if ($("#Phone_2").val() == "") {
+                //alert("Enter Your Email Address");
+                toastr.error('Enter Your Phone Number Two', 'Phone 2')
+                return false;
+            }
+
+            var addressObj = {
+                Address_TypeID: $('#Address_TypeID').val(),
+                Organization_ID: $('#Organization_ID').val(),
+                Address_1: $('#Address_1').val(),
+                Address_2: $('#Address_2').val(),
+                District_ID: $('#District_ID').val(),
+                City_ID: $('#City_ID').val(),
+                PostalCode: $('#PostalCode').val(),
+                Phone_1: $('#Phone_1').val(),
+                Phone_2: $('#Phone_2').val(),
+                Country_ID: $('#Country_ID').val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/Organization/AddressAdd",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(addressObj),
+                success: function (result) {
+                    // alert(result);
+
+
+                    $('#address-tab').attr("aria-expanded", "false");
+                    $('#address-tab').removeAttr('class', 'active');
+                    $('#tab_2').removeClass('class', 'active');
+                    $('#tab_1').attr('class', 'active');
+
+                    $('#organigation-tab').attr('class', 'active');
+                    $('#organigation-tab').attr("aria-expanded", "true");
+
+                    companyReset();
+
+                    addressReset();
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+
+        });
+    });
+
+    function companyReset()
+    {
+        $('#External_ID').val('');
+        $('#business_unit_Id').val('');
+        $('#business_unit_type').clearQueue();
+        $('#business_unit_name').val('');
+        $("#Organization_TypeID")[0].selectedIndex = 0;
+        $("#ddlorganization")[0].selectedIndex = 0;
+        $('#VatRegNo').val('');
+        //$('#ddlorganization').find('option:first').attr('selected', 'selected');
+        //$("#ddlorganization option:selected").removeAttr("selected");
+        $('#Organization_Name').val('');
+
+        $("#contact_person")[0].selectedIndex = 0;
+        //$("#contact_person option:selected").removeAttr("selected");
+        //$('#contact_person').find('option:first').attr('selected', 'selected');
+        $("#Business_Type")[0].selectedIndex = 0;
+        //$("#Business_Type option:selected").removeAttr("selected");
+       // $('#Business_Type').find('option:first').attr('selected', 'selected');
+        $('#email').val('');
+        $('#website').val('');
+        $('#Email_ID').val('');
+        $('#Website').val('');
+    };
+
+    function addressReset() {
+        $('#Address_TypeID').val('');
+        $('#Organization_ID').val('');
+        $('#Address_1').val('');
+        $('#Address_2').val('');
+        $('#District_ID').val('');
+        $('#City_ID').val('');
+        $('#PostalCode').val('');
+        $('#Phone_1').val('');
+        $('#Phone_2').val('');
+        $('#Country_ID').val('');
+    };
+
+</script>

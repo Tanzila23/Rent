@@ -1,0 +1,2118 @@
+﻿@using System.Data
+@using System.Collections
+@using FIXED_ASSET.DTO
+@using System.Data
+@using System.Collections
+
+@{
+    ViewBag.Title = "Rent";
+    Layout = "~/Views/Shared/_RentLayout.cshtml";
+    List<ViewManufactureDTO> ManufactureGridList = new List<ViewManufactureDTO>();
+
+
+    if (ViewBag.ManufactureGridList != null)
+    {
+        ManufactureGridList = ViewBag.ManufactureGridList;
+    }
+}
+
+
+<link href="~/Content/css/select2.css" rel="stylesheet" />
+<script src="~/Content/js/select2.full.min.js"></script>
+<link href="~/Content/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<script src="~/Content/js/jquery.dataTables.min.js"></script>
+<script src="~/Content/js/dataTables.bootstrap.min.js"></script>
+
+<style>
+    /* The container */
+    .container {
+        display: block;
+        position: relative;
+        padding-left: 35px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size: 22px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+        /* Hide the browser's default checkbox */
+        .container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+    /* Create a custom checkbox */
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 25px;
+        width: 25px;
+        background-color: #F03434;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .container:hover input ~ .checkmark {
+        background-color: #ccc;
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .container input:checked ~ .checkmark {
+        background-color: #2196F3;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .container input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    /* Style the checkmark/indicator */
+    .container .checkmark:after {
+        left: 9px;
+        top: 5px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        .switch input {
+            display: none;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+    .select2-selection__rendered {
+        line-height: 32px !important;
+    }
+
+    .select2-selection {
+        height: 34px !important;
+    }
+</style>
+
+<style type="text/css">
+
+    div.addnew {
+        display: none
+    }
+
+    html {
+        overflow-y: scroll;
+    }
+</style>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        @ViewBag.Title
+        <small>Control panel</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Supplier</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="center-block col-md-6" style="float: none;">    </div>
+    @*<div class="box box-primary addnew">*@
+    @*<div class="box-header with-border">
+            <h3 class="box-title">@ViewBag.Title</h3>
+            <div class="box-tools pull-right">
+                <button class="btn btn-primary bg-blue-gradient hide-form">Hide</button>
+            </div>
+        </div>*@
+    <div class="panel-body">
+        <div class="bs-example">
+            <ul class="nav nav-pills" style="margin-bottom: 15px;">
+                <li id="organigation-tab"><a href="#tab_1" class="tab-1" data-toggle="tab">Landlord </a></li>
+                <li id="address-tab"><a href="#tab_2" class="tab-2" data-toggle="tab">Rent Ratio</a></li>
+                @*<li id="contact-tab"><a href="#tab_3" class="tab-3" data-toggle="tab">Payee</a></li>*@
+            </ul>
+            <div id="myTabContent" class="tab-content form-horizontal">
+
+                <div class="tab-pane fade active in" id="tab_1" color="blue">
+                    <div id="tab_1_modal" class="form-horizontal">
+
+                        <section class="content">
+                            <!-- Default box -->
+                            <div class="center-block col-md-6" style="float: none;">    </div>
+                            <div class="box box-primary addnew">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">@ViewBag.Title</h3>
+                                    <div class="box-tools pull-right">
+                                        <button class="btn btn-primary bg-blue-gradient hide-form">Hide</button>
+                                    </div>
+                                </div>
+
+                                <form role="form"></form>
+
+                                <div class="box-body">
+                                    <div class="panel panel-primary col-md-12 center-block" style="float: none;">
+                                        <div class="panel-body">
+                                            <fieldset>
+                                                <legend>Landlord</legend>
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label for="landlordName">Name</label>
+                                                            <input type="hidden" class="form-control col-sm-4" id="landlordId" placeholder="Landlord Name">
+                                                            <input type="text" class="form-control col-sm-4" id="landlordName" placeholder="Landlord Name">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="address">Address</label>
+                                                            <input type="text" class="form-control" id="address" placeholder="Address">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="email">Email</label>
+                                                            <input type="text" class="form-control" id="email" placeholder="Email">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label for="phone_1">Phone_1</label>
+                                                            <input type="text" class="form-control" id="phone_1" placeholder="Phone_1">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="phone_2">Phone_2</label>
+                                                            <input type="text" class="form-control" id="phone_2" placeholder="Phone_2">
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <label for="">Status</label>
+                                                            <select id="active_status" class="form-control" name="active_status">
+                                                                <option value="true">Active</option>
+                                                                <option value="false">InActive</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                </div>
+
+
+                                                <div class="text-right">
+                                                    <button type="submit" class="btn btn-primary" id="submitLandlord" onclick="addcat();">Submit</button>
+                                                    <button class="btn btn-sm btn-primary " id="updateLandlord">
+                                                        <i class="ace-icon fa fa-check"></i> Update
+                                                    </button>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- /.box -->
+                            <!-- Default box -->
+                            <div class="box box-primary">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">List All Landlord</h3>
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool show-form text-info bg-blue-gradient"><i class="fa fa-plus"></i>Add New</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="box-body table-responsive no-padding">
+                                        <table id="datatable" class="table table-bordered table-striped compact hover" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th class="hidden"></th>
+                                                    <th>Name</th>
+                                                    <th>Address</th>
+                                                    <th>Phone_1</th>
+                                                    <th>Phone_2</th>
+                                                    <th>Email</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+
+
+                                        </table>
+
+                                    </div>
+                                    <!-- /.box-body -->
+                                </div>
+                                <div class="box-footer">
+                                    Footer
+                                </div>
+                                <!-- /.box-footer-->
+                            </div>
+                            <!-- /.box -->
+
+                        </section>
+
+                    </div>
+                </div>
+
+                <div id="tab_2" class="tab-pane fade" color="blue">
+                    <div id="tab_2_modal" class="form-horizontal">
+                        <section class="content">
+                            <!-- Default box -->
+                            <div class="center-block col-md-6" style="float: none;">    </div>
+                            <div class="box box-primary addnew">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">@ViewBag.Title</h3>
+                                    <div class="box-tools pull-right">
+                                        <button class="btn btn-primary bg-blue-gradient hide-form">Hide</button>
+                                    </div>
+                                </div>
+
+                                <form role="form"></form>
+                                <div class="box-body">
+                                    <div class="panel panel-primary col-md-12 center-block" style="float: none;">
+                                        <div class="panel-body">
+                                            <fieldset>
+                                                <legend>Rent Share</legend>
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label for="ProjectList">Project</label>
+                                                            <input type="hidden" class="form-control col-sm-4" id="LandShare_Id" placeholder=" Name">
+                                                            <select type="text" class="form-control select2 " style="width:270px;" id="ProjectList"></select>
+                                                            @*<select type="text" class="form-control select2 " style="width:315px;" id="ProjectList"></select>*@
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="UnitList">Unit</label>
+                                                            <input type="hidden" class="form-control" id="UnitList_edit" placeholder="">
+                                                            @*<select type="text" class="form-control select2" id="CategoryList" style="border-radius:5px; height:30px;" data-placeholder="Category"></select>*@
+                                                            <select type="text" class="form-control select2 " style="width:270px;" id="UnitList" data-placeholder="Unit Name"></select>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="LandlordList">Landlord</label>
+                                                            <input type="hidden" class="form-control" id="LandlordList_edit" placeholder="">
+                                                            <select type="text" class="form-control select2 " style="width:270px;" id="LandlordList"></select>
+                                                            @*<select type="text" class="form-control select2 " style="width:315px;" id="ProjectList"></select>*@
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <label for="share">Share</label>
+                                                            <input type="text" class="form-control" id="share" placeholder="Share">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="">Status</label>
+                                                            <select id="active_status" class="form-control" name="active_status">
+                                                                <option value="true">Active</option>
+                                                                <option value="false">InActive</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="row">
+                                                </div>
+
+
+                                                <div class="text-right">
+                                                    <button type="submit" class="btn btn-primary" id="submitRentShare" onclick="addcat();">Submit</button>
+                                                    <button class="btn btn-sm btn-primary " id="updateRentShare">
+                                                        <i class="ace-icon fa fa-check"></i> Update
+                                                    </button>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                            <!-- /.box -->
+                            <!-- Default box -->
+                            <div class="box box-primary">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">List All Rent Share</h3>
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool show-form text-info bg-blue-gradient"><i class="fa fa-plus"></i>Add New</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="box-body table-responsive no-padding">
+                                        <table id="RentShare" class="table table-bordered table-striped compact hover" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Project</th>
+                                                    <th>Unit</th>
+                                                    <th>Landlord</th>
+                                                    <th>Share</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                    <th>View</th>
+
+                                                </tr>
+                                            </thead>
+
+
+                                        </table>
+
+                                    </div>
+                                    <!-- /.box-body -->
+                                </div>
+                                <div class="box-footer">
+                                    Footer
+                                </div>
+                                <!-- /.box-footer-->
+                            </div>
+                            <!-- /.box -->
+
+                        </section>
+
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="tab_3" color="blue">
+                    <div id="" class="form-horizontal">
+                        <section class="content">
+                            <!-- Default box -->
+                            <div class="center-block col-md-6" style="float: none;">    </div>
+                            <div class="box box-primary addnew">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">@ViewBag.Title</h3>
+                                    <div class="box-tools pull-right">
+                                        <button class="btn btn-primary bg-blue-gradient hide-form">Hide</button>
+                                    </div>
+                                </div>
+
+                                <form role="form"></form>
+                                <div class="box-body">
+                                    <div class="panel panel-primary col-md-12 center-block" style="float: none;">
+                                        <div class="panel-body">
+                                            <fieldset>
+                                                <legend>Rent Payee</legend>
+
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <h4 class="panel-title">
+                                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                                                <b>General</b>
+                                                            </a>
+                                                        </h4>
+                                                    </div>
+                                                    <div id="collapseOne" class="panel-collapse collapse in">
+                                                        <div class="panel-body" style=" margin-left:10px">
+                                                            <fieldset>
+                                                                @*<legend>Payee </legend>*@
+                                                                <div class="form-group">
+                                                                    <div class="row">
+                                                                        <div class="hidden">
+                                                                            <input type="hidden" class="form-control " value="1" id="payee_id" placeholder="">
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            <label for="ProjectList">Project</label>
+                                                                            <input type="hidden" class="form-control col-sm-4" id="RentPayee_Id" placeholder=" Name">
+                                                                            <select type="text" class="form-control select2 " style="width:270px;" id="RentPayeeProjectList"></select>
+                                                                            @*<select type="text" class="form-control select2 " style="width:315px;" id="ProjectList"></select>*@
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            <label for="UnitList">Unit</label>
+                                                                            <input type="hidden" class="form-control" id="UnitList_edit" placeholder="">
+                                                                            @*<select type="text" class="form-control select2" id="CategoryList" style="border-radius:5px; height:30px;" data-placeholder="Category"></select>*@
+                                                                            <select type="text" class="form-control select2 " style="width:270px;" id="RentPayeeUnitList" data-placeholder="Unit Name"></select>
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            <label for="LandlordList">Landlord</label>
+                                                                            <input type="hidden" class="form-control" id="LandlordList_edit" placeholder="">
+                                                                            <select type="text" class="form-control select2 " style="width:250px;" id="RentPayeeLandlordList" data-placeholder="Landlord Name"></select>
+                                                                            @*<select type="text" class="form-control select2 " style="width:315px;" id="ProjectList"></select>*@
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
+
+                                                                <div class="text-right">
+                                                                </div>
+                                                            </fieldset>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <h4 class="panel-title">
+                                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSix">
+                                                                <b>Payee</b>
+                                                            </a>
+                                                        </h4>
+                                                    </div>
+                                                    <div id="collapseSix" class="panel-collapse collapse">
+                                                        <div class="panel-body" style=" margin-left:10px">
+                                                            <fieldset>
+                                                                @*<legend>Payee </legend>*@
+                                                                <div class="form-group">
+                                                                    <div class="row">
+                                                                        <div class="col-md-4">
+                                                                            <label for="payee_Name">Payee Name</label>
+                                                                            <input type="text" class="form-control" id="payee_Name" placeholder="Payee Name">
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            <label for="relation">Relation</label>
+                                                                            <input type="text" class="form-control" id="relation" placeholder="Relation">
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            <label for="cash">Cash</label>
+                                                                            <input type="text" class="form-control" style="width:250px;" id="cash" placeholder="Cash">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <div class="row">
+                                                                        <div class="col-md-4">
+                                                                            <label for="mobile_Banking_Type">Mobile Banking Type</label>
+                                                                            <select class="form-control select2" id="mobile_Banking_Type" style="width:250px">
+                                                                                <option value="0" selected> Select </option>
+                                                                                <option value="1">Rocket</option>
+                                                                                <option value="2">Bkash</option>
+                                                                                <option value="3">Ukash</option>
+
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            <label for="mobile_Banking">Mobile Banking Amount</label>
+                                                                            <input type="text" class="form-control" style="width:250px;" id="mobile_Banking_Amount" placeholder="Mobile Banking">
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            <label for="bank">Bank</label>
+                                                                            <select type="text" class="form-control" style="width:250px;" id="BankName_0" placeholder="Bank"></select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <div class="row">
+                                                                        <div class="col-md-4">
+                                                                            <label for="BankDistrict_0">District</label>
+                                                                            <input type="hidden" class="form-control" id="BanDistrictkList_edit" placeholder="">
+                                                                            <select type="text" class="form-control" id="BankDistrict_0" data-placeholder="District Name"></select>
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            <label for="BranchName_0">Branch</label>
+                                                                            <input type="hidden" class="form-control" id="BranchList_edit" placeholder="">
+                                                                            <select type="text" class="form-control" id="BranchName_0" data-placeholder="Branch Name"></select>
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            <label for="routing_Number">Routing Number</label>
+                                                                            <input type="text" class="form-control" id="routing_Number" placeholder="Routing Number">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <div class="row">
+                                                                        <div class="col-md-4">
+                                                                            <label for="account_Number">Account Number</label>
+                                                                            <input type="text" class="form-control" id="account_Number" placeholder="Account Number">
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            <label for="amount">Amount</label>
+                                                                            <input type="text" class="form-control" id="amount" placeholder="Amount">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="text-right">
+                                                                </div>
+                                                            </fieldset>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="text-right">
+                                                    @*<button type="button" class="btn btn-default">Cancel</button> &nbsp;&nbsp;*@
+                                                    <button type="button" class="btn btn-primary" id="btnSubmit" style="margin-right:10px;margin-bottom:10px;">Submit</button>
+                                                    <button class="btn btn-sm btn-primary " id="updateRentPayee">
+                                                        <i class="ace-icon fa fa-check"></i> Update
+                                                    </button>
+
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- /.box -->
+                            <!-- Default box -->
+                            <div class="box box-primary">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">List All Payee</h3>
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool show-form text-info bg-blue-gradient"><i class="fa fa-plus"></i>Add New</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="box-body table-responsive no-padding">
+                                        <table id="Payeedatatable" class="table table-bordered table-striped compact hover" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Project</th>
+                                                    <th>Unit</th>
+                                                    <th>Landlord</th>
+                                                    <th>Payee</th>
+                                                    <th>Cash</th>
+                                                    <th>Mobile Banking</th>
+                                                    <th>Bank Payment</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+
+
+                                        </table>
+
+                                    </div>
+                                    <!-- /.box-body -->
+                                </div>
+                                <div class="box-footer">
+                                    Footer
+                                </div>
+                                <!-- /.box-footer-->
+                            </div>
+                            <!-- /.box-footer-->
+                        </section>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </div>
+</section>
+ @*</div>
+                     
+                    </div>
+        </div>*@
+<form role="form"></form>
+
+@*</div>*@
+
+<!-- /.box -->
+<!-- Default box -->
+<!-- /.box -->
+@*</section>*@
+<!-- /.content -->
+
+<script>
+   
+
+    $('#organigation-tab').click(function (event) {
+        //if ($(this).hasClass('disabled')) {
+        //    return false;
+        //}
+       
+    });
+    $('#address-tab').click(function (event) {
+        //if ($(this).hasClass('disabled')) {
+        //    return false;
+        //}
+          //getRentShareData();  
+       
+    });
+
+    $('#contact-tab').click(function (event) {
+        if ($(this).hasClass('disabled')) {
+            return false;
+        }
+        RentPayeegetData();
+           BankList("#BankName_0");
+      //LandlordList(0);
+        $('.select2').select2();
+        $('#BankName_0').select2()
+    });
+
+    $(document).ready(function () {
+         RentPayeeProjectList();
+      //BankList("#BankName_0");
+      //LandlordList(0);
+        $('.select2').select2();
+        //$('#BankName_0').select2();
+         ProjectList();
+       // Unitist(0);
+        LandlordList();
+        $('.select2').select2();
+       
+        $('.addnew').hide();
+        $('.show-form').click(function () {
+            $('.addnew').show();
+            $('.show-form').hide();
+            $('#updateManufacture').hide();
+        });
+        $('.hide-form').click(function () {
+            $('.addnew').hide();
+            $('.show-form').show();
+        });
+        getLandlordData();
+        getRentShareData();  
+        $('#updateRentPayee').hide();
+          $('#updateRentShare').hide();
+          $('#updateLandlord').hide();
+    });
+ 
+     function getLandlordData() {
+
+        $('#datatable').DataTable({
+            "searching": true,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "language":
+            {
+                "processing": "<div class='overlay custom-loader-background'><i class='fa fa-cog fa-spin custom-loader-color'></i></div>"
+            },
+            "processing": true,
+            "ajax": {
+                "url": "/AssetCategory/LandlordList",
+                "type": "GET",
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "Landlord_ID", "autoWidth": true },
+                { "data": "Name", "autoWidth": true },
+                { "data": "Address", "autoWidth": true },
+                { "data": "Phone_1", "autoWidth": true },
+                { "data": "Phone_2", "autoWidth": true },
+                { "data": "Email", "autoWidth": true },
+                { "data": "Status", "autoWidth": true },
+                {
+                    "data": "Landlord_ID", "width": "50px", "render": function (data) {
+                        return '<button type="button" class="btn btn-primary" onclick="editLandlord(' + data + ')">Edit</button>';
+                        // return '<div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu"><li><button type="button" class="btn btn-primary" onclick="getbyID(' + data + ')">DETAIL</button></li><li><button type="button" class="btn btn-info" onclick="getOldCategory(' + data + ')"> OLD CATEGORY</button></li><li><button type="button" class="btn btn-info" onclick="getbyInventoryInsert(' + data + ')">INVENTORY INSERT</button></li><li><button type="button" class="btn btn-warning" onclick="getbyInventoryView(' + data+')">INVENTORY VIEW</button></li></ul></div>';
+                    }
+                }
+            ]
+        });
+
+    }
+      function getRentShareData() {
+
+        $('#RentShare').DataTable({
+            "searching": true,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "language":
+            {
+                "processing": "<div class='overlay custom-loader-background'><i class='fa fa-cog fa-spin custom-loader-color'></i></div>"
+            },
+            "processing": true,
+            "ajax": {
+                "url": "/AssetCategory/RentShareList",
+                "type": "GET",
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "Project_Name", "autoWidth": true },
+                { "data": "UNIT_NAME", "autoWidth": true },
+                { "data": "LANDLORD_NAME", "autoWidth": true },
+                { "data": "SHARE", "autoWidth": true },
+                { "data": "STATUS", "autoWidth": true },
+                
+                {
+                    "data": "LND_SHAREID",  "render": function (data) {
+                          return '<button type="button" class="btn btn-primary" onclick="editRentShare(' + data + ')">Edit</button>';
+                        // return <i class="glyphicon glyphicon-pencil"></i> '<div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu"><li><button type="button" class="btn btn-primary" onclick="getbyID(' + data + ')">DETAIL</button></li><li><button type="button" class="btn btn-info" onclick="getOldCategory(' + data + ')"> OLD CATEGORY</button></li><li><button type="button" class="btn btn-info" onclick="getbyInventoryInsert(' + data + ')">INVENTORY INSERT</button></li><li><button type="button" class="btn btn-warning" onclick="getbyInventoryView(' + data+')">INVENTORY VIEW</button></li></ul></div>';
+                    }
+
+                },
+                 {
+                    "data": "LAND_ID", "width": "50px", "render": function (data) {
+                          return '<button type="button" class="btn btn-primary" onclick="getRentPayeeView(' + data + ')">View Payee</button>';
+                        // return '<div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu"><li><button type="button" class="btn btn-primary" onclick="getbyID(' + data + ')">DETAIL</button></li><li><button type="button" class="btn btn-info" onclick="getOldCategory(' + data + ')"> OLD CATEGORY</button></li><li><button type="button" class="btn btn-info" onclick="getbyInventoryInsert(' + data + ')">INVENTORY INSERT</button></li><li><button type="button" class="btn btn-warning" onclick="getbyInventoryView(' + data+')">INVENTORY VIEW</button></li></ul></div>';
+                    }
+
+                }
+            ]
+        });
+
+    }
+    function RentPayeegetData() {
+      $('#Payeedatatable').DataTable({
+            "searching": true,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "language":
+            {
+                "processing": "<div class='overlay custom-loader-background'><i class='fa fa-cog fa-spin custom-loader-color'></i></div>"
+            },
+            "processing": true,
+            "ajax": {
+                "url": "/AssetCategory/RentPayeeList",
+                "type": "GET",
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "Project_Name", "autoWidth": true },
+                { "data": "UNIT_NAME", "autoWidth": true },
+                { "data": "LANDLORD_NAME", "autoWidth": true },
+                { "data": "PAYEE_NAME", "autoWidth": true },
+                { "data": "CASH", "autoWidth": true },
+                { "data": "M_BANK_AMOUNT", "autoWidth": true },
+                { "data": "AMOUNT", "autoWidth": true },
+              //  { "data": "STATUS", "autoWidth": true },
+
+                {
+                    "data": "RENT_PAYEEID", "width": "50px", "render": function (data) {
+                        return '<button type="button" class="btn btn-primary" onclick="editRentPayee(' + data + ')">Edit</button>';
+                        // return '<div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu"><li><button type="button" class="btn btn-primary" onclick="getbyID(' + data + ')">DETAIL</button></li><li><button type="button" class="btn btn-info" onclick="getOldCategory(' + data + ')"> OLD CATEGORY</button></li><li><button type="button" class="btn btn-info" onclick="getbyInventoryInsert(' + data + ')">INVENTORY INSERT</button></li><li><button type="button" class="btn btn-warning" onclick="getbyInventoryView(' + data+')">INVENTORY VIEW</button></li></ul></div>';
+                    }
+                }
+            ]
+        });
+
+    }
+      function getRentPayeeView(landId) {
+             $.ajax({
+            type: "POST",
+            url: "/AssetCategory/viewRentPayeeInfo",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                //  obj: asd
+                landId: landId
+
+            }),
+                 success: function (response) {
+                     if (response == true) {
+                         window.location.href = '/AssetCategory/RentPayee';
+                     }
+                 
+               //window.location.href = ("/AssetChildIndex.cshtml");
+
+            }
+        })
+
+    }
+  
+
+
+     $("#ProjectList").change(function () {
+        var projectId = $(this).val();
+
+        Unitist(projectId);
+    });
+     function ProjectList() {
+
+        $.ajax({
+            url: '/AssetCategory/RentProjectList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#ProjectList').html('');
+                    var result = '';
+                    result += "<option value='0'>Project Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option id='" + response[i].Project_ID + "'  data-STORAGE_ID='" + response[i].External_ID + "' title='" + response[i].Project_Name + "'value='" + response[i].Project_ID + "'>" + response[i].Project_Name + "</option>";
+
+                    }
+                }
+                $('select#ProjectList').append(result);
+
+
+            }
+        });
+    }
+     function LandlordList() {
+
+        $.ajax({
+            url: '/AssetCategory/RentLandlordList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#LandlordList').html('');
+                    var result = '';
+                    result += "<option value='0'>Landlord Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+                       
+                            result += "<option id='" + response[i].Landlord_ID + "' title='" + response[i].Name + "'value='" + response[i].Landlord_ID + "'>" + response[i].Name + "</option>";
+                        
+                    }
+                }
+                $('select#LandlordList').append(result);
+
+
+            }
+        });
+    }
+     function Unitist(projectId) {
+
+        $.ajax({
+            url: '/AssetCategory/UnitList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+             data: JSON.stringify({ _projectId: projectId }),
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#UnitList').html('');
+                    var result = '';
+                   result += "<option value='0'>Unit Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+                         if (response[i].UNIT_ID == $('#UnitList_edit').val()) {
+                             result += "<option selected value='" + response[i].UNIT_ID + "'>" + response[i].UNIT_NAME + "</option>";
+                              //result += "<option selected id='" + response[i].UNIT_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].UNIT_NAME + "'value='" + response[i].UNIT_ID + "'>" + response[i].UNIT_NAME + "</option>";
+                        }
+                         else {
+                              result += "<option id='" + response[i].UNIT_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].UNIT_NAME + "'value='" + response[i].UNIT_ID + "'>" + response[i].UNIT_NAME + "</option>";
+                         }
+                       
+
+                    }
+                }
+                $('select#UnitList').append(result);
+
+
+            }
+        });
+    }
+      $("#RentPayeeProjectList").change(function () {
+        var projectId = $(this).val();
+
+        RentPayeeUnitist(projectId);
+    });
+    $("#RentPayeeUnitList").change(function () {
+        unitId = $(this).val();
+
+        RentPayeeLandlordList(unitId);
+    });
+    function RentPayeeProjectList() {
+
+        $.ajax({
+            url: '/AssetCategory/RentProjectList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#RentPayeeProjectList').html('');
+                    var result = '';
+                    result += "<option value='0'>Project Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option id='" + response[i].Project_ID + "'  data-STORAGE_ID='" + response[i].External_ID + "' title='" + response[i].Project_Name + "'value='" + response[i].Project_ID + "'>" + response[i].Project_Name + "</option>";
+
+                    }
+                }
+                $('select#RentPayeeProjectList').append(result);
+
+
+            }
+        });
+    }
+    function RentPayeeLandlordList(unitId) {
+
+        $.ajax({
+            url: '/AssetCategory/UnitLandlordList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ _unitId: unitId }),
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#RentPayeeLandlordList').html('');
+                    var result = '';
+                    result += "<option value='0'>Landlord Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+                        if ( response[i].Landlord_ID==$('#LandlordList_edit').val()) {
+                             result += "<option selected value='" + response[i].Landlord_ID + "' title='" + response[i].Name + "'value='" + response[i].Landlord_ID + "'>" + response[i].Name + "</option>";
+                        }
+                      result += "<option id='" + response[i].Landlord_ID + "' title='" + response[i].Name + "'value='" + response[i].Landlord_ID + "'>" + response[i].Name + "</option>";
+                      
+                    }
+                }
+                $('select#RentPayeeLandlordList').append(result);
+
+
+            }
+        });
+    }
+    function RentPayeeUnitist(projectId) {
+
+        $.ajax({
+            url: '/AssetCategory/UnitList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ _projectId: projectId }),
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#RentPayeeUnitList').html('');
+                    var result = '';
+                    result += "<option value='0'>Unit Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+                        if (response[i].UNIT_ID == $('#UnitList_edit').val()) {
+                            result += "<option selected value='" + response[i].UNIT_ID + "'>" + response[i].UNIT_NAME + "</option>";
+                            //result += "<option selected id='" + response[i].UNIT_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].UNIT_NAME + "'value='" + response[i].UNIT_ID + "'>" + response[i].UNIT_NAME + "</option>";
+                        }
+                        else {
+                            result += "<option id='" + response[i].UNIT_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].UNIT_NAME + "'value='" + response[i].UNIT_ID + "'>" + response[i].UNIT_NAME + "</option>";
+                        }
+
+
+                    }
+                }
+                $('select#RentPayeeUnitList').append(result);
+
+
+            }
+        });
+    }
+      function BankList(ID) {
+        debugger;
+        $.ajax({
+            url: '/AssetCategory/BankList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $(ID).html('');
+
+                    var result = '';
+                    result += "<option value='select'>Select One</option>";
+                    for (var i = 0; response.length > i; i++) {
+                        result += "<option value='" + response[i].Bank_ID + "'>" + response[i].Bank_Name + "</option>";
+                    }
+                    $(ID).append(result);
+                    //$('select.BankName').append(result);
+                }
+            }
+        });
+    }
+    $("#BankName_0").change(function () {
+        var vBankID = $(this).val();
+
+        DistrictList(vBankID);
+    });
+    function District(r_id) {
+        var vBankID = $('#BankName_0' + r_id).val();
+        DistrictList(r_id, vBankID);
+    }
+    function DistrictList(vBankID) {
+
+
+        $.ajax({
+            url: '/AssetCategory/DistrictList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(
+                {
+                    Bank_ID: vBankID
+                }
+            ),
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('#BankDistrict_0').html('');
+                    var result = '';
+                    result += "<option value=''>SELECT ONE</option>";
+                    for (var i = 0; response.length > i; i++) {
+                        if (response[i].District_Code == $('#BanDistrictkList_edit').val()) {
+                            //alert($('#bankdistrict_edit').val());
+                            //alert(response[i].District_Code);
+                            result += "<option selected value='" + response[i].District_Code + "' data-shortname='" + response[i].District_Code + "'>" + response[i].District_Name + "</option>";
+                        } else {
+                            result += "<option value='" + response[i].District_Code + "' data-shortname='" + response[i].District_Code + "'>" + response[i].District_Name + "</option>";
+                        }
+                    }
+                    $('#BankDistrict_0').append(result);
+
+                    $("#BankDistrict_0").select2();
+                }
+            }
+        });
+    }
+    $("#BankName_0,#BankDistrict_0").change(function () {
+
+        var vBankID = $('#BankName_0').val();
+        var vDistrictID = $('#BankDistrict_0').val();
+        BranchList(vBankID, vDistrictID);
+    });
+    ``
+    function BranchList(vBankID, vDistrictID) {
+
+        $.ajax({
+            url: '/AssetCategory/BranchList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(
+                {
+                    Bank_ID: vBankID,
+                    District_Code: vDistrictID
+                }
+            ),
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('#BranchName_0').html('');
+                    var result = '';
+                    result += "<option value=''>SELECT ONE</option>";
+                    for (var i = 0; response.length > i; i++) {
+                        //if (response[i].Bank_ID == $('#BankName_0').val()) {
+                        //     alert($('#BankName_0').val());
+                        //     result += "<option selected value='" + response[i].Bank_ID + "'>" + response[i].Bank_Name + "</option>";
+                        // }
+                        if (response[i].District_Code == $('#bankdistrict_edit').val()) {
+                            result += "<option selected value='" + response[i].Branch_Code + "' data-shortname='" + response[i].Branch_Code + "'>" + response[i].Branch_Name + "</option>";
+                        }
+                        else if (response[i].Branch_Code == $('#BranchList_edit').val()) {
+                            result += "<option selected value='" + response[i].Branch_Code + "' data-shortname='" + response[i].Branch_Code + "'>" + response[i].Branch_Name + "</option>";
+                        }
+                        else {
+                            result += "<option value='" + response[i].Branch_Code + "' data-shortname='" + response[i].Branch_Code + "'>" + response[i].Branch_Name + "</option>";
+                        }
+                    }
+                    $('#BranchName_0').append(result);
+                    $('#branch_edit').append(result);
+
+                    $("#BranchName_0").select2();
+
+                }
+            }
+        });
+    }
+
+    $("#submitLandlord").click(function () {
+        if ($("#landlordName").val() == "" || $("#address").val() == "" || $("#email").val() == "") {
+
+            toastr.error('Enter Data', 'Department', {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            });
+            return false;
+        }
+
+        //if ($("#email").val() != $("#unitName").val().toUpperCase()) {
+
+        //    toastr.error("Enter Your Unit Name Uppercase");
+        //    return false;
+        //}
+
+        //if ($.trim($("#unitId").val()).length > 8) {
+        //    toastr.error('Enter Your Unit ID in 8 digit', 'Manufacture ID!', {
+        //        "closeButton": false,
+        //        "debug": false,
+        //        "newestOnTop": false,
+        //        "progressBar": true,
+        //        "positionClass": "toast-top-right",
+        //        "preventDuplicates": false,
+        //        "onclick": null,
+        //        "showDuration": "300",
+        //        "hideDuration": "1000",
+        //        "timeOut": "5000",
+        //        "extendedTimeOut": "1000",
+        //        "showEasing": "swing",
+        //        "hideEasing": "linear",
+        //        "showMethod": "fadeIn",
+        //        "hideMethod": "fadeOut"
+        //    });
+        //    return false;
+        //    //event.preventDefault();
+        //}
+
+
+        //var rowStatus = 1;
+        var landlordName = $('#landlordName ').val();
+        var address = $('#address').val();
+        var email = $('#email ').val();
+        var phone_1 = $('#phone_1 ').val();
+        var phone_2 = $('#phone_2 ').val();
+        var activeStatus = $('#active_status').val();
+
+
+        if (landlordName == '') {
+            alert('Landlord  field is empty !!');
+            return false;
+        }
+        else if (address == '') {
+            alert('Address field is empty!!');
+            return false;
+        }
+        else {
+            //ajax passing data to controller
+            $.ajax({
+
+                type: "POST",
+                url: '/AssetCategory/SaveLandlord',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //alert("Result" + response);
+                    if (response != null) {
+
+
+                        toastr.success(response, 'Landlord', {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": true,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        });
+                        $("#landlordName").val("");
+                        $("#address").val("");
+                        $("#email").val("");
+                        $("#phone_1").val("");
+                        $("#phone_2").val("");
+                      
+                        // $("#active_status").val(-1);
+                        $('.addnew').show();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 5000);
+                        // $('#datatable').load(document.URL + ' #datatable');
+
+                    }
+
+                },
+                data: JSON.stringify({
+                    landlordName: landlordName,
+                    address: address,
+                    email: email,
+                    phone_1: phone_1,
+                    phone_2:phone_2,
+                    activeStatus: activeStatus
+
+                }),
+                //success: function (result) {
+                //    location.reload(true);
+
+                //    $("h2").css({ color: result[1] });
+                //},
+                error: function () {
+                    alert("error");
+                }
+            });
+        }
+
+    });
+
+
+    function editLandlord(landlordId) {
+       // $("#unitId").prop("disabled", true);
+       // $("#ClassList").prop("disabled", true);
+        $('.addnew').show();
+        $('#updateLandlord').show();
+        $('#submitLandlord').hide();
+
+        $.ajax({
+            type: "POST",
+            url: "/AssetCategory/Edit_Landlord",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                //  obj: asd
+                landlordId: landlordId
+
+            }),
+            success: function (response) {
+
+                console.log(response);
+               // alert(response.data.DESCRIPTION);
+                $("#landlordId").val(response.data.Landlord_ID);
+                $("#landlordName").val(response.data.Name);
+                $("#address").val(response.data.Address);
+                $("#email").val(response.data.Email);
+                $("#phone_1").val(response.data.Phone_1);//targetImg
+                $("#phone_2").val(response.data.Phone_2);
+              
+                if (response.data.Status == 'Active') {
+                    $("#active_status").val('true');
+                } else {
+                    $("#active_status").val('false');
+                }
+
+                $("#btnUpdate").show();
+
+
+            }
+        })
+
+
+    }
+
+
+    $("#updateLandlord").click(function UpdateData() {
+
+        // var rowStatus = 2;
+
+        //if ($("#unitName").val() != $("#unitName").val().toUpperCase()) {
+
+        //    toastr.error("Enter Your Unit Name Uppercase");
+        //    return false;
+        //}
+       // landlordId
+        var landlordId = $('#landlordId ').val();
+      var landlordName = $('#landlordName ').val();
+        var address = $('#address').val();
+        var email = $('#email ').val();
+        var phone_1 = $('#phone_1 ').val();
+        var phone_2 = $('#phone_2 ').val();
+        var activeStatus = $('#active_status').val();
+
+
+
+        if (landlordName == '') {
+            alert('Landlord  field is empty !!');
+            return false;
+        }
+        else if (address == '') {
+            alert('Address field is empty!!');
+            return false;
+        }
+        else {
+            //ajax passing data to controller
+            $.ajax({
+                url: '/AssetCategory/updateLandlord',
+                type: 'POST',
+                dataType: "json",
+                traditional: true,
+                success: function (response) {
+                    //alert("Result" + response);
+                    if (response != null) {
+
+
+                        toastr.success(response, 'Landlord', {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": true,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        });
+                         $("#landlordName").val("");
+                        $("#address").val("");
+                        $("#email").val("");
+                        $("#phone_1").val("");
+                        $("#phone_2").val("");
+                        // $("#active_status").val(-1);
+                        $('.addnew').show();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 5000);
+                        // $('#datatable').load(document.URL + ' #datatable');
+
+                    }
+
+                },
+                data: {
+                    landlordId:landlordId,
+                    landlordName: landlordName,
+                    address: address,
+                    email: email,
+                    phone_1: phone_1,
+                    phone_2:phone_2,
+                    activeStatus: activeStatus
+
+                },
+                //success: function (response) {
+
+                //    if (response == 'Success') {
+                //        location.reload();
+                //        //getData();
+                //    }
+                //},
+                error: function () {
+                    alert("error");
+                }
+            });
+        }
+
+    });
+     $("#submitRentShare").click(function () {
+        if ($("#ProjectList").val() == "" || $("#UnitList").val() == "" || $("#LandlordList").val() == "") {
+
+            toastr.error('Enter Data', 'Rent Share', {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            });
+            return false;
+        }
+
+      
+        //if ($.trim($("#share").val()).max > 100) {
+
+        //    toastr.error(" Your value is greater than 100");
+        //    return false;
+        //}
+
+       
+        //if ($.trim($("#share").val().max> 100)) {
+        //    toastr.error(' Your value is greater than 100', 'share!', {
+        //        "closeButton": false,
+        //        "debug": false,
+        //        "newestOnTop": false,
+        //        "progressBar": true,
+        //        "positionClass": "toast-top-right",
+        //        "preventDuplicates": false,
+        //        "onclick": null,
+        //        "showDuration": "300",
+        //        "hideDuration": "1000",
+        //        "timeOut": "5000",
+        //        "extendedTimeOut": "1000",
+        //        "showEasing": "swing",
+        //        "hideEasing": "linear",
+        //        "showMethod": "fadeIn",
+        //        "hideMethod": "fadeOut"
+        //    });
+        //    return false;
+        //    //event.preventDefault();
+        //}
+        //var rowStatus = 1;
+        var ProjectList = $('#ProjectList').val();
+        var UnitList = $('#UnitList').val();
+        var LandlordList = $('#LandlordList').val();
+        var share = $('#share').val();
+        var activeStatus = $('#active_status').val();
+
+
+        if (UnitList == '') {
+            alert('Unit List  field is empty !!');
+            return false;
+        }
+        else if (LandlordList == '') {
+            alert('Landlord List field is empty!!');
+            return false;
+        }
+            else if (share > 100) {
+            alert("Number is greater than 100");
+            return false;
+        }
+           else {
+            //ajax passing data to controller
+            $.ajax({
+
+                type: "POST",
+                url: '/AssetCategory/SaveRentShare',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //alert("Result" + response);
+                    if (response != null) {
+
+
+                        toastr.success(response, 'Rent Share', {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": true,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        });
+                        $("#UnitList").val("");
+                        $("#LandlordList").val("");
+                        $("#share").val("");
+                        // $("#active_status").val(-1);
+                        $('.addnew').show();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 5000);
+                        // $('#datatable').load(document.URL + ' #datatable');
+
+                    }
+
+                },
+                data: JSON.stringify({
+                    ProjectList:ProjectList,
+                    UnitList: UnitList,
+                    LandlordList:LandlordList,
+                    share: share,
+                    activeStatus: activeStatus
+
+                }),
+                //success: function (result) {
+                //    location.reload(true);
+
+                //    $("h2").css({ color: result[1] });
+                //},
+                error: function () {
+                    alert("error");
+                }
+            });
+        }
+    });
+
+
+    function editRentShare(landlordShareId) {
+       // $("#unitId").prop("disabled", true);
+       // $("#ClassList").prop("disabled", true);
+        $('.addnew').show();
+        $('#updateRentShare').show();
+        $('#submitRentShare').hide();
+
+        $.ajax({
+            type: "POST",
+            url: "/AssetCategory/Edit_Rent_Share",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                //  obj: asd
+                landlordShareId: landlordShareId
+
+            }),
+            success: function (response) {
+
+                console.log(response);
+                //LandShare_Id
+                 $("#LandShare_Id").val(response.data.LND_SHAREID);
+              
+                $("#ProjectList").val(response.data.PROJECT_ID).trigger('change');
+                $("#UnitList_edit").val(response.data.UNIT_ID).trigger('change');
+                //alert(response.data.LAND_ID);
+                $("#LandlordList").val(response.data.LAND_ID).trigger('change');
+                //$("#LandlordList").val(response.data.LAND_ID).trigger('change');
+                $("#share").val(response.data.SHARE);
+              
+                if (response.data.STATUS == 'Active') {
+                    $("#active_status").val('true');
+                } else {
+                    $("#active_status").val('false');
+                }
+
+                $("#btnUpdate").show();
+
+
+            }
+        })
+
+
+    }
+
+
+    $("#updateRentShare").click(function UpdateData() {
+
+        // var rowStatus = 2;
+
+        //if ($("#unitName").val() != $("#unitName").val().toUpperCase()) {
+
+        //    toastr.error("Enter Your Unit Name Uppercase");
+        //    return false;
+        //}
+       // landlordId
+         var LandShare_Id = $('#LandShare_Id').val();
+       var ProjectList = $('#ProjectList').val();
+        var UnitList = $('#UnitList').val();
+        var LandlordList = $('#LandlordList').val();
+        var share = $('#share').val();
+        var activeStatus = $('#active_status').val();
+
+
+
+       if (UnitList == '') {
+            alert('Unit List  field is empty !!');
+            return false;
+        }
+        else if (LandlordList == '') { 
+            alert('Landlord List field is empty!!');
+            return false;
+        }
+            else if (share > 100) {
+            alert("Number is greater than 100");
+            return false;
+        }
+        else {
+            //ajax passing data to controller
+            $.ajax({
+                url: '/AssetCategory/updateRentShare',
+                type: 'POST',
+                dataType: "json",
+                traditional: true,
+                success: function (response) {
+                    //alert("Result" + response);
+                    if (response != null) {
+
+
+                        toastr.success(response, 'Rent Share', {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": true,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        });
+                         $("#UnitList").val("");
+                        $("#LandlordList").val("");
+                        $("#share").val("");
+                        // $("#active_status").val(-1);
+                        $('.addnew').show();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 5000);
+                        // $('#datatable').load(document.URL + ' #datatable');
+
+                    }
+
+                },
+                data: {
+                     LandShare_Id:LandShare_Id,
+                     ProjectList:ProjectList,
+                    UnitList: UnitList,
+                    LandlordList:LandlordList,
+                    share: share,
+                    activeStatus: activeStatus
+
+                },
+                //success: function (response) {
+
+                //    if (response == 'Success') {
+                //        location.reload();
+                //        //getData();
+                //    }
+                //},
+                error: function () {
+                    alert("error");
+                }
+            });
+        }
+
+    });
+     $("#btnSubmit").click(function () {
+        if ($("#ProjectList").val() == "" || $("#UnitList").val() == "" || $("#LandlordList").val() == "") {
+
+            toastr.error('Enter Data', 'Rent Share', {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            });
+            return false;
+        }
+
+
+        //if ($.trim($("#share").val()).max > 100) {
+
+        //    toastr.error(" Your value is greater than 100");
+        //    return false;
+        //}
+
+
+        //if ($.trim($("#share").val().max> 100)) {
+        //    toastr.error(' Your value is greater than 100', 'share!', {
+        //        "closeButton": false,
+        //        "debug": false,
+        //        "newestOnTop": false,
+        //        "progressBar": true,
+        //        "positionClass": "toast-top-right",
+        //        "preventDuplicates": false,
+        //        "onclick": null,
+        //        "showDuration": "300",
+        //        "hideDuration": "1000",
+        //        "timeOut": "5000",
+        //        "extendedTimeOut": "1000",
+        //        "showEasing": "swing",
+        //        "hideEasing": "linear",
+        //        "showMethod": "fadeIn",
+        //        "hideMethod": "fadeOut"
+        //    });
+        //    return false;
+        //    //event.preventDefault();
+        //}
+        //var rowStatus = 1;
+        var ProjectList = $('#RentPayeeProjectList').val();
+        var UnitList = $('#RentPayeeUnitList').val();
+        var LandlordList = $('#RentPayeeLandlordList').val();
+        var payee_Name = $('#payee_Name').val();
+        var relation = $('#relation').val();
+        var cash = $('#cash').val();
+        var mobile_Banking_Type = $('#mobile_Banking_Type').val();
+        var mobile_Banking_Amount = $('#mobile_Banking_Amount').val();
+        var BankName_0 = $('#BankName_0').val();
+        var BankDistrict_0 = $('#BankDistrict_0').val();
+        var BranchName_0 = $('#BranchName_0').val();
+        var routing_Number = $('#routing_Number').val();
+        var account_Number = $('#account_Number').val();
+        var amount = $('#amount').val();
+
+        if (ProjectList == '') {
+            alert('Project List  field is empty !!');
+            return false;
+        }
+        else if (UnitList == '') {
+            alert('Unit List field is empty!!');
+            return false;
+        }
+        else if (LandlordList == '') {
+            alert("Landlord List field is empty!!");
+            return false;
+        }
+        else {
+            //ajax passing data to controller
+            $.ajax({
+
+                type: "POST",
+                url: '/AssetCategory/SaveRentPayee',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //alert("Result" + response);
+                    if (response != null) {
+
+
+                        toastr.success(response, 'Rent Payee', {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": true,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        });
+                        $("#UnitList").val("");
+                        $("#LandlordList").val("");
+                        //  $("#share").val("");
+                        // $("#active_status").val(-1);
+                        $('.addnew').show();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 5000);
+                        // $('#datatable').load(document.URL + ' #datatable');
+
+                    }
+
+                },
+                data: JSON.stringify({
+                    ProjectList: ProjectList,
+                    UnitList: UnitList,
+                    LandlordList: LandlordList,
+                    payee_Name: payee_Name,
+                    relation: relation,
+                    cash: cash,
+                    mobile_Banking_Type: mobile_Banking_Type,
+                    mobile_Banking_Amount: mobile_Banking_Amount,
+                    BankName_0: BankName_0,
+                    BankDistrict_0: BankDistrict_0,
+                    BranchName_0: BranchName_0,
+                    routing_Number: routing_Number,
+                    account_Number: account_Number,
+                    amount: amount
+
+                }),
+                //success: function (result) {
+                //    location.reload(true);
+
+                //    $("h2").css({ color: result[1] });
+                //},
+                error: function () {
+                    alert("error");
+                }
+            });
+        }
+    });
+
+    function editRentPayee(rentPayeeId) {
+        // $("#unitId").prop("disabled", true);
+        // $("#ClassList").prop("disabled", true);
+        $('.addnew').show();
+        $('#updateRentPayee').show();
+        $('#btnSubmit').hide();
+
+        $.ajax({
+            type: "POST",
+            url: "/AssetCategory/Edit_Rent_Payee",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                //  obj: asd
+               rentPayeeId: rentPayeeId
+
+            }),
+            success: function (response) {
+
+                console.log(response);
+                //LandShare_Id
+                $("#RentPayee_Id").val(response.data.RENT_PAYEEID);
+                $("#RentPayeeProjectList").val(response.data.PROJECT_ID).trigger('change');
+                $("#UnitList_edit").val(response.data.UNIT_ID).trigger('change');
+                 //alert(response.data.LAND_ID);
+               // $("#LandlordList_edit").val(response.data.LAND_ID).trigger('change');
+                 LandlordListReload(response.data.UNIT_ID, response.data.LAND_ID);
+               // $("#LandlordList_edit :selected").val(response.data.LAND_ID);
+               // alert(response.data.LAND_ID);
+                $("#payee_Name").val(response.data.PAYEE_NAME);
+                  $("#relation").val(response.data.RELATION);
+                    $("#cash").val(response.data.CASH);
+                $("#mobile_Banking_Type").val(response.data.M_BANK).trigger('change');
+                 $("#mobile_Banking_Amount").val(response.data.M_BANK_AMOUNT);
+                $("#BankName_0").val(response.data.BANK_ID).trigger('change');
+               // alert(response.data.DISTRICT);
+                $("#BanDistrictkList_edit").val(response.data.DISTRICT).trigger('change');
+                BranchListReload(response.data.BANK_ID, response.data.DISTRICT, response.data.BRANCH);
+               // alert(response.data.BRANCH);
+              // $("#BranchList_edit").val(response.data.BRANCH).trigger('change');
+                    $("#routing_Number").val(response.data.ROU_NUM);
+                $("#account_Number").val(response.data.ACC_NUM);
+                   $("#amount").val(response.data.AMOUNT);
+
+                if (response.data.STATUS == 'Active') {
+                    $("#active_status").val('true');
+                } else {
+                    $("#active_status").val('false');
+                }
+
+                $("#updateRentPayee").show();
+
+          function LandlordListReload(unitId,landlord_edit) {
+            $.ajax({
+            url: '/AssetCategory/UnitLandlordList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ _unitId: unitId }),
+            dataType: "json",
+            success: function (response) {
+
+                  if (response.length > 0) {
+                    $('select#RentPayeeLandlordList').html('');
+                    
+                    var result = '';
+                      result += "<option value='0'>Landlord Name</option>";
+                       var LandlordEdit = landlord_edit;
+                     for (var i = 0; response.length > i; i++) {
+                       
+                         result += "<option selected value='" + response[i].Landlord_ID + "' title='" + response[i].Name + "'value='" + response[i].Landlord_ID + "'>" + response[i].Name + "</option>";
+                  
+                    }
+                      $('select#RentPayeeLandlordList').append(result);
+                       $('select#RentPayeeLandlordList').val(LandlordEdit);
+                }
+            }
+        });
+                }
+
+            function BranchListReload(vBankID, vDistrictID,branch_edit) {
+
+        $.ajax({
+            url: '/AssetCategory/BranchList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(
+                {
+                    Bank_ID: vBankID,
+                    District_Code: vDistrictID
+                }
+            ),
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('#BranchName_0').html('');
+                    var result = '';
+                    result += "<option value=''>SELECT ONE</option>";
+                     var BranchEdit = branch_edit;
+                    for (var i = 0; response.length > i; i++) {
+                        //if (response[i].Bank_ID == $('#BankName_0').val()) {
+                        //     alert($('#BankName_0').val());
+                        //     result += "<option selected value='" + response[i].Bank_ID + "'>" + response[i].Bank_Name + "</option>";
+                        // }
+                        if (response[i].District_Code == $('#bankdistrict_edit').val()) {
+                            result += "<option selected value='" + response[i].Branch_Code + "' data-shortname='" + response[i].Branch_Code + "'>" + response[i].Branch_Name + "</option>";
+                        }
+                        //else if (response[i].Branch_Code == $('#BranchList_edit').val()) {
+                        //    result += "<option selected value='" + response[i].Branch_Code + "' data-shortname='" + response[i].Branch_Code + "'>" + response[i].Branch_Name + "</option>";
+                        //}
+                        else {
+                            result += "<option selected value='" + response[i].Branch_Code + "' data-shortname='" + response[i].Branch_Code + "'>" + response[i].Branch_Name + "</option>";
+                        }
+                    }
+                    $('#BranchName_0').append(result);
+                   // $('#branch_edit').append(result);
+                     $('#BranchName_0').val(BranchEdit);
+
+                    $("#BranchName_0").select2();
+
+                }
+            }
+        });
+    }
+            }
+        })
+
+
+    }
+
+
+    $("#updateRentPayee").click(function UpdateData() {
+
+         var rentPayee_Id = $('#RentPayee_Id').val();
+        var ProjectList = $('#ProjectList').val();
+        var UnitList = $('#UnitList').val();
+        var LandlordList = $('#LandlordList').val();
+        var payee_Name = $('#payee_Name').val();
+        var relation = $('#relation').val();
+        var cash = $('#cash').val();
+        var mobile_Banking_Type = $('#mobile_Banking_Type').val();
+        var mobile_Banking_Amount = $('#mobile_Banking_Amount').val();
+        var BankName_0 = $('#BankName_0').val();
+        var BankDistrict_0 = $('#BankDistrict_0').val();
+        var BranchName_0 = $('#BranchName_0').val();
+        var routing_Number = $('#routing_Number').val();
+        var account_Number = $('#account_Number').val();
+        var amount = $('#amount').val();
+
+
+
+       if (ProjectList == '') {
+            alert('Project List  field is empty !!');
+            return false;
+        }
+        else if (UnitList == '') {
+            alert('Unit List field is empty!!');
+            return false;
+        }
+        else if (LandlordList == '') {
+            alert("Landlord List field is empty!!");
+            return false;
+        }
+        else {
+            //ajax passing data to controller
+            $.ajax({
+                url: '/AssetCategory/updateRentPayee',
+                type: 'POST',
+                dataType: "json",
+                traditional: true,
+                success: function (response) {
+                    //alert("Result" + response);
+                    if (response != null) {
+
+
+                        toastr.success(response, 'Rent Payee', {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": true,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        });
+                        $("#UnitList").val("");
+                        $("#LandlordList").val("");
+                       // $("#share").val("");
+                        // $("#active_status").val(-1);
+                        $('.addnew').show();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 5000);
+                        // $('#datatable').load(document.URL + ' #datatable');
+
+                    }
+
+                },
+                data: {
+                    rentPayee_Id: rentPayee_Id,
+                    ProjectList: ProjectList,
+                    UnitList: UnitList,
+                    LandlordList: LandlordList,
+                    payee_Name: payee_Name,
+                    relation: relation,
+                    cash: cash,
+                    mobile_Banking_Type: mobile_Banking_Type,
+                    mobile_Banking_Amount: mobile_Banking_Amount,
+                    BankName_0: BankName_0,
+                    BankDistrict_0: BankDistrict_0,
+                    BranchName_0: BranchName_0,
+                    routing_Number: routing_Number,
+                    account_Number: account_Number,
+                    amount: amount
+
+                },
+                //success: function (response) {
+
+                //    if (response == 'Success') {
+                //        location.reload();
+                //        //getData();
+                //    }
+                //},
+                error: function () {
+                    alert("error");
+                }
+            });
+        }
+
+    });
+
+
+   
+
+</script>

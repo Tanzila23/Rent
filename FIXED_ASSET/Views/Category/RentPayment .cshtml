@@ -1,0 +1,637 @@
+﻿
+@using System.Data
+@using System.Collections
+@using FIXED_ASSET.DTO
+@using System.Data
+@using System.Collections
+
+@{
+    ViewBag.Title = "Rent Payment";
+    Layout = "~/Views/Shared/_RentLayout.cshtml";
+    List<ViewManufactureDTO> ManufactureGridList = new List<ViewManufactureDTO>();
+
+
+    if (ViewBag.ManufactureGridList != null)
+    {
+        ManufactureGridList = ViewBag.ManufactureGridList;
+    }
+}
+
+
+<link href="~/Content/css/select2.css" rel="stylesheet" />
+<script src="~/Content/js/select2.full.min.js"></script>
+<link href="~/Content/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<script src="~/Content/js/jquery.dataTables.min.js"></script>
+<script src="~/Content/js/dataTables.bootstrap.min.js"></script>
+
+<style type="text/css">
+
+    div.addnew {
+        display: none
+    }
+
+    html {
+        overflow-y: scroll;
+    }
+</style>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        @ViewBag.Title
+        <small>Control panel</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Rent Share</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="center-block col-md-6" style="float: none;">    </div>
+    <div class="box box-primary addnew">
+        <div class="box-header with-border">
+            <h3 class="box-title">@ViewBag.Title</h3>
+            <div class="box-tools pull-right">
+                @*<button class="btn btn-primary bg-blue-gradient hide-form">Hide</button>*@
+            </div>
+        </div>
+
+        <form role="form"></form>
+        <div class="box-body">
+            <div class="panel panel-primary col-md-12 center-block" style="float: none;">
+                <div class="panel-body">
+                    <fieldset>
+                        <legend>Rent Payment</legend>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <input type="hidden" class="form-control" id="payment_id" placeholder="">
+                                    @*<select type="text" class="form-control select2 " style="width:270px;" id="payment_id" data-placeholder="Year"></select>*@
+                                    <label for="first_Day_Of_Month">Start Date</label>
+                                    @*<input type="text" readonly class="form-control" id="first_Day_Of_Month" value="" placeholder="Rent Pay Day">*@
+                                    @*<input type="hidden" class="form-control" id="UnitList_edit" placeholder="">*@
+                                    @*<select type="text" class="form-control select2" id="CategoryList" style="border-radius:5px; height:30px;" data-placeholder="Category"></select>*@
+                                    <select type="text" readonly class="form-control " style="width:270px;" id="first_Day_Of_Month" data-placeholder="Year"></select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="end_Day_Of_Month">End Date</label>
+                                    <input type="hidden" class="form-control col-sm-4" id="LandShare_Id" placeholder=" Name">
+                                    <select type="text" readonly class="form-control " style="width:270px;" id="end_Day_Of_Month" data-placeholder="Month"></select>
+                                    @*<select type="text" class="form-control select2 " style="width:315px;" id="ProjectList"></select>*@
+                                </div>
+
+                                <div class="col-md-4 text-right">
+
+                                    <button type="submit" class="btn btn-primary" id="generateRentPaymentDetails" style="margin-bottom:-50px;">Generate</button>
+                                    <button id="btnExport" class="btn btn-info" onclick="fnExcelReport();" style="margin-bottom:-50px;"> EXPORT </button>
+                                    <button type="submit" class="btn btn-primary" id="submitRentPaymentDetails" style="margin-bottom:-50px;" onclick="addcat();">Process</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="box-body table-responsive no-padding">
+                                <table id="slotdatatable" class="table table-bordered table-striped compact hover" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th id="Start_Date">Ex Rent Pay Day</th>
+                                            <th id="Start_Date">Actual Rent Pay Day</th>
+                                            <th style="display:none">Project Id</th>
+                                            <th id="Increment_Amount">Project</th>
+                                            <th style="display:none">Unit Id</th>
+                                            <th id="Increment_VAT">Unit</th>
+                                            <th id="Increment_Amount">Agreement</th>
+                                            <th id="Increment_VAT">Advace Amount</th>
+                                            <th id="Increment_VAT">Balance</th>
+                                            <th id="Increment_Amount"> Monthly Rent</th>
+                                            <th id="Increment_VAT">Adv Adjust</th>
+                                            <th id="Increment_VAT">Tax Rent</th>
+                                            <th style="display:none">AIT Agree</th>
+                                            <th id="Increment_VAT">AIT Per</th>
+                                            <th id="Increment_VAT">AIT Amount</th>
+                                            <th id="Increment_VAT">Vat Per</th>
+                                            <th id="Increment_Amount">Vat Amount</th>
+                                            <th id="Monthly_Rent_Payment"> Disc Rent</th>
+                                            <th id="Monthly_Rent_Payment"> Disc AIT</th>
+                                            <th id="Monthly_Rent_Payment"> Disc VAT</th>
+                                            <th id="Monthly_Rent_Payment"> Disc Advance</th>
+                                            <th id="Monthly_Rent_Payment">Monthly Rent Payment</th>
+                                            <th id="Monthly_Rent_Expense">Monthly Rent Expense</th>
+                                            <th id="Monthly_Rent_Expense">Adjusted Balance</th>
+                                            <th style="display:none">RentDetailsId</th>
+                                        </tr>
+                                        @*<tr>
+                            <td style="width:300px" data-bind="First_start_date">
+
+                            </td>
+                        </tr>*@
+
+                                    </thead>
+                                    <tbody id="rentalDate">
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        @*<div class="text-right">
+            <button type="submit" class="btn btn-primary" id="submitRentShare" onclick="addcat();">Process</button>
+            <button class="btn btn-sm btn-primary " id="updateRentShare">
+                <i class="ace-icon fa fa-check"></i> Update
+            </button>
+        </div>*@
+                    </fieldset>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <!-- /.box -->
+    <!-- Default box -->
+    @*<div class="box box-primary">
+        <div class="box-header with-border">*@
+            @*<h3 class="box-title">List All Rent Share</h3>*@
+            @*<div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool show-form text-info bg-blue-gradient"><i class="fa fa-plus"></i>Add New</button>
+            </div>
+        </div>*@
+        @*<div class="col-md-12">
+            <div class="box-body table-responsive no-padding">
+                <table id="datatable" class="table table-bordered table-striped compact hover" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Project</th>
+                            <th>Unit</th>
+                            <th>Landlord</th>
+                            <th>Share</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+
+                </table>
+
+            </div>*@
+            <!-- /.box-body -->
+        @*</div>*@
+        <div class="box-footer">
+            Footer
+        </div>
+        <!-- /.box-footer-->
+    @*</div>*@
+    <!-- /.box -->
+
+</section>
+<!-- /.content -->
+
+<script>
+
+
+    $(document).ready(function () {
+         $('#slotdatatable').hide();
+        FirstDayOfMonthList();
+        EndDayOfMonthList();
+        paymentList();
+         $('.select2').select2();
+        $('.addnew').show();
+         $('#submitRentPaymentDetails').hide();
+        //$('.show-form').click(function () {
+        //    $('.addnew').show();
+        //    $('.show-form').hide();
+        //    $('#submitRentPaymentDetails').hide();
+        //});
+        //$('.hide-form').click(function () {
+        //    $('.addnew').hide();
+        //    $('.show-form').show();
+        //});
+
+  
+      
+
+    });
+
+function fnExcelReport() {
+		var tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>";
+		var textRange; var j = 0;
+		tab = document.getElementById('slotdatatable'); // id of table
+
+		for (j = 0; j < tab.rows.length; j++) {
+			tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+			//tab_text=tab_text+"</tr>";
+		}
+
+		tab_text = tab_text + "</table>";
+		tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+		tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+		tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+		var ua = window.navigator.userAgent;
+		var msie = ua.indexOf("MSIE ");
+
+		if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+		{
+			txtArea1.document.open("txt/html", "replace");
+			txtArea1.document.write(tab_text);
+			txtArea1.document.close();
+			txtArea1.focus();
+			sa = txtArea1.document.execCommand("SaveAs", true, "Say Thanks to Ashik.xls");
+		}
+		else                 //other browser not tested on IE 11
+			sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
+		return (sa);
+	}
+      
+ $("#YearList").change(function () {
+        var yearId = $(this).val();
+
+        MonthList(yearId);
+ });
+   function paymentList() {
+     $.ajax({
+            url: '/AssetCategory/FirstDayOfMonthList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#payment_id').html('');
+                    var result = '';
+                   // result += "<option value='0'>Year</option>";
+                    for (var i = 0; response.length > i; i++) {
+                         var dateString = response[i].F_DAYM.substr(6);
+var currentTime = new Date(parseInt(dateString));
+var month = currentTime.getMonth() + 1;
+var day = currentTime.getDate();
+var year = currentTime.getFullYear();
+var date = month + "/"+ day + "/" + year;
+                         if (response[i].ACCPRID == $('#payment_id_edit').val()) {
+                            
+                              result += "<option selected value='" + response[i].ACCPRID + "'+ value='" + response[i].ACCPRID + "' >" + date + "</option>";
+                            //result += "<option selected id='" + response[i].UNIT_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].UNIT_NAME + "'value='" + response[i].UNIT_ID + "'>" + response[i].UNIT_NAME + "</option>";
+                        }
+                         else {
+                              result += "<option id='" + response[i].ACCPRID + "'+ value='" + response[i].ACCPRID + "' >" + date + "</option>";
+                         }
+                         
+                        //result += "<option id='" + response[i].ACCPRID + "'+ value='" + response[i].ACCPRID + "' >" + date + "</option>";
+
+                    }
+                }
+                $('select#payment_id').append(result);
+             //  $("#payment_id").val(response.data.ACCPRID);
+  
+            }
+        });
+    }
+     function FirstDayOfMonthList() {
+     $.ajax({
+            url: '/AssetCategory/FirstDayOfMonthList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#first_Day_Of_Month').html('');
+                    var result = '';
+                   // result += "<option value='0'>Year</option>";
+                    for (var i = 0; response.length > i; i++) {
+                         var dateString = response[i].F_DAYM.substr(6);
+var currentTime = new Date(parseInt(dateString));
+var month = currentTime.getMonth() + 1;
+var day = currentTime.getDate();
+var year = currentTime.getFullYear();
+var date = month + "/"+ day + "/" + year;
+
+                         
+                        result += "<option id='" + response[i].ACCPRID + "'+ value='" + date + "' >" + date + "</option>";
+
+                    }
+                }
+                $('select#first_Day_Of_Month').append(result);
+             //  $("#payment_id").val(response.data.ACCPRID);
+  
+            }
+        });
+    }
+       function EndDayOfMonthList() {
+
+        $.ajax({
+            url: '/AssetCategory/EndDayOfMonthList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#end_Day_Of_Month').html('');
+                    var result = '';
+                   // result += "<option value='0'>Year</option>";
+                    for (var i = 0; response.length > i; i++) {
+                         var dateString = response[i].E_DAYM.substr(6);
+var currentTime = new Date(parseInt(dateString));
+var month = currentTime.getMonth() + 1;
+var day = currentTime.getDate();
+var year = currentTime.getFullYear();
+var date = + month + "/"+ day + "/" + year;
+
+
+                        result += "<option id='" + response[i].ACCPRID + "'+ value='" + date + "' >" + date + "</option>";
+                        $('#payment_id').val(response[i].ACCPRID)
+               
+                    }
+                }
+                $('select#end_Day_Of_Month').append(result);
+              
+            }
+        });
+    }
+     function YaerList() {
+
+        $.ajax({
+            url: '/AssetCategory/RentYearList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#YearList').html('');
+                    var result = '';
+                    result += "<option value='0'>Year</option>";
+                    for (var i = 0; response.length > i; i++) {
+                        var dateString = response[i].F_DAYM.substr(6);
+var currentTime = new Date(parseInt(dateString));
+var month = currentTime.getMonth() + 1;
+var day = currentTime.getDate();
+var year = currentTime.getFullYear();
+var date = day + "/" + month + "/" + year;
+
+
+                        result += "<option id='" + response[i].YEAR + "'+ value='" + date+ "'>" + response[i].YEAR + "</option>";
+
+                    }
+                }
+                $('select#YearList').append(result);
+
+
+            }
+        });
+    }
+  
+     function MonthList(yearId) {
+
+        $.ajax({
+            url: '/AssetCategory/MonthList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+             data: JSON.stringify({ _yearId: yearId }),
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#MonthList').html('');
+                    var result = '';
+                   result += "<option value='0'>Month Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+                         if (response[i].UNIT_ID == $('#UnitList_edit').val()) {
+                             result += "<option selected value='" + response[i].ACCPRID + "'>" + response[i].M_NAME + "</option>";
+                              //result += "<option selected id='" + response[i].UNIT_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].UNIT_NAME + "'value='" + response[i].UNIT_ID + "'>" + response[i].UNIT_NAME + "</option>";
+                        }
+                         else {
+                              result += "<option id='" + response[i].ACCPRID + "'>" + response[i].M_NAME + "</option>";
+                         }
+                       
+
+                    }
+                }
+                $('select#MonthList').append(result);
+
+
+            }
+        });
+    }
+      $("#generateRentPaymentDetails").click(function () {
+          $('#slotdatatable').show();
+           $('#submitRentPaymentDetails').show();
+          $('#generateRentPaymentDetails').hide();
+          var first_Day_Of_Month = $('#first_Day_Of_Month').val();
+          var end_Day_Of_Month = $('#end_Day_Of_Month').val();
+           $.ajax({     
+            type: "POST",
+            url: "/AssetCategory/Get_Payment_Details",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+               first_Day_Of_Month: first_Day_Of_Month,
+               end_Day_Of_Month: end_Day_Of_Month
+
+            }),
+            success: function (response) {
+
+                console.log(response);
+                console.log(response.data);
+                var html = '';
+                  for (var i = 0; i < response.data.length; i++) {
+                        
+                      html += '<tr>';
+                       html += '<td>'+response.data[i].Expec_R_P_Date+'</td>';
+                       html += '<td>' + response.data[i].Doc_Date + '</td>';
+                       html += '<td style="display:none">' + response.data[i].Project_ID + '</td>';
+                       html += '<td>' + response.data[i].Project_Name + '</td>';
+                       html += '<td style="display:none">' + response.data[i].Unit_ID + '</td>';
+                       html += '<td>' + response.data[i].UNIT_NAME + '</td>';
+                       html += '<td>' + response.data[i].External_ID + '</td>';
+                       html += '<td>' + response.data[i].Advnace_Amt + '</td>';
+                       html += '<td>' + response.data[i].balance + '</td>';
+                       html += '<td>' + response.data[i].M_rent + '</td>';
+                       html += '<td>' + response.data[i].ADV + '</td>';
+                       html += '<td>' + response.data[i].M_Rent_Tax_Base + '</td>';
+                       html += '<td style="display:none">' + response.data[i].AIT_Paid + '</td>';
+                       html += '<td>' + response.data[i].AT + '</td>';
+                       html += '<td>' + response.data[i].AIT_Amt + '</td>';
+                       html += '<td>' + response.data[i].VT + '</td>';
+                       html += '<td>' + response.data[i].VT_Amt + '</td>';
+                       html += '<td>' + response.data[i].R_Disc + '</td>';
+                       html += '<td>' + response.data[i].AIT_Disc + '</td>';
+                       html += '<td>' + response.data[i].VAT_Disc + '</td>';
+                       html += '<td>' + response.data[i].ADV_Disc + '</td>';
+					   
+					    if ( response.data[i].AIT_Paid == '1') {
+                          html += '<td>'+(+response.data[i].M_rent - response.data[i].ADV - response.data[i].AIT_Amt)+ '</td>';
+
+                      } 
+					   
+                      if (response.data[i].AIT_Paid == '1') {
+                          html += '<td>' + ((+response.data[i].M_rent) + (+ response.data[i].VT_Amt)) + '</td>';
+
+                      }
+                      else {
+                            html += '<td>' + ((+response.data[i].M_rent) + (+ response.data[i].VT_Amt)+(+ response.data[i].AIT_Amt)) + '</td>';
+                      }
+                      html += '<td>' + (+response.data[i].balance - response.data[i].ADV) + '</td>';
+                       html += '<td style="display:none">' + response.data[i].rent_details_id + '</td>';
+                      html += '</tr>';
+
+                     
+ 
+                    }
+                $('#rentalDate').html(html);
+             
+
+            }
+        })
+    });
+
+     $("#submitRentPaymentDetails").click(function () {
+
+        var _Expec_Rent_Pay_Date = "", _Act_Rent_Pay_Date = "", _project = "",_unit= "", _agreement="",_balance ="",_monthly_rent = "",_adv_adjust= "", _tax_rent="",_ait_paid="",_ait_per="",_ait_amount="",_vat_per="",_vat_amt="", _disc_rent="",_disc_ait="",_disc_vat="",_disc_adv="",  _monthly_rent_payment="",_monthly_rent_expense="",_adjusted_balance="",_rent_details_id=""
+           var first_Day_Of_Month = $("#payment_id").val();
+       //  var first_Day_Of_Month = $("#payment_id").val(response.data.ACCPRID);
+  
+        
+        $("#rentalDate").find('tr').each(function () {
+           var _a = $(this).find('td:eq(0)').html() + ',';
+            var _b = $(this).find('td:eq(1)').html() + ',';
+            var _c = $(this).find('td:eq(2)').html() + ',';
+             var _d = $(this).find('td:eq(3)').html() + ',';
+            var _e = $(this).find('td:eq(4)').html() + ',';
+            var _f = $(this).find('td:eq(5)').html() + ',';
+             var _g = $(this).find('td:eq(6)').html() + ',';
+            var _h= $(this).find('td:eq(7)').html() + ',';
+            var _i = $(this).find('td:eq(8)').html() + ',';
+             var _j = $(this).find('td:eq(9)').html() + ',';
+            var _k = $(this).find('td:eq(10)').html() + ',';
+             var _l = $(this).find('td:eq(11)').html() + ',';
+            var _m = $(this).find('td:eq(12)').html() + ',';
+            var _n = $(this).find('td:eq(13)').html() + ',';
+            var _o = $(this).find('td:eq(14)').html() + ',';
+            var _p = $(this).find('td:eq(15)').html() + ',';
+            var _q = $(this).find('td:eq(16)').html() + ',';
+            var _r = $(this).find('td:eq(17)').html() + ',';
+            var _s = $(this).find('td:eq(18)').html() + ',';
+            var _t = $(this).find('td:eq(19)').html() + ',';
+             var _u = $(this).find('td:eq(20)').html() + ',';
+             var _v = $(this).find('td:eq(21)').html() + ',';
+            var _w = $(this).find('td:eq(22)').html() + ',';
+             var _x = $(this).find('td:eq(23)').html() + ',';
+            var _y = $(this).find('td:eq(24)').html() + ',';
+
+                _Expec_Rent_Pay_Date += _a;
+                _Act_Rent_Pay_Date += _b;
+                _project += _c;
+                _unit += _e;
+                _agreement += _g;
+                _balance += _i;
+                _monthly_rent +=_j ;
+                _adv_adjust += _k;
+                _tax_rent +=_l ;
+                _ait_paid +=_m ;
+                _ait_per +=_n ;
+                _ait_amount += _o;
+                _vat_per +=_p ;
+            _vat_amt += _q;
+             _disc_rent +=_r ;
+                _disc_ait += _s;
+                  _disc_vat +=_t;
+                _disc_adv += _u ;
+                  _monthly_rent_payment += _v;
+                _monthly_rent_expense +=_w ;
+                _adjusted_balance += _x ;
+                  _rent_details_id += _y ;
+
+ 
+        });
+      
+
+            $.ajax({
+
+                type: "POST",
+                url: '/AssetCategory/SaveRentPayment',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({
+                    first_Day_Of_Month: first_Day_Of_Month,
+                    _Expec_Rent_Pay_Date: _Expec_Rent_Pay_Date,
+                    _Act_Rent_Pay_Date: _Act_Rent_Pay_Date,
+                    _project: _project,
+                    _unit:_unit,
+                    _agreement: _agreement,
+                    _balance: _balance,
+                    _monthly_rent: _monthly_rent,
+                    _adv_adjust: _adv_adjust,
+                    _tax_rent: _tax_rent,
+                    _ait_paid: _ait_paid,
+                    _ait_per: _ait_per,
+                    _ait_amount:_ait_amount,
+                    _vat_per: _vat_per,
+                    _vat_amt: _vat_amt,
+                    _disc_rent: _disc_rent,
+                    _disc_ait:_disc_ait,
+                    _disc_vat: _disc_vat,
+                    _disc_adv:_disc_adv,
+                    _monthly_rent_payment: _monthly_rent_payment,
+                    _monthly_rent_expense: _monthly_rent_expense,
+                    _adjusted_balance: _adjusted_balance,
+                    _rent_details_id:_rent_details_id
+                }),
+                success: function (response) {
+                    //alert("Result" + response);
+                    if (response != null) {
+
+
+                        toastr.success(response, 'Rent Payment', {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": true,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        });
+
+                        $('.addnew').show();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 5000);
+                        // $('#datatable').load(document.URL + ' #datatable');
+
+                    }
+
+                },
+
+                //success: function (result) {
+                //    location.reload(true);
+
+                //    $("h2").css({ color: result[1] });
+                //},
+                error: function () {
+                    alert("error");
+                }
+            });
+
+
+   });
+    
+</script>

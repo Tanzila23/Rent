@@ -1,0 +1,1231 @@
+﻿
+@{
+    ViewBag.Title = "Asset Item";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/css/select2.css" rel="stylesheet" />
+<link href="~/Content/Custom/_Item.css" rel="stylesheet" />
+<script src="~/Content/js/select2.full.min.js"></script>
+<link href="~/Content/css/bootstrap3-wysihtml5.min.css" rel="stylesheet" />
+<link href="~/Content/css/bootstrap-select.css" rel="stylesheet" />
+<link href="~/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+<script src="~/dist/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="~/plugins/iCheck/all.css">
+<!-- iCheck 1.0.1 -->
+<script src="~/plugins/iCheck/icheck.min.js"></script>
+
+<script src="~/Content/js/bootstrap3-wysihtml5.all.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Content/js/jquery.dataTables.min.js"></script>
+<script src="~/Content/js/dataTables.bootstrap.min.js"></script>
+
+
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+
+<style>
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* The container */
+    .container {
+        display: block;
+        position: relative;
+        padding-left: 35px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size: 22px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    /* Hide the browser's default checkbox */
+    c.ontainer input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    /* Create a custom checkbox */
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 25px;
+        width: 25px;
+        background-color: #F03434;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .container:hover input ~ .checkmark {
+        background-color: #ccc;
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .container input:checked ~ .checkmark {
+        background-color: #2196F3;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .container input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    /* Style the checkmark/indicator */
+    .container .checkmark:after {
+        left: 9px;
+        top: 5px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        .switch input {
+            display: none;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+    /*.select2-selection__rendered {
+        line-height: 32px !important;
+    }
+
+    .select2-selection {
+        height: 34px !important;
+    }*/
+
+</style>
+
+<section class="content-header">
+    <h1 style="font-weight: bolder;">
+        <span style="font-size: 17px;">Asset<span id="invno" style="color: #428dbd;"></span></span>
+        <small>Control panel</small>
+
+    </h1>
+   
+
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Asset Item</li>
+    </ol>
+</section>
+<section class="content">
+    <!-- Default box -->
+    <div class="center-block col-md-6" style="float: none;">    </div>
+    @*<div class="box box-primary addnew">*@
+    @*<div class="box-header with-border">
+            <h3 class="box-title">@ViewBag.Title</h3>
+            <div class="box-tools pull-right">
+                <button class="btn btn-primary bg-blue-gradient hide-form">Hide</button>
+            </div>
+        </div>*@
+    @*<div class="panel-body">
+        <div class="bs-example">
+            <ul class="nav nav-pills" style="margin-bottom: 15px;">
+                <li id="organigation-tab" class="active"><a href="#tab_1" class="tab-1" data-toggle="tab">Main Asset </a></li>*@
+                @*<li id="address-tab"><a href="#tab_2" class="tab-2" data-toggle="tab">Peripheral</a></li>
+                <li id="contact-tab"><a href="#tab_3" class="tab-3" data-toggle="tab">Component</a></li>*@
+            @*</ul>*@
+            <h3 class="box-title">
+                @*Product*@ &nbsp;&nbsp;&nbsp;
+                <strong id="articleInfo">
+                    <span class="classShortCode" style="color:#16a085;"></span>
+                    <span class="categoryShortCode" style="color:#16a085;"></span>
+                    @*<span class="subcategoryShortCode" style="color:#16a085;"></span>*@
+                    <span class="segmentShortCode" style="color:#16a085;"></span>
+                    <span class="modelShortCode" style="color:#16a085;"></span>
+                    <span id="fullBarcode" style="color:#16a085; display:none;"></span>
+                </strong>
+            </h3>
+            <div id="myTabContent" class="tab-content form-horizontal">
+                <div class="tab-pane fade active in" id="tab_1" color="blue">
+                    <div id="tab_1_modal" class="form-horizontal">
+                        <section class="content">
+                            <!-- Default box -->
+                            <div class="box box-solid">
+                                @*<div class="box-header">
+                                        <h3 class="box-title">
+                                            Asset &nbsp;&nbsp;&nbsp;
+                                            <strong class="articleInfo">
+                                                <span class="categoryShortCode" style="color:#16a085;"></span>
+                                                <span class="subcategoryShortCode" style="color:#16a085;"></span>
+                                                <span class="segmentShortCode" style="color:#16a085;"></span>
+                                                <span class="gradeShortCode" style="color:#16a085;"></span>
+                                                <span id="fullBarcode" style="color:#16a085; display:none;"></span>
+                                            </strong>
+                                        </h3>
+
+                                    </div>*@
+
+
+                                <div class="box-body">
+                                    <div class="box-group" id="accordion">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                                        General
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseOne" class="panel-collapse collapse in">
+                                                <div class="panel-body" style=" margin-left:10px;width:990px;">
+                                                    <fieldset>
+                                                        <legend>Asset </legend>
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <div class="hidden">
+                                                                    <input type="hidden" class="form-control " value="1" id="type_id" placeholder="">
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="ClassList">Class</label>
+                                                                    <select type="text" class="form-control select2" id="ClassList" style="border-radius:5px; height:30px; margin-right:-5px; width: 220px;"></select>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="CategoryList" style="margin-right:150px;">Category</label>
+                                                                    <input type="hidden" class="form-control " id="CategoryList_edit" placeholder="">
+                                                                    <select type="text" class="form-control select2" id="CategoryList" style="border-radius:5px; height:30px;" data-placeholder="Category"></select>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="SegmentList" style="margin-left:5px;">Sub Category</label>
+                                                                    <select type="text" class="form-control select2" id="SegmentList" style="border-radius:5px; height:30px;width:220px;margin-left:10px;" data-placeholder="Sub Category"></select>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="modelId" style="margin-left:15px;">Model</label>
+                                                                    <select class="form-control select2" style="border-radius:5px; height:30px; margin-left:5px;" id="model_list" name="model_id" data-plugin="xin_select" data-placeholder="Model" tabindex="-1" aria-hidden="true"></select>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <label for="Manufacturelist">Manufacture</label>
+                                                                    <select class="form-control select2" style="width:220px;margin-left:10px;" id="manufacture_list" name="manufacture" data-plugin="xin_select" data-placeholder="Manufacture" tabindex="-1" aria-hidden="true"></select>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="Supplier">Supplier</label>
+                                                                    <select type="text" class="form-control select2" style="border-radius:0px; height:50px;width:230px;" id="SupplierList" data-placeholder="Supplier"></select>
+                                                                    @*<input type="text" class="form-control" id="SupplierList" placeholder="Component ID" style="border-radius:5px; height:30px;">*@
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="name">Name</label>
+                                                                    <input type="text" class="form-control" id="name" placeholder="Name" style="border-radius:5px; height:30px;">
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="description">Description</label>
+                                                                    <input type="text" class="form-control" id="description" placeholder="Description" style="border-radius:5px; height:30px;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <label for="Size">Select Size</label><br />
+                                                                    @*<select class="form-control select2" multiple style="width:100%;" id="selectSize" name="article_id" data-placeholder="Select Size"></select>*@
+                                                                    <select class="form-control select2" style="width:220px;margin-left:10px;" id="selectSize" name="manufacture" data-plugin="xin_select" data-placeholder="Select Size" tabindex="-1" aria-hidden="true"></select>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="Segment">Color</label><br />
+                                                                    <input type="hidden" class="form-control" id="colorvalue" value="0">
+                                                                    @*<select class="form-control select2" multiple style="width:100%;" id="selectColor" data-2digit="" name="article_id" data-placeholder="Select Color"></select>*@
+                                                                    <select class="form-control select2" style="width:220px;margin-left:10px;" id="selectColor" name="color" data-plugin="xin_select" data-placeholder="Select Color" tabindex="-1" aria-hidden="true"></select>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="DUOM_Id">Unit of Measurement</label>
+                                                                    <select class="form-control select2" style="width:220px;margin-left:10px;" id="DUOM_Id" name="Unit of Measurement" data-plugin="xin_select" data-placeholder="Unit of Measurement" tabindex="-1" aria-hidden="true"></select>
+                                                                </div>
+
+                                                                <div class="col-md-3">
+                                                                    <label for="purchaseCost">Purchase Cost</label>
+                                                                    <input type="text" class="form-control" id="purchaseCost" placeholder=" Purchase Cost" style="border-radius:5px; height:30px;">
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <table style="margin-left:-200px; font-size: 15px;  ">
+                                                                <tr>
+                                                                    <td style="padding: 0 200px;">
+
+                                                                        <label>
+                                                                            &nbsp;&nbsp;<input type="checkbox" class="minimal-red" id="ISNoos" data-isnoos="false">&nbsp; SL
+                                                                        </label>
+
+
+                                                                    </td>
+
+                                                                </tr>
+
+                                                            </table>
+                                                        </div>
+
+
+                                                        <div class="text-right">
+                                                            <button type="submit" class="btn btn-primary" id="submitAsset" onclick="addcat();">Submit</button>
+                                                           
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                              
+                                            </div>
+                                        </div>
+
+                                     
+                                    </div>
+
+
+                            </div>
+
+                            <!-- /.box -->
+                        </section>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    getperipheralData();
+   
+    getcomponentdatatable();
+    $('#ISNoos').on('ifChecked', function () {
+
+        $(this).data('isnoos', true); //setter
+
+    });
+
+    $('#ISNoos').on('ifUnchecked', function () { //Do your code
+        $(this).data('isnoos', 0); //setter
+
+    });
+
+    $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+        checkboxClass: 'icheckbox_minimal-red',
+        radioClass: 'iradio_minimal-red'
+    })
+ 
+ 
+    $(document).ready(function () {
+
+        $('.select2').select2();
+
+        ClassList();
+        SizeDropDownList();
+        ColorDropDownList();
+        bindConversionUnit();
+       
+        $('.addnew').hide();
+        $('.show-form').click(function () {
+            $('.addnew').show();
+            $('.show-form').hide();
+            $('#updateCategory').hide();
+        });
+        $('.hide-form').click(function () {
+            $('.addnew').hide();
+            $('.show-form').show();
+        });
+
+    
+    });
+
+    $("#ClassList").change(function () {
+        var classId = $(this).val();
+        CategoryList(classId);
+        //SegmentList('0');
+        //ModelList('0');
+
+    });
+   
+    $("#model_list").change(function () {
+        var model_list = $(this).val();
+        ManufactureList(model_list);
+        SupplierList(model_list);
+    });
+    $("#CategoryList").change(function () {
+        var catId = $("#CategoryList :selected").val();
+        if (catId) {
+            SegmentList(catId);
+        }
+        
+    });
+    $("#SegmentList").change(function () {
+         var segmentId = $("#SegmentList :selected").val();
+
+        if (segmentId) {
+            ModelList(segmentId);
+        }
+        
+    });
+   
+    function ClassList() {
+
+        $.ajax({
+            url: '/AssetCategory/ClassList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#ClassList').html('');
+                    $('select#ClassListc').html('');
+                    $('select#ClassListp').html('');
+                    var result = '';
+                    result += "<option value='0'>Class Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option id='" + response[i].CLASS_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].DESCRIPTION + "' value='" + response[i].CLASS_ID + "' data-shortname='" + response[i].CODE + "'>" + response[i].DESCRIPTION + "</option>";
+
+                    }
+                }
+                $('select#ClassList').append(result);
+                $('select#ClassListc').append(result);
+                $('select#ClassListp').append(result);
+
+
+            }
+        });
+    }
+    function ManufactureList(model_list) {
+
+        $.ajax({
+            url: '/AssetCategory/ManufactureItemList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ _model_list: model_list }),
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#manufacture_list').html('');
+                    var result = '';
+                    result += "<option value='0'>Manufacure Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option selected id='" + response[i].MANF_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].DESCRIPTION + "' value='" + response[i].MANF_ID + "' data-shortname='" + response[i].STATUS + "'>" + response[i].DESCRIPTION + "</option>";
+
+                    }
+                }
+                $('select#manufacture_list').append(result);
+
+
+            }
+        });
+    }
+    function SupplierList(model_list) {
+
+        $.ajax({
+            url: '/AssetCategory/SupplierItemList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ _model_list: model_list }),
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#SupplierList').html('');
+                    var result = '';
+                    result += "<option value='0'>Supplier Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option selected id='" + response[i].SUP_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].SUPPLIER_NAME + "' value='" + response[i].SUP_ID + "' data-shortname='" + response[i].STATUS + "'>" + response[i].SUPPLIER_NAME + "</option>";
+
+                    }
+                }
+                $('select#SupplierList').append(result);
+
+
+            }
+        });
+    }
+    function CategoryList(classId) {
+        $.ajax({
+            url: '/AssetCategory/CategoryList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ _classId: classId }),
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#CategoryList').html('');
+                    $('select#CategoryListc').html('');
+                    $('select#CategoryListp').html('');
+                    var result = '';
+                    result += "<option value='0'>Category Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+                        if (response[i].CAT_ID == $('#CategoryList_edit').val()) {
+                            result += "<option selected value='" + response[i].CAT_ID + "'data-shortname='" + response[i].CODE + "'>" + response[i].DESCRIPTION + "</option>";
+                        }
+                        else {
+                            result += "<option id='" + response[i].CAT_ID + "' data-shortname='" + response[i].CODE + "' data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].DESCRIPTION + "' value='" + response[i].CAT_ID + "' data-shortname='" + response[i].STATUS + "'>" + response[i].DESCRIPTION + "</option>";
+
+                        }
+                    }
+                    $('select#CategoryList').append(result);
+                    $('select#CategoryListc').append(result);
+                    $('select#CategoryListp').append(result);
+                }
+            }
+        });
+    }
+    function PeripheralList(segmentId) {
+        $.ajax({
+            url: '/AssetCategory/PeripheralList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({  _segmentId: segmentId }),
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#peripheral_list').html('');
+
+                    var result = '';
+                    result += "<option value='0'>Peripheral Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option id='" + response[i].ASSET_CODE + "' data-shortname='" + response[i].MST_TAG + "' value='" + response[i].ASSET_CODE + "' data-shortname='" + response[i].NAME + "'>" + response[i].DESCRIPTION + "</option>";
+
+                    }
+
+                    $('select#peripheral_list').append(result);
+
+                }
+            }
+        });
+    }
+    function ComponentList(segmentId) {
+        $.ajax({
+            url: '/AssetCategory/ComponentList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ _segmentId: segmentId }),
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#component_list').html('');
+
+                    var result = '';
+                    result += "<option value='0'>Component Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option id='" + response[i].ASSET_CODE + "' data-shortname='" + response[i].MST_TAG + "' value='" + response[i].ASSET_CODE + "' data-shortname='" + response[i].NAME + "'>" + response[i].DESCRIPTION + "</option>";
+
+                    }
+
+                    $('select#component_list').append(result);
+
+                }
+            }
+        });
+    }
+    function SegmentList(catId) {
+        $.ajax({
+            url: '/AssetCategory/SegmentList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ _catId: catId }),
+            dataType: "json",
+            success: function (response) {
+
+                if (response != "ERROR") {
+                    $('select#SegmentList').html('');
+                    $('select#SegmentListc').html('');
+                    $('select#SegmentListp').html('');
+                    var result = '';
+                    result += "<option value='0'>Sub Category</option>";
+                    for (var i = 0; response.length > i; i++) {
+                        if (response.length > 0) {
+                            result += "<option  value='" + response[i].SEG_ID + "'data-shortname='" + response[i].CODE + "'>" + response[i].DESCRIPTION + "</option>";
+                        } else {
+                            result += "<option value='0'>Sub Category</option>";
+                        }
+                        
+
+                    }
+                    $('select#SegmentList').append(result);
+                    $('select#SegmentListc').append(result);
+                    $('select#SegmentListp').append(result);
+
+                    $('select#SegmentList').attr('disabled', false);
+                } else {
+                    $('select#SegmentList').attr('disabled', true);
+                }
+            }
+        });
+    }
+    function ModelList(segmentId) {
+        $.ajax({
+            url: '/AssetCategory/ModelList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ _segmentId: segmentId }),
+            dataType: "json",
+            success: function (response) {
+
+                if (response != "ERROR") {
+                    $('select#model_list').html('');
+
+                    var result = '';
+                    result += "<option value='0'>Model Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option  value='" + response[i].MODEL_ID + "'>" + response[i].MODEL_NAME + "</option>";
+
+                    }
+                    $('select#model_list').append(result);
+                    $('select#model_list').attr('disabled', false);
+                }
+                else {
+                    $('select#model_list').attr('disabled', true);
+                }
+            }
+        });
+    }
+    function SizeDropDownList() {
+        $.ajax({
+            url: '/AssetCategory/SizeDropDownList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#selectSize').html('');
+                    // alert("Done");
+                    //   console.log(response);
+                    var result = '';
+                    // result += "<option value='0'>Class Name</option>";
+                    result += "<option value='0'>Select One</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option value='" + response[i].ARTMID + "' title = '" + response[i].ARTMID + "' data-shortname = '" + response[i].DISCODE + "'>" + response[i].DESCRIPTION + "</option>";
+
+                    }
+                    $('select#selectSize').append(result);
+
+                    //subCategoryList();
+                }
+            }
+        })
+    }
+    function ColorDropDownList() {
+        $.ajax({
+            url: '/AssetCategory/ColorDropDownList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#selectColor').html('');
+                    // alert("Done");
+                    //  console.log(response);
+                    var result = '';
+                    result += "<option value=''>Select One</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option value='" + response[i].ARTMID + "' title = '" + response[i].ARTMID + "' data-shortname = '" + response[i].DISCODE + "' data-extid = '" + response[i].EXTID + "'>" + response[i].DESCRIPTION + "</option>";
+
+                    }
+                    $('select#selectColor').append(result);
+
+                }
+            }
+        })
+    }
+    function bindConversionUnit() {
+        $.ajax({
+            type: "POST",
+            url: "/AssetCategory/bindConversionUnit",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                }),
+            success: function (response) {
+                $('#DUOM_Id').html('');
+                var result = "";
+                console.log(response);
+                if (response.First.length > 0) {
+                    if (response.First.length > 0) {
+                        result += "<option value=''>Select One</option>";
+                        for (var i = 0; i < response.First.length; i++) {
+                            result += "<option id='" + response.First[i].UNIT_ID + "' title='" + response.First[i].UNIT_ID + "' value='" + response.First[i].UNIT_ID + "'>" + response.First[i].UNIT_NAME + "</option>";
+                        }
+                    }
+                    $('#DUOM_Id').append(result);
+                }
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+   
+   
+   
+    $("select#ClassList").change(function () {
+       
+      CategoryList($('select#ClassList').val());
+
+        var vShoertName = $.trim($(this).find(':selected').data('shortname'));
+        var vSubCategory = $("CategoryList").find(':selected').data('shortname');
+        $(".classShortCode").html("");
+        $(".categoryShortCode").html("");
+       // $(".subcategoryShortCode").html("");
+        $(".segmentShortCode").html("");
+        $(".modelShortCode").html("");
+        $("#fullBarcode").html("");
+
+        $(".classShortCode").html(vShoertName);
+
+      
+    })
+    $("select#CategoryList").change(function () {
+        // alert("Onchage :" + $('select#category_id').val());
+        var cat = $('select#CategoryList').val();
+
+        if (cat) {
+
+            SegmentList(cat);
+                var vSubCategory = $("SegmentList").find(':selected').data('shortname');
+                $(".classShortCode").html("");
+                $(".categoryShortCode").html("");
+              //  $(".subcategoryShortCode").html("");
+                $(".segmentShortCode").html("");
+                $(".modelShortCode").html("");
+                $("#fullBarcode").html("");
+                var vClass = $.trim($("#ClassList").find(':selected').data('shortname'));
+                var vShoertName = $.trim($(this).find(':selected').data('shortname'));
+                $(".categoryShortCode").html(vClass + vShoertName);
+        }
+        
+
+    })
+    $("select#SegmentList").change(function () {
+        // alert("Onchage :" + $('select#category_id').val());
+
+
+     var seg =   $('select#SegmentList').val()
+        if (seg) {
+            ModelList(seg);
+
+                    var vShoertName = $.trim($(this).find(':selected').data('shortname'));
+                    var vSubCategory = $("ModelList").find(':selected').data('shortname');
+                    $(".classShortCode").html("");
+                    $(".categoryShortCode").html("");
+                    // $(".subcategoryShortCode").html("");
+                    $(".segmentShortCode").html("");
+                    $(".modelShortCode").html("");
+                    $("#fullBarcode").html("");
+                    var vClass = $.trim($("#ClassList").find(':selected').data('shortname'));
+                    var vCategory = $.trim($("#CategoryList").find(':selected').data('shortname'));
+                    //var vShoertName = $(this).find(':selected').data('shortname');
+                    $(".segmentShortCode").html(vClass + vCategory + vShoertName);
+        }
+       
+
+    })
+    $("select#model_list").change(function () {
+        
+
+      //  var vShoertName = $.trim($(this).find(':selected').data('shortname'));
+        //var vSubCategory = $("ModelList").find(':selected').data('shortname');
+        $(".classShortCode").html("");
+        $(".categoryShortCode").html("");
+        // $(".subcategoryShortCode").html("");
+        $(".segmentShortCode").html("");
+        $(".modelShortCode").html("");
+        $("#fullBarcode").html("");
+        var vClass = $.trim($("#ClassList").find(':selected').data('shortname'));
+        var vCategory = $.trim($("#CategoryList").find(':selected').data('shortname'));
+        var vSegment = $.trim($("#SegmentList").find(':selected').data('shortname'));
+       // var vShoertName = $(this).find(':selected').data('shortname');
+        $(".modelShortCode").html(vClass + vCategory + vSegment);
+
+     var vClassShortCode = $(".classShortCode").html();
+     var vCategoryShortCode = $(".categoryShortCode").html();
+     var vSegmentShortCode = $(".segmentShortCode").html();
+     var vModelShortCode = $(".modelShortCode").html();
+     var articleInfo = vClassShortCode + vCategoryShortCode + vSegmentShortCode + vModelShortCode;
+
+
+        Article_Sl_Check(articleInfo);
+   
+    })
+
+
+
+
+      function Article_Sl_Check(prifix) {
+        $.ajax({
+            type: "POST",
+            url: "/AssetCategory/ArticleSlCheck",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                    _prifix: prifix
+                }
+            ),
+            success: function (response) {
+              
+                if (response.length > 0) {
+
+                    //alert('Done');
+                    //  alert(response[0].Article_Serial)
+                    // $("#Customer_Name").val(response[0].CUSTOMER_NAME);
+                    $("#fullBarcode").html(response[0].Article_Serial);
+
+                    var vClass = $.trim($("#ClassList").find(':selected').data('shortname'));
+                    var vCategory = $.trim($("#CategoryList").find(':selected').data('shortname'));
+                    var vSegment = $.trim($("#SegmentList").find(':selected').data('shortname'));
+
+                  
+                    $(".modelShortCode").html(vClass + vCategory + vSegment + $("#fullBarcode").html() );
+                   // $(".gradeShortCode").html(vCategory + vSubCategory + vSegment + vShoertName + $("#fullBarcode").html());
+                }
+
+            }
+        });
+    }
+
+
+    $("#submitAsset").click(function () {
+        if ($("#componentId").val() == "" || $("#componentname").val() == "" || $("#serialNo").val() == "") {
+
+            toastr.error('Enter Data', 'Asset', {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            });
+            return false;
+        }
+         //var rowStatus = 1;
+        var vClassShortCode = $(".classShortCode").html();
+        var vCategoryShortCode = $(".categoryShortCode").html();
+        // var vSubcategoryShortCode = $(".subcategoryShortCode").html();
+        var vSegmentShortCode = $(".segmentShortCode").html();
+        var vModelShortCode = $(".modelShortCode").html();
+
+        var articleInfo = vClassShortCode + vCategoryShortCode + vSegmentShortCode + vModelShortCode;
+        // alert(articleInfo);
+        // articleInfo = $('#articleInfo ').val();
+        var ClassList = $('#ClassList ').val();
+        var TypeId = $('#type_id ').val();
+        var Modellist = $('#model_list ').val();
+        var SupplierList = $('#SupplierList ').val();
+        var Name = $('#name').val();
+        var Description = $('#description').val();
+        var Size = $('#selectSize').val();
+        var Color = $('#selectColor').val();
+        var DUOMId = $('#DUOM_Id').val();
+        var PurchaseCost = $('#purchaseCost').val();
+        var AutoSl = $('#ISNoos').val();
+        if ($("#ISNoos").prop('checked') == true) {
+           
+            AutoSl = 1;
+        }
+        else {
+            AutoSl = 0;
+        }
+
+        //ajax passing data to controller
+        $.ajax({
+
+            type: "POST",
+            url: '/AssetCategory/SaveComponent',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+                  success: function (response) {
+                    //alert("Result" + response);
+                    if (response != null) {
+
+                        if (response === 'Success') {
+
+                             toastr.success(response, 'Asset', {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": true,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        });
+                          $("#masterTag").val("");
+                    $("#Name").val("");
+                    $("#ClassList").val("");
+                    $("#Description").val("");
+                    $("#Size").val("");
+                            // $("#active_status").val(-1);
+                            $('.addnew').show();
+                            setTimeout(function () {
+                                location.reload();
+                            }, 5000);
+
+                           
+
+                        } else {
+                            toastr.error(response, 'Asset', {
+                                    "closeButton": false,
+                                    "debug": false,
+                                    "newestOnTop": false,
+                                    "progressBar": true,
+                                    "positionClass": "toast-top-right",
+                                    "preventDuplicates": false,
+                                    "onclick": null,
+                                    "showDuration": "300",
+                                    "hideDuration": "1000",
+                                    "timeOut": "5000",
+                                    "extendedTimeOut": "1000",
+                                    "showEasing": "swing",
+                                    "hideEasing": "linear",
+                                    "showMethod": "fadeIn",
+                                    "hideMethod": "fadeOut"
+                            });
+
+                             $('.addnew').show();
+                        }
+                        
+                        // $('#datatable').load(document.URL + ' #datatable');
+
+                    }
+
+                },
+        
+
+            data: JSON.stringify({
+                articleInfo: articleInfo,
+                ClassList: ClassList,
+                TypeId: TypeId,
+                Modellist: Modellist,
+                SupplierList: SupplierList,
+                Name: Name,
+                Description: Description,
+                Size: Size,
+                Color: Color,
+                DUOMId: DUOMId,
+                PurchaseCost: PurchaseCost,
+                AutoSl: AutoSl
+
+            }),
+            //success: function (result) {
+            //    location.reload(true);
+
+            //    $("h2").css({ color: result[1] });
+            //},
+            error: function () {
+                alert("error");
+            }
+        });
+
+
+    });
+
+    $("#submitAssetPeripheralData").click(function () {
+
+        var ClassList = $('#ClassListc ').val();
+        var TypeId = $('#type_idp ').val();
+        var peripheralList = $('#peripheral_list ').val();
+
+        //ajax passing data to controller
+        $.ajax({
+
+            type: "POST",
+            url: '/Department/Saveperipheral',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                //alert("Result" + response);
+                if (response != null) {
+
+                    alert(articleInfo);
+                    toastr.success(response, 'Peripheral', {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": true,
+                        "positionClass": "toast-top-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    });
+
+                    $("#Description").val("");
+
+                    // $("#active_status").val(-1);
+                    $('.addnew').show();
+                    setTimeout(function () {
+                        location.reload();
+                    }, 5000);
+                    // $('#datatable').load(document.URL + ' #datatable');
+
+                }
+
+            },
+
+            data: JSON.stringify({
+                ClassList: ClassList,
+                TypeId: TypeId,
+                peripheralList: peripheralList
+
+            }),
+            //success: function (result) {
+            //    location.reload(true);
+
+            //    $("h2").css({ color: result[1] });
+            //},
+            error: function () {
+                alert("error");
+            }
+        });
+
+
+    });
+    function getperipheralData() {
+
+        $('#peripheraldatatable').DataTable({
+            "searching": false,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "language":
+            {
+                "processing": "<div class='overlay custom-loader-background'><i class='fa fa-cog fa-spin custom-loader-color'></i></div>"
+            },
+            "processing": true,
+            "ajax": {
+                "url": "/AssetCategory/PeripheralGridList",
+                "type": "GET",
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "ASSET_CLASS_NAME", "autoWidth": true },
+                { "data": "CATEGORY_NAME", "autoWidth": true },
+                 { "data": "SEGMENT_NAME", "autoWidth": true },
+                { "data": "DESCRIPTION", "autoWidth": true },
+                //{ "data": "LOGO_EXT","width": "50px", "autoWidth": true},
+                {
+                    "data": "MODEL_ID", "width": "50px", "render": function (data) {
+                        return '<button type="button" class="btn btn-primary" onclick="editAssetModel(' + data + ')">Edit</button>';
+                        // return '<div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu"><li><button type="button" class="btn btn-primary" onclick="getbyID(' + data + ')">DETAIL</button></li><li><button type="button" class="btn btn-info" onclick="getOldCategory(' + data + ')"> OLD CATEGORY</button></li><li><button type="button" class="btn btn-info" onclick="getbyInventoryInsert(' + data + ')">INVENTORY INSERT</button></li><li><button type="button" class="btn btn-warning" onclick="getbyInventoryView(' + data+')">INVENTORY VIEW</button></li></ul></div>';
+                    }
+                }
+            ]
+        });
+
+    }
+     $("#submitAssetComponentData").click(function () {
+
+        var ClassList = $('#ClassListp ').val();
+        var TypeId = $('#type_idc ').val();
+        var peripheralList = $('#component_list ').val();
+
+        //ajax passing data to controller
+        $.ajax({
+
+            type: "POST",
+            url: '/Department/Saveperipheral',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                //alert("Result" + response);
+                if (response != null) {
+
+                    alert(articleInfo);
+                    toastr.success(response, 'Component', {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": true,
+                        "positionClass": "toast-top-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    });
+
+                    $("#Description").val("");
+
+                    // $("#active_status").val(-1);
+                    $('.addnew').show();
+                    setTimeout(function () {
+                        location.reload();
+                    }, 5000);
+                    // $('#datatable').load(document.URL + ' #datatable');
+
+                }
+
+            },
+
+            data: JSON.stringify({
+                ClassList: ClassList,
+                TypeId: TypeId,
+                peripheralList: peripheralList
+
+            }),
+            //success: function (result) {
+            //    location.reload(true);
+
+            //    $("h2").css({ color: result[1] });
+            //},
+            error: function () {
+                alert("error");
+            }
+        });
+
+
+     });
+    function getcomponentdatatable() {
+    
+        $('#componentdatatable').DataTable({
+            "searching": false,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "language":
+            {
+                "processing": "<div class='overlay custom-loader-background'><i class='fa fa-cog fa-spin custom-loader-color'></i></div>"
+            },
+            "processing": true,
+            "ajax": {
+                "url": "/AssetCategory/AssetComponentGridList",
+                "type": "GET",
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "ASSET_CLASS_NAME", "autoWidth": true },
+                { "data": "CATEGORY_NAME", "autoWidth": true },
+                 { "data": "SEGMENT_NAME", "autoWidth": true },
+                { "data": "DESCRIPTION", "autoWidth": true },
+                //{ "data": "LOGO_EXT","width": "50px", "autoWidth": true},
+                {
+                    "data": "MODEL_ID", "width": "50px", "render": function (data) {
+                        return '<button type="button" class="btn btn-primary" onclick="editAssetModel(' + data + ')">Edit</button>';
+                        // return '<div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu"><li><button type="button" class="btn btn-primary" onclick="getbyID(' + data + ')">DETAIL</button></li><li><button type="button" class="btn btn-info" onclick="getOldCategory(' + data + ')"> OLD CATEGORY</button></li><li><button type="button" class="btn btn-info" onclick="getbyInventoryInsert(' + data + ')">INVENTORY INSERT</button></li><li><button type="button" class="btn btn-warning" onclick="getbyInventoryView(' + data+')">INVENTORY VIEW</button></li></ul></div>';
+                    }
+                }
+            ]
+        });
+
+    }
+
+</script>
+
+<link href="~/Content/Custom/_AssetMaster.css" rel="stylesheet" />

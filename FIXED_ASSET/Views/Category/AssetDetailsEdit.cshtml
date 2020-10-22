@@ -1,0 +1,2285 @@
+﻿
+@{
+    ViewBag.Title = "Asset Details Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/css/select2.css" rel="stylesheet" />
+<link href="~/Content/Custom/_Item.css" rel="stylesheet" />
+<script src="~/Content/js/select2.full.min.js"></script>
+<link href="~/Content/css/bootstrap3-wysihtml5.min.css" rel="stylesheet" />
+<link href="~/Content/css/bootstrap-select.css" rel="stylesheet" />
+<link href="~/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+<script src="~/dist/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="~/plugins/iCheck/all.css">
+<!-- iCheck 1.0.1 -->
+<script src="~/plugins/iCheck/icheck.min.js"></script>
+
+<script src="~/Content/js/bootstrap3-wysihtml5.all.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Content/js/jquery.dataTables.min.js"></script>
+<script src="~/Content/js/dataTables.bootstrap.min.js"></script>
+
+
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+
+<style>
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* The container */
+    .container {
+        display: block;
+        position: relative;
+        padding-left: 35px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size: 22px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    /* Hide the browser's default checkbox */
+    c.ontainer input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    /* Create a custom checkbox */
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 25px;
+        width: 25px;
+        background-color: #F03434;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .container:hover input ~ .checkmark {
+        background-color: #ccc;
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .container input:checked ~ .checkmark {
+        background-color: #2196F3;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .container input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    /* Style the checkmark/indicator */
+    .container .checkmark:after {
+        left: 9px;
+        top: 5px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        .switch input {
+            display: none;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+    /*.select2-selection__rendered {
+        line-height: 32px !important;
+    }
+
+    .select2-selection {
+        height: 34px !important;
+    }*/
+
+</style>
+
+<section class="content-header">
+    <h1>
+        @ViewBag.Title
+        <small>Control panel</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Asset Details Edit</li>
+    </ol>
+</section>
+@*<section class="content-header">
+        <h1 style="font-weight: bolder;">
+            <span style="font-size: 17px;">Asset<span id="invno" style="color: #428dbd;"></span></span>
+        </h1>
+        <small>Control panel</small>
+
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Asset Item</li>
+        </ol>
+    </section>*@
+<section class="content">
+    <!-- Default box -->
+    <div class="center-block col-md-6" style="float: none;">    </div>
+    <div>
+        <a class="btn btn-primary" href="/AssetCategory/AssetChildIndex">
+            << BACK
+        </a>
+    </div>
+    @*<div class="box box-primary addnew">*@
+    @*<div class="box-header with-border">
+            <h3 class="box-title">@ViewBag.Title</h3>
+            <div class="box-tools pull-right">
+                <button class="btn btn-primary bg-blue-gradient hide-form">Hide</button>
+            </div>
+        </div>*@
+    @*<div class="panel-body">
+        <div class="bs-example">*@
+            @*<ul class="nav nav-pills" style="margin-bottom: 15px;">
+                <li id="organigation-tab" class="active"><a href="#tab_1" class="tab-1" data-toggle="tab">Main Asset </a></li>*@
+            @*<li id="address-tab"><a href="#tab_2" class="tab-2" data-toggle="tab">Peripheral</a></li>
+                <li id="contact-tab"><a href="#tab_3" class="tab-3" data-toggle="tab">Component</a></li>*@
+            @*</ul>*@
+            <h3 class="box-title">
+                Asset Details Edit &nbsp;&nbsp;&nbsp;
+                <strong id="articleInfo">
+                    <span class="classShortCode" style="color:#16a085;"></span>
+                    <span class="categoryShortCode" style="color:#16a085;"></span>
+                    @*<span class="subcategoryShortCode" style="color:#16a085;"></span>*@
+                    <span class="segmentShortCode" style="color:#16a085;"></span>
+                    <span class="sizeShortCode" style="color:#16a085;"></span>
+                    @*<span id="fullBarcode" style="color:#16a085; display:none;"></span>*@
+                </strong>
+            </h3>
+            <div id="myTabContent" class="tab-content form-horizontal">
+                <div class="tab-pane fade active in" id="tab_1" color="blue">
+                    <div id="tab_1_modal" class="form-horizontal">
+                        <section class="content">
+                            <!-- Default box -->
+                            <div class="box box-solid">
+
+                                <div class="box-body">
+                                    <div class="box-group" id="accordion">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                                        General
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseOne" class="panel-collapse collapse in">
+                                                <div class="panel-body" style=" margin-left:10px;width:990px;">
+                                                    <fieldset>
+                                                        <legend>Asset </legend>
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <div class="hidden">
+                                                                    <input type="hidden" class="form-control " value="1" id="type_id" placeholder="">
+                                                                    <input type="hidden" class="form-control " id="parent_code" placeholder="">
+                                                                    <input type="hidden" class="form-control " id="main_asset_code" placeholder="">
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="ClassList">Class</label>
+                                                                    <input type="text" readonly class="form-control" id="ClassList" value="" placeholder="Class ID">
+                                                                    @*<input type="hidden" class="form-control" id="ClassList_edit" placeholder="">
+                                                                        <select type="text" class="form-control select2 " id="ClassList" style="border-radius:5px; height:30px; margin-right:-5px; width: 220px;"></select>*@
+
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="CategoryList" style="margin-right:150px;">Category</label>
+                                                                    <input type="text" readonly class="form-control" id="CategoryList" value="" placeholder="Category ID">
+
+                                                                    @*<select type="text" class="form-control select2" id="CategoryList" style="border-radius:5px; height:30px;" data-placeholder="Category"></select>*@
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="SegmentList" style="margin-left:5px;">Sub Category</label>
+                                                                    <input type="text" readonly class="form-control" id="SegmentList" value="" placeholder="Sub Category ID">
+                                                                    @*<input type="hidden" class="form-control" id="SegmentList_edit" placeholder="">
+                                                                        <select type="text" class="form-control select2" id="SegmentList" style="border-radius:5px; height:30px;width:220px;margin-left:10px;" data-placeholder="Sub Category"></select>*@
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="modelId" style="margin-left:15px;">Model</label>
+                                                                    <input type="text" readonly class="form-control" id="model_list" value="" placeholder="Model ID">
+                                                                    @*<input type="hidden" class="form-control" id="model_list_edit" placeholder="">
+                                                                        <select class="form-control select2" style="border-radius:5px; height:30px; margin-left:5px;" id="model_list" name="model_id" data-plugin="xin_select" data-placeholder="Model" tabindex="-1" aria-hidden="true"></select>*@
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <label for="Manufacturelist">Manufacture</label>
+                                                                    <input type="text" readonly class="form-control" id="manufacture_list" value="" placeholder="Manufacture ID">
+                                                                    @*<input type="hidden" class="form-control" id="manufacture_list_edit" placeholder="">
+                                                                        <select class="form-control select2" style="width:220px;margin-left:10px;" id="manufacture_list" name="manufacture" data-plugin="xin_select" data-placeholder="Manufacture" tabindex="-1" aria-hidden="true"></select>*@
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="Supplier">Supplier</label>
+                                                                    <input type="text" readonly class="form-control" id="SupplierList" value="" placeholder="Supplier ID">
+                                                                    @*<input type="hidden" class="form-control" id="SupplierList_edit" placeholder="">
+                                                                        <select type="text" class="form-control select2" style="border-radius:0px; height:50px;width:230px;" id="SupplierList" data-placeholder="Supplier"></select>*@
+
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="asset" style="margin-left:15px;">Asset</label>
+                                                                    <input type="text" class="form-control" id="asset" placeholder="Asset" style="border-radius:5px; height:30px;">
+                                                                    @*<select class="form-control select2" style="border-radius:5px; height:30px; margin-left:5px;" id="asset_list" name="model_id" data-plugin="xin_select" data-placeholder="Asset" tabindex="-1" aria-hidden="true"></select>*@
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="initial_Tag">Initial Tag</label>
+                                                                    <input type="text" class="form-control" id="initial_Tag" placeholder="Initial Tag" style="border-radius:5px; height:30px;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </fieldset>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSix">
+                                                        Details
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseSix" class="panel-collapse collapse">
+                                                <div class="panel-body" style=" margin-left:10px;
+                                                     ">
+                                                    <fieldset>
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <label for="external_Tag">External Tag</label><br />
+                                                                    <input type="text" class="form-control" id="external_Tag" placeholder="External Tag" style="border-radius:5px; height:30px;">
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="serial_No">Serial No</label><br />
+                                                                    <input type="text" class="form-control" id="serial_No" placeholder="Serial No" style="border-radius:5px; height:30px;">
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="servicing_Tag">Servicing Tag</label>
+                                                                    <input type="text" class="form-control" id="servicing_Tag" placeholder="Servicing Tag" style="border-radius:5px; height:30px;">
+                                                                </div>
+
+                                                                <div class="col-md-3">
+                                                                    <label for="order_No">Order No</label>
+                                                                    <input type="text" class="form-control" id="order_No" placeholder=" Order No" style="border-radius:5px; height:30px;">
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <label for="Order_Date">Order Date</label><br />
+                                                                    <div class="input-group date" data-provide="datepicker">
+                                                                        <input type="text" data-date-format="mm/dd/yyyy" id="Order_Date" class="form-control datepicker " placeholder="-Select Date-" autocomplete="off">
+                                                                        <div class="input-group-addon">
+                                                                            <span class="glyphicon glyphicon-th"></span>
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="challan_No">Challan No</label><br />
+                                                                    <input type="text" class="form-control" id="challan_No" placeholder=" Challan No" style="border-radius:5px; height:30px;">
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="Receive_Date">Receive Date</label>
+
+                                                                    <div class="input-group date" data-provide="datepicker">
+                                                                        <input type="text" data-date-format="mm/dd/yyyy" id="Receive_Date" class="form-control datepicker" placeholder="-Select Date-" autocomplete="off">
+                                                                        <div class="input-group-addon">
+                                                                            <span class="glyphicon glyphicon-th"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-md-3">
+                                                                    <label for="purchaseCost">Purchase Cost</label>
+                                                                    <input type="text" class="form-control" id="purchaseCost" placeholder=" Purchase Cost" style="border-radius:5px; height:30px;">
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <label for="sales_Price">Sales Price</label><br />
+                                                                    <input type="text" class="form-control" id="sales_Price" placeholder="Sales Price" style="border-radius:5px; height:30px;">
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="tax_Amount">Tax Amount</label><br />
+                                                                    <input type="text" class="form-control" id="tax_Amount" placeholder=" Tax Amount" style="border-radius:5px; height:30px;">
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="discount">Discount</label>
+                                                                    <input type="text" class="form-control" id="discount" placeholder="Discount" style="border-radius:5px; height:30px;">
+                                                                </div>
+
+                                                                <div class="col-md-3">
+                                                                    <label for="land_Value">Land Value</label>
+                                                                    <input type="text" class="form-control" id="land_Value" placeholder="Land Value" style="border-radius:5px; height:30px;">
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+
+                                                    </fieldset>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="panel panel-default" id="">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                                        Others Information
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseTwo" class="panel-collapse collapse">
+                                                <div class="panel-body" style="margin-left:10px;">
+                                                    <fieldset>
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <label for="net_Amount">Net Amount</label><br />
+                                                                    <input type="text" class="form-control" id="net_Amount" placeholder=" Net Amount" style="border-radius:5px; height:30px;">
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="depriciation_Rule_Id">Depriciation Rule Id</label><br />
+                                                                    <select class="form-control select2" id="depriciation_Rule_Id" style="width:221.25px">
+                                                                        <option selected> Select </option>
+                                                                        <option value="1">Rule1</option>
+                                                                        <option value="2">Rule2</option>
+
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="depriciation_Amount">Depriciation Amount</label>
+                                                                    <input type="text" class="form-control" id="depriciation_Amount" placeholder=" Depriciation Amount" style="border-radius:5px; height:30px;">
+                                                                </div>
+
+                                                                <div class="col-md-3">
+                                                                    <label for="book_Value">Book Value</label>
+                                                                    <input type="text" class="form-control" id="book_Value" placeholder=" Book Value" style="border-radius:5px; height:30px;">
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <label for="salvage_Value">Salvage Value</label><br />
+                                                                    <input type="text" class="form-control" id="salvage_Value" placeholder=" Salvage Value" style="border-radius:5px; height:30px;">
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="uDF_Value">UDF Value</label><br />
+                                                                    <input type="text" class="form-control" id="uDF_Value" placeholder=" UDF Value" style="border-radius:5px; height:30px;">
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="warranty">Warranty</label>
+                                                                    <select class="form-control select2" id="warranty" style="width:221.25px">
+                                                                        <option selected> Select </option>
+                                                                        <option value="1">One</option>
+                                                                        <option value="2">Two</option>
+                                                                        <option value="3">Three</option>
+                                                                        <option value="4">Four</option>
+                                                                        <option value="5">Five</option>
+                                                                        <option value="6">Six</option>
+                                                                        <option value="7">Seven</option>
+                                                                        <option value="8">Eight</option>
+                                                                        <option value="9">Nine</option>
+                                                                        <option value="10">Ten</option>
+                                                                    </select>
+
+                                                                </div>
+
+                                                                <div class="col-md-3">
+                                                                    <label for="warranty_Type">Warranty Type</label>
+                                                                    <select class="form-control select2" id="warranty_Type" style="width:221.25px">
+                                                                        <option selected> Select </option>
+                                                                        <option value="1">Year</option>
+                                                                        <option value="2">Month</option>
+                                                                        <option value="3">Day</option>
+                                                                    </select>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <label for="Efective_Date">Efective Date</label><br />
+                                                                    <div class="input-group date" data-provide="datepicker">
+                                                                        <input type="text" data-date-format="mm/dd/yyyy" id="Efective_Date" class="form-control datepicker" placeholder="-Select Date-" autocomplete="off">
+                                                                        <div class="input-group-addon">
+                                                                            <span class="glyphicon glyphicon-th"></span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="aset_Life">Aset Life</label><br />
+                                                                    <select class="form-control select2" id="aset_Life" style="width:221.25px">
+                                                                        <option selected> Select </option>
+                                                                        <option value="1">One</option>
+                                                                        <option value="2">Two</option>
+                                                                        <option value="3">Three</option>
+                                                                        <option value="4">Four</option>
+                                                                        <option value="5">Five</option>
+                                                                        <option value="6">Six</option>
+                                                                        <option value="7">Seven</option>
+                                                                        <option value="8">Eight</option>
+                                                                        <option value="9">Nine</option>
+                                                                        <option value="10">Ten</option>
+                                                                    </select>
+                                                                    @*<input type="text" class="form-control" id="aset_Life" placeholder=" Aset Life" style="border-radius:5px; height:30px;">*@
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="life_Type">Life Type</label>
+                                                                    <select class="form-control select2" id="life_Type" style="width:221.25px">
+                                                                        <option selected> Select </option>
+                                                                        <option value="1">Year</option>
+                                                                        <option value="2">Month</option>
+                                                                        <option value="3">Day</option>
+                                                                    </select>
+                                                                    @*<input type="text" class="form-control" id="life_Type" placeholder=" Life Type" style="border-radius:5px; height:30px;">*@
+                                                                </div>
+
+                                                                <div class="col-md-3">
+                                                                    <label for="Disposed_Date">Disposed Date</label>
+                                                                    <div class="input-group date" data-provide="datepicker">
+                                                                        <input type="text" data-date-format="mm/dd/yyyy" id="Disposed_Date" class="form-control datepicker " placeholder="-Select Date-" autocomplete="off">
+                                                                        <div class="input-group-addon">
+                                                                            <span class="glyphicon glyphicon-th"></span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <label for="condition_Id">Condition Id</label><br />
+                                                                    <select class="form-control select2" id="condition_Id" style="width:221.25px">
+                                                                        <option selected> Select </option>
+                                                                        <option value="1">Good</option>
+                                                                        <option value="2">Bad</option>
+                                                                        <option value="3">New</option>
+
+                                                                    </select>
+                                                                </div>
+
+                                                                <div class="col-md-3">
+                                                                    <label for="business_Unit_ID">Outlet</label>
+                                                                    <input type="hidden" class="form-control" id="outlet_edit" placeholder="">
+                                                                    <select type="text" class="form-control select2 outletSelect" id="outletSelect" name="OutletDefine" style="border-radius:5px; height:30px; margin-right:-5px; width: 220px;"></select>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <label for="department_Id">Department</label>
+                                                                    <input type="hidden" class="form-control" id="department_edit" placeholder="">
+                                                                    <select type="text" class="form-control select2" id="department_Id" data-placeholder="Department Name" style="border-radius:5px; height:30px; margin-right:-5px; width: 220px;"></select>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-3">
+                                                                        <label for="user_Code">User</label><br />
+                                                                        <input type="hidden" class="form-control" id="user_edit" placeholder="">
+                                                                        <select type="text" class="form-control select2" id="user_Code" style="border-radius:5px; height:30px; margin-right:-5px; width: 220px;"></select>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <label for="status">Status</label><br />
+                                                                    <select class="form-control select2" id="status" style="width:221.25px">
+                                                                        <option value="0"selected > Select </option>
+                                                                        <option value="1">In stock</option>
+                                                                        <option value="2">In Use</option>
+                                                                        <option value="3">Repairable</option>
+
+                                                                    </select>
+
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">
+                                                        Peripheral
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseSeven" class="panel-collapse collapse">
+                                                <div class="panel-body" style=" margin-left:10px;
+                                                    ">
+                                                    <div class="col-md-12">
+                                                        <div class="box-body table-responsive no-padding">
+                                                            <table id="AssetPeripheraldatatable" class="table table-bordered table-striped compact hover" cellspacing="0" width="100%">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th style="font-size:15px">Iniitial Tag</th>
+                                                                        <th style="font-size:15px">External Tag</th>
+                                                                        <th style="font-size:15px">Sl</th>
+                                                                        <th style="font-size:15px">Asset</th>
+                                                                        @*<th style="font-size:15px"> Quantity</th>*@
+                                                                        @*<th style="font-size:15px">Model</th>*@
+                                                                        @*<th style="font-size:15px">Purchase Cost</th>*@
+                                                                        <th style="font-size:15px">Order No</th>
+                                                                        <th style="font-size:15px;width:auto;">Actions</th>
+                                                                    </tr>
+                                                                </thead>
+
+
+                                                            </table>
+
+                                                        </div>
+                                                        <!-- /.box-body -->
+                                                    </div>
+                                                </div>
+                                                </fieldset>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="panel panel-default" id="">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseEight">
+                                                        Component
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseEight" class="panel-collapse collapse">
+                                                <div class="panel-body" style="margin-left:10px;">
+                                                    <fieldset>
+                                                        <div class="col-md-12">
+                                                            <div class="box-body table-responsive no-padding">
+                                                                <table id="AssetComponentdatatable" class="table table-bordered table-striped compact hover" cellspacing="0" width="100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            @*<th>SL</th>*@
+                                                                            <th style="font-size:15px">Iniitial Tag</th>
+                                                                            <th style="font-size:15px">External Tag</th>
+                                                                            <th style="font-size:15px">Sl</th>
+                                                                            <th style="font-size:15px">Asset</th>
+                                                                            @*<th style="font-size:15px"> Quantity</th>*@
+                                                                            @*<th style="font-size:15px">Model</th>*@
+                                                                            @*<th style="font-size:15px">Purchase Cost</th>*@
+                                                                            <th style="font-size:15px">Order No</th>
+                                                                            <th style="font-size:15px;width:auto;">Actions</th>
+                                                                        </tr>
+                                                                    </thead>
+
+                                                                </table>
+
+                                                            </div>
+                                                            <!-- /.box-body -->
+                                                        </div>
+                                                        @*<div class="text-right">
+                                                            <button type="submit" class="btn btn-primary" id="submitAssetComponentData">ADD</button>*@
+                                                        @*<button class="btn btn-sm btn-primary " id="updateCategory">
+                                                                <i class="ace-icon fa fa-check"></i> Update
+                                                            </button>*@
+                                                        @*</div>*@
+                                                        @*<div class="box box-primary" id="getComponentList" style="margin-top:20px;">*@
+                                                        @*<div class="box-header with-border">
+                                                            <h3 class="box-title">List All Peripheral</h3>*@
+                                                        @*<div class="box-tools pull-right">
+                                                                <button type="button" class="btn btn-box-tool show-form text-info bg-blue-gradient"><i class="fa fa-plus"></i>Add New</button>
+                                                            </div>*@
+                                                        @*</div>*@
+
+
+                                                        <!-- /.box-body -->
+                                                </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="text-right">
+                                    @*<button type="button" class="btn btn-default">Cancel</button> &nbsp;&nbsp;*@
+                                    <button type="button" class="btn btn-primary" id="btnFinalUpdate" onclick="CheckArtNoExists()">Update</button>
+                                </div>
+                            </div>
+
+
+                    </div>
+
+                    <!-- /.box -->
+</section>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog" style="width:350px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Peripheral Edit</h4>
+            </div>
+            <div class="modal-body" >
+                <form role="form">
+                    <div class="hidden">
+                        @*<input type="hidden" class="form-control " value="1" id="type_id" placeholder="">*@
+                        <input type="hidden" class="form-control " id="peripheral_code" placeholder="">
+                    </div>
+                    @*<input type="hidden" class="form-control " value="2" id="type_idp" placeholder="">*@
+                    <div class="form-group">
+                        <label for="Designation">Peripheral</label>
+                        <input type="text" readonly class="form-control col-sm-4" id="p_Peripheral" value="" placeholder="Peripheral ID">
+                    </div>
+                    <div class="form-group">
+                        <label for="Designation">Category</label>
+                        <input type="text" readonly class="form-control" id="p_categoryId" value="" placeholder="Category ID">
+                    </div>
+                    <div class="form-group">
+                        <label for="Category">Sub Category </label>
+                        <input type="text" readonly class="form-control" id="p_sub_categoryId" value="" placeholder="Category Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="CategoryShortName">Manufacture</label>
+                        <input type="text" readonly class="form-control" id="p_manufacture" value="" placeholder="Category Short Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="CategoryShortName">Model</label>
+                        <input type="text" readonly class="form-control" id="p_model" value="" placeholder="Category Short Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="CategoryShortName">Serial No</label>
+                        <input type="text" class="form-control" id="p_serial_no" value="" placeholder="Serial No">
+                    </div>
+                    <div class="form-group">
+                        <label for="CategoryShortName">External Tag</label>
+                        <input type="text" class="form-control" id="p_external_tag" value="" placeholder="External Tag">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="UpdatePeripheral();">Update</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="modal fade" id="modal-default_component">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Component Edit</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="hidden">
+                        @*<input type="hidden" class="form-control " value="1" id="type_id" placeholder="">*@
+                        <input type="hidden" class="form-control " id="component_code" placeholder="">
+                    </div>
+                    @*<input type="hidden" class="form-control " value="2" id="type_idp" placeholder="">*@
+                    <div class="form-group">
+                        <label for="Designation">Component</label>
+                        <input type="text" readonly class="form-control" id="c_Component" value="" placeholder="Component ID">
+                    </div>
+                    <div class="form-group">
+                        <label for="Designation">Category</label>
+                        <input type="text" readonly class="form-control" id="c_categoryId" value="" placeholder="Category ID">
+                    </div>
+                    <div class="form-group">
+                        <label for="Category">Sub Category </label>
+                        <input type="text" readonly class="form-control" id="c_sub_categoryId" value="" placeholder="Category Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="CategoryShortName">Manufacture</label>
+                        <input type="text" readonly class="form-control" id="c_manufacture" value="" placeholder="Category Short Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="CategoryShortName">Model</label>
+                        <input type="text" readonly class="form-control" id="c_model" value="" placeholder="Category Short Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="CategoryShortName">Serial No</label>
+                        <input type="text" class="form-control" id="c_serial_no" value="" placeholder="Serial No">
+                    </div>
+                    <div class="form-group">
+                        <label for="CategoryShortName">External Tag</label>
+                        <input type="text" class="form-control" id="c_external_tag" value="" placeholder="External Tag">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="UpdateComponentClick();">Update</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+@*<script src="../../Scripts/daterangepicker.js"></script>
+<link href="../../Content/daterangepicker.css" rel="stylesheet" />
+<link href="../../dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+<script src="../../dist/js/bootstrap-datepicker.min.js"></script>*@
+
+<script>
+
+
+    $(document).ready(function () {
+    
+         $('.select2').select2();
+       
+       $.fn.datepicker.defaults.autoclose =true;
+        // $("#Order_Date").datepicker("setDate", new Date());
+        //$("#Receive_Date").datepicker("setDate", new Date());
+        // $("#Efective_Date").datepicker("setDate", new Date());
+        // $("#Disposed_Date").datepicker("setDate", new Date());
+
+        Edit_Asset_Data();
+        //Edit_Asset_Peripheral_Data();
+        AssetDetailsPeripheralList();
+        AssetDetailsComponentList();
+
+        OutletList();
+        UserList();
+        //DepartmentList();
+        ClassList();
+        SizeDropDownList();
+        ColorDropDownList();
+        bindConversionUnit();
+      $('#address-tab').attr('class', 'disabled');
+
+
+    });
+
+    function AssetDetailsPeripheralList() {
+
+        $('#AssetPeripheraldatatable').DataTable({
+            "searching": false,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "language":
+            {
+                "processing": "<div class='overlay custom-loader-background'><i class='fa fa-cog fa-spin custom-loader-color'></i></div>"
+            },
+            "processing": true,
+            "ajax": {
+                "url": "/AssetCategory/AssetDetailsPeripheralList",
+                "type": "GET",
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "ASSET_INTTAG", "autoWidth": true },
+                { "data": "ASSET_EXTTAG", "autoWidth": true },
+                { "data": "P_SERIAL_NO", "autoWidth": true },
+                { "data": "CHILD_ASSET", "autoWidth": true },
+                //{ "data": "QUANTITY", "autoWidth": true },
+                //{ "data": "P_COST", "autoWidth": true },
+                // { "data": "SERIAL_NO", "autoWidth": true },
+                { "data": "ORD_NO", "autoWidth": true },
+
+                {
+
+
+                    "data": "PERIPHERAL_CODE", "width": "50px", "render": function (data, type, row) {
+                        return '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-default" onclick="Edit_Asset_Peripheral_Data(' + row.MAIN_ASSET_CODE + ', ' + row.PERIPHERAL_CODE + ')"><i class="glyphicon glyphicon-pencil"></i></button>';
+
+
+                    }
+                }
+            ]
+        });
+
+    }
+
+    function editAssetDetailsPeripheral(assetDetailsCode) {
+        $.ajax({
+            type: "POST",
+            url: "/AssetCategory/AssetChildID",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                //  obj: asd
+                assetDetailsCode: assetDetailsCode
+
+            }),
+            success: function (response) {
+                window.location.href = '/AssetCategory/AssetDetailsEdit';
+                //window.location.href = ("/AssetChildIndex.cshtml");
+
+            }
+        })
+
+    }
+    function AssetDetailsComponentList() {
+
+        $('#AssetComponentdatatable').DataTable({
+            "searching": false,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "language":
+            {
+                "processing": "<div class='overlay custom-loader-background'><i class='fa fa-cog fa-spin custom-loader-color'></i></div>"
+            },
+            "processing": true,
+            "ajax": {
+                "url": "/AssetCategory/AssetComponentPeripheralList",
+                "type": "GET",
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "ASSET_INTTAG", "autoWidth": true },
+                { "data": "ASSET_EXTTAG", "autoWidth": true },
+                { "data": "SERIAL_NO", "autoWidth": true },
+                { "data": "CHILD_ASSET", "autoWidth": true },
+                //{ "data": "QUANTITY", "autoWidth": true },
+                //{ "data": "P_COST", "autoWidth": true },
+                // { "data": "SERIAL_NO", "autoWidth": true },
+                { "data": "ORD_NO", "autoWidth": true },
+
+                {
+                    "data": "PERIPHERAL_CODE", "width": "50px", "render": function (data, type, row) {
+                        return '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-default_component" onclick="Edit_Asset_Component_Data(' + row.MAIN_ASSET_CODE + ', ' + row.PERIPHERAL_CODE + ')"><i class="glyphicon glyphicon-pencil"></i></button>';
+
+
+                    }
+                }
+            ]
+        });
+
+    }
+    function Edit_Asset_Component_Data(parentCode, peripheralCode) {
+
+
+        $.ajax({
+            url: '/AssetCategory/getAssetDetailsComponentList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                //  obj: asd
+                parentCode: parentCode,
+                peripheralCode: peripheralCode
+
+            }),
+            success: function (response) {
+
+                console.log(response);
+                $("#component_code").val(response.data.PERIPHERAL_CODE);
+                $("#c_Component").val(response.data.CHILD_ASSET);
+                $("#c_categoryId").val(response.data.CATEGORY_NAME);
+                $("#c_sub_categoryId").val(response.data.SEGMENT_NAME);
+                $("#c_manufacture").val(response.data.MANUFACTURE);
+                $("#c_model").val(response.data.MODEL_NAME);
+                $("#c_serial_no").val(response.data.SERIAL_NO);
+                $("#c_external_tag").val(response.data.ASSET_EXTTAG);
+
+
+
+            }
+
+        });
+    }
+    function Edit_Asset_Data() {
+
+        // AssetDetailsPeripheralList();
+        $("#modelId").prop("disabled", true);
+        $("#ClassList").prop("disabled", true);
+        $("#CategoryList").prop("disabled", true);
+        $("#SegmentList").prop("disabled", true);
+        $("#model_list").prop("disabled", true);
+        $("#manufacture_list").prop("disabled", true);
+        $("#SupplierList").prop("disabled", true);
+        $("#asset").prop("disabled", true);
+        $("#initial_Tag").prop("disabled", true);
+        //alert("Edit_Asset_Data");
+        $.ajax({
+            url: '/AssetCategory/Edit_Asset_Data',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                // Console.log(response);
+                // Console.log("Edit_Asset_Data");
+                //$("#ClassList_edit").val(response.data.CLASS_NAME);
+                //alert(response.ASSET_INTTAG);
+                //console.log(response.ASSET_INTTAG);
+
+                if (response.ASSET_IDFNO.length > 0) {
+                    console.log(response.ASSET_INTTAG);
+                    //(response.ASSET_INTTAG);
+
+                    $("#ClassList").val(response.CLASS_NAME).trigger('change');
+                    // $("#CategoryList_edit").val(response.data.CAT_ID).trigger('change');
+                        $("#CategoryList").val(response.CATEGORY_NAME);
+                   // CategoryListReload(response.ASSET_CLASS, response.CAT_ID);
+                    // CategoryListReloadPeripheral(response.ASSET_CLASS, response.CAT_ID);
+                    // CategoryListReloadComponent(response.ASSET_CLASS, response.CAT_ID);
+                       $("#SegmentList").val(response.SEGMENT_NAME);
+                   // SegmentListReload(response.ASSET_CLASS, response.CAT_ID, response.SEG_ID);
+                     $("#model_list").val(response.MODEL_NAME);
+                    ModelListReload(response.SEG_ID, response.MOD_ID);
+                    ComponentListReload(response.SEG_ID, response.CHILD_ASSET);
+                    PeripheralListReload(response.SEG_ID, response.CHILD_ASSET);
+                    // ComponentListReload(response.SEG_ID, response.CHILD_ASSET);
+                     $("#manufacture_list").val(response.MANUFACTURE);
+                   // ManufactureListReload(response.MOD_ID, response.MAN_ID);
+                      $("#SupplierList").val(response.SUPPLIER_NAME);
+                   // SupplierListReload(response.MOD_ID, response.SUP_ID);
+                    $("#asset").val(response.MAIN_ASSET);
+                    $("#main_asset_code").val(response.ASSET_CODE);
+                    $("#parent_code").val(response.ASSET_IDFNO);
+                    $("#quantityp").val(response.QUANTITY);
+                    $("#quantityc").val(response.QUANTITY);
+                    $("#initial_Tag").val(response.ASSET_INTTAG);
+                    $("#external_Tag").val(response.ASSET_EXTTAG);
+                    // alert(response.SERIAL_NO);
+                    $("#serial_No").val(response.SERIAL_NO);
+                    $("#servicing_Tag").val(response.SERV_TAG);
+                    $("#order_No").val(response.ORD_NO);
+                    $("#Order_Date").val(response.ORD_DATE);
+                    $("#challan_No").val(response.CHALLAN_NO);
+                    $("#Receive_Date").val(response.GRC_DATE);
+                    $("#purchaseCost").val(response.P_COST);
+                    $("#sales_Price").val(response.S_PRICE);
+                    $("#tax_Amount").val(response.TAX_AMT);
+                    $("#discount").val(response.DISCOUNT);
+                    $("#land_Value").val(response.LAND_VALUE);
+                    $("#net_Amount").val(response.NET_AMT);
+                    $("#depriciation_Rule_Id").val(response.DEP_RULEID);
+                    $("#depriciation_Amount").val(response.DEP_AMT);
+                    $("#book_Value").val(response.BOOK_VALUE);
+                    $("#salvage_Value").val(response.SALVAGE_VALUE);
+                    $("#uDF_Value").val(response.UDF_VALUE);
+                    $("#warranty").val(response.WARRANTY).trigger('change');
+                    $("#warranty_Type").val(response.WAR_TYPE).trigger('change');
+                    $("#Efective_Date").val(response.ASS_EFFDATE);
+                    $("#aset_Life").val(response.ASS_LIFE);
+                    $("#life_Type").val(response.LF_TYPE);
+                    $("#Disposed_Date").val(response.ASS_DISPDATE);
+                    $("#condition_Id").val(response.ASS_CONID).trigger('change');
+                    // alert(response.Organization_Name);
+                    $("#outlet_edit").val(response.BUNIT_ID).trigger('change');
+                    //alert(response.DEP_ID);
+                    $("#department_edit").val(response.DEP_ID).trigger('change');
+                       DepartmentListReload(response.BUNIT_ID, response.DEP_ID);
+                    $("#user_edit").val(response.USER_ID).trigger('change');
+                    // $("#Disposed_Date").val(response.ASS_DISPDATE);
+                    //$("#outletSelect").val(response.BUNIT_ID).trigger('change');
+                 function DepartmentListReload(outletId,department_edit) {
+
+        $.ajax({
+            url: '/AssetCategory/LocationWiseDepartmentList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+             data: JSON.stringify({ _org_id: outletId }),
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#department_Id').html('');
+                    var result = '';
+                    result += "<option value='0'>Department Name</option>";
+                      var DepartmentEdit = department_edit;
+                    for (var i = 0; response.length > i; i++) {
+                        if (response[i].DEPT_ID == $('#department_edit').val()) {
+                            result += "<option selected value='" + response[i].DEPT_ID + "'>" + response[i].DEPT_NAME + "</option>";
+                        }
+                        else {
+                            result += "<option  value='" + response[i].DEPT_ID + "'>" + response[i].DEPT_NAME + "</option>";
+                        }
+
+
+                    }
+                }
+                $('select#department_Id').append(result);
+                 $('select#department_Id').val(DepartmentEdit);
+
+
+
+            }
+        });
+    }
+                    function CategoryListReload(classId, category_edit) {
+                        $.ajax({
+                            url: '/AssetCategory/CategoryList',
+                            type: 'POST',
+                            contentType: "application/json;charset=utf-8",
+                            data: JSON.stringify({ _classId: classId }),
+                            dataType: "json",
+                            success: function (response) {
+
+                                if (response.length > 0) {
+                                    $('select#CategoryList').html('');
+                                    //$('select#CategoryListc').html('');
+
+                                    var result = '';
+                                    result += "<option value='0'>Category Name</option>";
+                                    // var CategoryEdit = category_edit;
+                                    var CategoryEdit = category_edit;
+
+                                    for (var i = 0; response.length > i; i++) {
+
+                                        result += "<option selected value='" + response[i].CAT_ID + "'>" + response[i].DESCRIPTION + "</option>";
+
+
+                                    }
+                                    $('select#CategoryList').append(result);
+                                    //$('select#CategoryList').val(CategoryEdit);
+                                    $('select#CategoryList').val(CategoryEdit);
+
+                                }
+                            }
+                        });
+                    }
+                    //  function CategoryListReloadPeripheral(classId,category_edit_p) {
+                    //    $.ajax({
+                    //        url: '/AssetCategory/CategoryList',
+                    //        type: 'POST',
+                    //        contentType: "application/json;charset=utf-8",
+                    //        data: JSON.stringify({ _classId: classId }),
+                    //        dataType: "json",
+                    //        success: function (response) {
+
+                    //              if (response.length > 0) {
+                    //                $('select#CategoryList').html('');
+                    //                $('select#CategoryListc').html('');
+
+                    //                var result = '';
+                    //                  result += "<option value='0'>Category Name</option>";
+                    //                 // var CategoryEdit = category_edit;
+                    //                  var CategoryEditc = category_edit_p;
+
+                    //                 for (var i = 0; response.length > i; i++) {
+
+                    //                result += "<option selected value='" + response[i].CAT_ID + "'>" + response[i].DESCRIPTION + "</option>";
+
+
+                    //                }
+                    //                  $('select#CategoryListc').append(result);
+                    //                   //$('select#CategoryList').val(CategoryEdit);
+                    //                  $('select#CategoryListc').val(CategoryEditc);
+
+                    //            }
+                    //        }
+                    //    });
+                    //                }
+                    //  function CategoryListReloadComponent(classId,category_edit_c) {
+                    //    $.ajax({
+                    //        url: '/AssetCategory/CategoryList',
+                    //        type: 'POST',
+                    //        contentType: "application/json;charset=utf-8",
+                    //        data: JSON.stringify({ _classId: classId }),
+                    //        dataType: "json",
+                    //        success: function (response) {
+
+                    //              if (response.length > 0) {
+                    //                $('select#CategoryList').html('');
+                    //                $('select#CategoryListp').html('');
+
+                    //                var result = '';
+                    //                  result += "<option value='0'>Category Name</option>";
+                    //                 // var CategoryEdit = category_edit;
+                    //                  var CategoryEditp = category_edit_c;
+
+                    //                 for (var i = 0; response.length > i; i++) {
+
+                    //                result += "<option selected value='" + response[i].CAT_ID + "'>" + response[i].DESCRIPTION + "</option>";
+
+
+                    //                }
+                    //                  $('select#CategoryListp').append(result);
+                    //                   //$('select#CategoryList').val(CategoryEdit);
+                    //                  $('select#CategoryListp').val(CategoryEditp);
+
+                    //            }
+                    //        }
+                    //    });
+                    //}
+                    function SegmentListReload(classId, catId, segment_edit) {
+                        $.ajax({
+                            url: '/AssetCategory/SegmentList',
+                            type: 'POST',
+                            contentType: "application/json;charset=utf-8",
+                            data: JSON.stringify({ _classId: classId, _catId: catId }),
+                            dataType: "json",
+                            success: function (response) {
+
+                                if (response.length > 0) {
+                                    $('select#SegmentList').html('');
+
+                                    var result = '';
+                                    result += "<option value='0'>Segment Name</option>";
+                                    var SegmentEdit = segment_edit;
+                                    for (var i = 0; response.length > i; i++) {
+
+                                        result += "<option selected value='" + response[i].SEG_ID + "'>" + response[i].DESCRIPTION + "</option>";
+
+                                    }
+                                    $('select#SegmentList').append(result);
+                                    $('select#SegmentList').val(SegmentEdit);
+                                }
+                            }
+                        });
+                    }
+                    function ModelListReload(segmentId, model_edit) {
+                        $.ajax({
+                            url: '/AssetCategory/ModelList',
+                            type: 'POST',
+                            contentType: "application/json;charset=utf-8",
+                            data: JSON.stringify({ _segmentId: segmentId }),
+                            dataType: "json",
+                            success: function (response) {
+
+                                if (response.length > 0) {
+                                    $('select#model_list').html('');
+
+                                    var result = '';
+                                    result += "<option value='0'>Model Name</option>";
+                                    var ModelEdit = model_edit;
+                                    for (var i = 0; response.length > i; i++) {
+
+                                        result += "<option selected value='" + response[i].MODEL_ID + "'>" + response[i].MODEL_NAME + "</option>";
+
+                                    }
+                                    $('select#model_list').append(result);
+                                    $('select#model_list').val(ModelEdit);
+                                }
+                            }
+                        });
+                    }
+                    function ManufactureListReload(model_list, manf_edit) {
+
+                        $.ajax({
+                            url: '/AssetCategory/ManufactureItemList',
+                            type: 'POST',
+                            contentType: "application/json;charset=utf-8",
+                            data: JSON.stringify({ _model_list: model_list }),
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.length > 0) {
+                                    console.log(response);
+                                    $('select#manufacture_list').html('');
+                                    var result = '';
+                                    result += "<option value='0'>Manufacure Name</option>";
+                                    var ManufactureEdit = manf_edit;
+                                    for (var i = 0; response.length > i; i++) {
+
+                                        result += "<option selected id='" + response[i].MANF_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].DESCRIPTION + "' value='" + response[i].MANF_ID + "' data-shortname='" + response[i].STATUS + "'>" + response[i].DESCRIPTION + "</option>";
+
+                                    }
+                                }
+                                $('select#manufacture_list').append(result);
+                                $('select#manufacture_list').val(ManufactureEdit);
+
+
+                            }
+                        });
+                    }
+                    function SupplierListReload(model_list, sup_edit) {
+
+                        $.ajax({
+                            url: '/AssetCategory/SupplierItemList',
+                            type: 'POST',
+                            contentType: "application/json;charset=utf-8",
+                            data: JSON.stringify({ _model_list: model_list }),
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.length > 0) {
+                                    console.log(response);
+                                    $('select#SupplierList').html('');
+                                    var result = '';
+                                    result += "<option value='0'>Supplier Name</option>";
+                                    var SupplierEdit = sup_edit;
+                                    for (var i = 0; response.length > i; i++) {
+
+                                        result += "<option selected id='" + response[i].SUP_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].SUPPLIER_NAME + "' value='" + response[i].SUP_ID + "' data-shortname='" + response[i].STATUS + "'>" + response[i].SUPPLIER_NAME + "</option>";
+
+                                    }
+                                }
+                                $('select#SupplierList').append(result);
+                                $('selected#SupplierList').val(SupplierEdit);
+
+
+
+                            }
+                        });
+                    }
+                    function PeripheralListReload(segmentId, peripheral_edit) {
+                        $.ajax({
+                            url: '/AssetCategory/PeripheralList',
+                            type: 'POST',
+                            contentType: "application/json;charset=utf-8",
+                            data: JSON.stringify({ _segmentId: segmentId }),
+                            dataType: "json",
+                            success: function (response) {
+
+                                if (response.length > 0) {
+                                    $('select#peripheral_list').html('');
+
+                                    var result = '';
+                                    result += "<option value='0'>Peripheral Name</option>";
+                                    var PeripheralEdit = peripheral_edit;
+                                    for (var i = 0; response.length > i; i++) {
+
+                                        result += "<option selected id='" + response[i].ASSET_CODE + "' data-shortname='" + response[i].MST_TAG + "' value='" + response[i].ASSET_CODE + "' data-shortname='" + response[i].NAME + "'>" + response[i].DESCRIPTION + "</option>";
+
+                                    }
+
+                                    $('select#peripheral_list').append(result);
+                                    $('select#peripheral_list :selected').val(PeripheralEdit);
+
+                                }
+                            }
+                        });
+                    }
+                    function ComponentListReload(segmentId, component_edit) {
+                        $.ajax({
+                            url: '/AssetCategory/ComponentList',
+                            type: 'POST',
+                            contentType: "application/json;charset=utf-8",
+                            data: JSON.stringify({ _segmentId: segmentId }),
+                            dataType: "json",
+                            success: function (response) {
+
+                                if (response.length > 0) {
+                                    $('select#component_list').html('');
+
+                                    var result = '';
+                                    result += "<option value='0'>Component Name</option>";
+                                    var ComponentEdit = component_edit;
+                                    for (var i = 0; response.length > i; i++) {
+
+                                        result += "<option selected id='" + response[i].ASSET_CODE + "' data-shortname='" + response[i].MST_TAG + "' value='" + response[i].ASSET_CODE + "' data-shortname='" + response[i].NAME + "'>" + response[i].DESCRIPTION + "</option>";
+
+                                    }
+
+                                    $('select#component_list').append(result);
+                                    $('select#component_list :selected').val(ComponentEdit);
+
+                                }
+                            }
+                        });
+                    }
+                }
+
+            }
+
+        });
+    }
+    function Edit_Asset_Peripheral_Data(parentCode, peripheralCode) {
+
+
+        $.ajax({
+            url: '/AssetCategory/getAssetDetailsPeripheralList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                //  obj: asd
+                parentCode: parentCode,
+                peripheralCode: peripheralCode
+
+            }),
+            success: function (response) {
+
+                console.log(response);
+                $("#peripheral_code").val(response.data.PERIPHERAL_CODE);
+                $("#p_Peripheral").val(response.data.CHILD_ASSET);
+                $("#p_categoryId").val(response.data.CATEGORY_NAME);
+                $("#p_sub_categoryId").val(response.data.SEGMENT_NAME);
+                $("#p_manufacture").val(response.data.MANUFACTURE);
+                $("#p_model").val(response.data.MODEL_NAME);
+                $("#p_serial_no").val(response.data.P_SERIAL_NO);
+                $("#p_external_tag").val(response.data.ASSET_EXTTAG);
+
+
+
+            }
+
+        });
+    }
+    function UpdatePeripheral() {
+
+        var peripheral_code = $('#peripheral_code').val();
+        var parent_code = $('#parent_code').val();
+        var p_serial_no = $('#p_serial_no').val();
+        var p_external_tag = $('#p_external_tag').val();
+
+        $.ajax({
+            url: "/AssetCategory/UpdateMasterPeripheral",
+            type: 'POST',
+            dataType: "json",
+            traditional: true,
+            data: {
+                parent_code: parent_code,
+                peripheral_code: peripheral_code,
+                p_serial_no: p_serial_no,
+                p_external_tag: p_external_tag,
+
+            },
+            success: function (response) {
+                //alert("Result" + response);
+                if (response != null) {
+
+                    toastr.success(response, 'Peripheral', {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": true,
+                        "positionClass": "toast-top-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    });
+
+                    $('#collapseSeven').addClass('in');
+                    $('#collapseSeven').attr('aria-expanded', 'true');
+                    // AssetDetailsPeripheralList();
+                    setTimeout(function () {
+                        location.reload();
+                    }, 5000);
+
+                }
+
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+    function UpdateComponentClick() {
+
+        var peripheral_code = $('#component_code').val();
+        var parent_code = $('#parent_code').val();
+        var p_serial_no = $('#c_serial_no').val();
+        var p_external_tag = $('#c_external_tag').val();
+
+        $.ajax({
+            url: "/AssetCategory/UpdateMasterPeripheral",
+            type: 'POST',
+            dataType: "json",
+            traditional: true,
+            data: {
+                parent_code: parent_code,
+                peripheral_code: peripheral_code,
+                p_serial_no: p_serial_no,
+                p_external_tag: p_external_tag,
+
+            },
+            success: function (response) {
+                //alert("Result" + response);
+                if (response != null) {
+
+                    toastr.success(response, 'Component', {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": true,
+                        "positionClass": "toast-top-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    });
+
+                    $('#collapseSeven').addClass('in');
+                    $('#collapseSeven').attr('aria-expanded', 'true');
+                    // AssetDetailsPeripheralList();
+                    setTimeout(function () {
+                        location.reload();
+                    }, 5000);
+
+                }
+
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+    $("#ClassList").change(function () {
+        var classId = $(this).val();
+        CategoryList(classId);
+
+    });
+
+    $("#model_list").change(function () {
+        var model_list = $(this).val();
+        ManufactureList(model_list);
+        SupplierList(model_list);
+    });
+    $("#CategoryList").change(function () {
+        // var classId = $("#ClassList :selected").val();
+        var catId = $("#CategoryList :selected").val();
+        SegmentList(catId);
+    });
+    $("#CategoryListc").change(function () {
+        // var classId = $("#ClassList :selected").val();
+        var catId = $("#CategoryListc :selected").val();
+        SegmentList(catId);
+    });
+    $("#CategoryListp").change(function () {
+        // var classId = $("#ClassList :selected").val();
+        var catId = $("#CategoryListp :selected").val();
+        SegmentList(catId);
+    });
+
+    $("#SegmentList").change(function () {
+        // var classId = $("#ClassList :selected").val();
+        var segmentId = $("#SegmentList :selected").val();
+        ModelList(segmentId);
+        AssetList(segmentId);
+    });
+    $("#SegmentListc").change(function () {
+        // var classId = $("#ClassList :selected").val();
+        var segmentId = $("#SegmentListc :selected").val();
+        ModelList(segmentId);
+    });
+    $("#SegmentListp").change(function () {
+        // var classId = $("#ClassList :selected").val();
+        var segmentId = $("#SegmentListp :selected").val();
+        ModelList(segmentId);
+    });
+    function ClassList() {
+
+        $.ajax({
+            url: '/AssetCategory/ClassList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#ClassList').html('');
+                    $('select#ClassListc').html('');
+                    $('select#ClassListp').html('');
+
+                    var result = '';
+                    result += "<option value='0'>Class Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+                        if (response[i].CLASS_ID == $('#ClassList_edit').val()) {
+
+                            result += "<option selected value='" + response[i].CLASS_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].DESCRIPTION + "' value='" + response[i].CLASS_ID + "' data-shortname='" + response[i].CODE + "'>" + response[i].DESCRIPTION + "</option>";
+                        }
+                        else {
+                            result += "<option id='" + response[i].CLASS_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].DESCRIPTION + "' value='" + response[i].CLASS_ID + "' data-shortname='" + response[i].CODE + "'>" + response[i].DESCRIPTION + "</option>";
+                        }
+                    }
+                }
+                $('select#ClassList').append(result);
+                $('select#ClassListc').append(result);
+                $('select#ClassListp').append(result);
+
+
+            }
+        });
+    }
+    function ManufactureList(model_list) {
+
+        $.ajax({
+            url: '/AssetCategory/ManufactureItemList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ _model_list: model_list }),
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#manufacture_list').html('');
+                    var result = '';
+                    result += "<option value='0'>Manufacure Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option selected id='" + response[i].MANF_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].DESCRIPTION + "' value='" + response[i].MANF_ID + "' data-shortname='" + response[i].STATUS + "'>" + response[i].DESCRIPTION + "</option>";
+
+                    }
+                }
+                $('select#manufacture_list').append(result);
+
+
+            }
+        });
+    }
+    function SupplierList(model_list) {
+
+        $.ajax({
+            url: '/AssetCategory/SupplierItemList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ _model_list: model_list }),
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#SupplierList').html('');
+                    var result = '';
+                    result += "<option value='0'>Supplier Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option selected id='" + response[i].SUP_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].SUPPLIER_NAME + "' value='" + response[i].SUP_ID + "' data-shortname='" + response[i].STATUS + "'>" + response[i].SUPPLIER_NAME + "</option>";
+
+                    }
+                }
+                $('select#SupplierList').append(result);
+
+
+            }
+        });
+    }
+    function CategoryList(classId) {
+        $.ajax({
+            url: '/AssetCategory/CategoryList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ _classId: classId }),
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#CategoryList').html('');
+                    $('select#CategoryListc').html('');
+                    $('select#CategoryListp').html('');
+                    var result = '';
+                    result += "<option value='0'>Category Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+                        if (response[i].CAT_ID == $('#CategoryList_edit').val()) {
+                            result += "<option selected value='" + response[i].CAT_ID + "'data-shortname='" + response[i].CODE + "'>" + response[i].DESCRIPTION + "</option>";
+                        }
+                        else {
+                            result += "<option id='" + response[i].CAT_ID + "' data-shortname='" + response[i].CODE + "' data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].DESCRIPTION + "' value='" + response[i].CAT_ID + "' data-shortname='" + response[i].STATUS + "'>" + response[i].DESCRIPTION + "</option>";
+
+                        }
+                    }
+                    $('select#CategoryList').append(result);
+                    $('select#CategoryListc').append(result);
+                    $('select#CategoryListp').append(result);
+                }
+            }
+        });
+    }
+    //function CategoryList(classId) {
+    //    $.ajax({
+    //        url: '/AssetCategory/CategoryList',
+    //        type: 'POST',
+    //        contentType: "application/json;charset=utf-8",
+    //        data: JSON.stringify({ _classId: classId }),
+    //        dataType: "json",
+    //        success: function (response) {
+
+    //            if (response.length > 0) {
+    //                $('select#CategoryList').html('');
+
+    //                var result = '';
+    //                result += "<option value='0'>Category Name</option>";
+    //                for (var i = 0; response.length > i; i++) {
+    //                    if (response[i].CAT_ID == $('#CategoryList_edit').val()) {
+    //                        result += "<option selected value='" + response[i].CAT_ID + "'data-shortname='" + response[i].CODE + "'>" + response[i].DESCRIPTION + "</option>";
+    //                    }
+    //                    else {
+    //                        result += "<option id='" + response[i].CAT_ID + "' data-shortname='" + response[i].CODE + "' data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].DESCRIPTION + "' value='" + response[i].CAT_ID + "' data-shortname='" + response[i].STATUS + "'>" + response[i].DESCRIPTION + "</option>";
+
+    //                    }
+    //                }
+    //                $('select#CategoryList').append(result);
+
+    //            }
+    //        }
+    //    });
+    //}
+    function PeripheralList(segmentId) {
+        $.ajax({
+            url: '/AssetCategory/PeripheralList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ _segmentId: segmentId }),
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#peripheral_list').html('');
+
+                    var result = '';
+                    result += "<option value='0'>Peripheral Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option id='" + response[i].ASSET_CODE + "' data-shortname='" + response[i].MST_TAG + "' value='" + response[i].ASSET_CODE + "' data-shortname='" + response[i].NAME + "'>" + response[i].DESCRIPTION + "</option>";
+
+                    }
+
+                    $('select#peripheral_list').append(result);
+
+                }
+            }
+        });
+    }
+    function ComponentList(segmentId) {
+        $.ajax({
+            url: '/AssetCategory/ComponentList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ _segmentId: segmentId }),
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#component_list').html('');
+
+                    var result = '';
+                    result += "<option value='0'>Component Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option id='" + response[i].ASSET_CODE + "' data-shortname='" + response[i].MST_TAG + "' value='" + response[i].ASSET_CODE + "' data-shortname='" + response[i].NAME + "'>" + response[i].DESCRIPTION + "</option>";
+
+                    }
+
+                    $('select#component_list').append(result);
+
+                }
+            }
+        });
+    }
+    function SegmentList(catId) {
+        $.ajax({
+            url: '/AssetCategory/SegmentList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ _catId: catId }),
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#SegmentList').html('');
+                    $('select#SegmentListc').html('');
+                    $('select#SegmentListp').html('');
+                    var result = '';
+                    result += "<option value='0'>Sub Category</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option  value='" + response[i].SEG_ID + "'data-shortname='" + response[i].CODE + "'>" + response[i].DESCRIPTION + "</option>";
+
+                    }
+                    $('select#SegmentList').append(result);
+                    $('select#SegmentListc').append(result);
+                    $('select#SegmentListp').append(result);
+                }
+            }
+        });
+    }
+    function ModelList(segmentId) {
+        $.ajax({
+            url: '/AssetCategory/ModelList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ _segmentId: segmentId }),
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#model_list').html('');
+
+                    var result = '';
+                    result += "<option value='0'>Model Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option  value='" + response[i].MODEL_ID + "'>" + response[i].MODEL_NAME + "</option>";
+
+                    }
+                    $('select#model_list').append(result);
+                }
+            }
+        });
+    }
+    function AssetList(segmentId) {
+        $.ajax({
+            url: '/AssetCategory/AssetList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ _segmentId: segmentId }),
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#asset_list').html('');
+
+                    var result = '';
+                    result += "<option value='0'>Asset Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option id='" + response[i].ASSET_CODE + "' data-shortname='" + response[i].MST_TAG + "' value='" + response[i].ASSET_CODE + "' data-shortname='" + response[i].NAME + "'>" + response[i].DESCRIPTION + "</option>";
+
+                    }
+
+                    $('select#asset_list').append(result);
+
+                }
+            }
+        });
+    }
+    function SizeDropDownList() {
+        $.ajax({
+            url: '/AssetCategory/SizeDropDownList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#selectSize').html('');
+                    // alert("Done");
+                    //   console.log(response);
+                    var result = '';
+                    // result += "<option value='0'>Class Name</option>";
+                    result += "<option value='0'>Select One</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option value='" + response[i].ARTMID + "' title = '" + response[i].ARTMID + "' data-shortname = '" + response[i].DISCODE + "'>" + response[i].DESCRIPTION + "</option>";
+
+                    }
+                    $('select#selectSize').append(result);
+
+                    //subCategoryList();
+                }
+            }
+        })
+    }
+    function ColorDropDownList() {
+        $.ajax({
+            url: '/AssetCategory/ColorDropDownList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#selectColor').html('');
+                    // alert("Done");
+                    //  console.log(response);
+                    var result = '';
+                    result += "<option value=''>Select One</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option value='" + response[i].ARTMID + "' title = '" + response[i].ARTMID + "' data-shortname = '" + response[i].DISCODE + "' data-extid = '" + response[i].EXTID + "'>" + response[i].DESCRIPTION + "</option>";
+
+                    }
+                    $('select#selectColor').append(result);
+
+                }
+            }
+        })
+    }
+    function bindConversionUnit() {
+        $.ajax({
+            type: "POST",
+            url: "/AssetCategory/bindConversionUnit",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                }),
+            success: function (response) {
+                $('#DUOM_Id').html('');
+                var result = "";
+                console.log(response);
+                if (response.First.length > 0) {
+                    if (response.First.length > 0) {
+                        result += "<option value=''>Select One</option>";
+                        for (var i = 0; i < response.First.length; i++) {
+                            result += "<option id='" + response.First[i].UNIT_ID + "' title='" + response.First[i].UNIT_ID + "' value='" + response.First[i].UNIT_ID + "'>" + response.First[i].UNIT_NAME + "</option>";
+                        }
+                    }
+                    $('#DUOM_Id').append(result);
+                }
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+    function OutletList() {
+
+        $.ajax({
+            url: '/AssetCategory/OutletList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#OutletDefine').html('');
+                    $('select.outletSelect').html('');
+                    // alert("Done");
+                    //  console.log(response);
+                    var result = '';
+                    result += "<option value='0'>Select One</option>";
+                    for (var i = 0; response.length > i; i++) {
+                        if (response[i].Organization_ID == $('#outlet_edit').val()) {
+
+                            result += "<option selected value='" + response[i].Organization_ID + "'>" + response[i].External_ID + " " + response[i].Organization_Name + "</option>";
+
+                        }
+                        else {
+                            result += "<option  value='" + response[i].Organization_ID + "'>" + response[i].External_ID + " " + response[i].Organization_Name + "</option>";
+                        }
+                    }
+                    $('select#OutletDefine').append(result);
+                    $('select.outletSelect').append(result);
+                }
+            }
+        });
+    }
+      $(".outletSelect").change(function () {
+        var outletId = $(this).val();
+        DepartmentList(outletId);
+
+    });
+    function UserList() {
+
+        $.ajax({
+            url: '/AssetCategory/UserList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#user_Code').html('');
+                    var result = '';
+                    result += "<option value='0'>User Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+                        if (response[i].EMP_ID == $('#user_edit').val()) {
+
+                            result += "<option selected  value='" + response[i].EMP_ID + "'>" + response[i].Name + "</option>";
+                        }
+                        else {
+                            result += "<option  value='" + response[i].EMP_ID + "'>" + response[i].Name + "</option>";
+                        }
+                    }
+                }
+                $('select#user_Code').append(result);
+
+
+
+            }
+        });
+    }
+    function DepartmentList(outletId) {
+
+        $.ajax({
+            url: '/AssetCategory/LocationWiseDepartmentList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+             data: JSON.stringify({ _org_id: outletId }),
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#department_Id').html('');
+                    var result = '';
+                    result += "<option value='0'>Department Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+                        if (response[i].DEPT_ID == $('#department_edit').val()) {
+                            result += "<option selected value='" + response[i].DEPT_ID + "'>" + response[i].DEPT_NAME + "</option>";
+                        }
+                        else {
+                            result += "<option  value='" + response[i].DEPT_ID + "'>" + response[i].DEPT_NAME + "</option>";
+                        }
+
+
+                    }
+                }
+                $('select#department_Id').append(result);
+
+
+
+            }
+        });
+    }
+
+
+    var vClassShortCode = $(".classShortCode").html();
+    var vCategoryShortCode = $(".categoryShortCode").html();
+    // var vSubcategoryShortCode = $(".subcategoryShortCode").html();
+    var vSegmentShortCode = $(".segmentShortCode").html();
+    var vSizeShortCode = $(".sizeShortCode").html();
+
+    var articleInfo = vClassShortCode + vCategoryShortCode + vSegmentShortCode + vSizeShortCode;
+
+
+    $("#SegmentListc").change(function () {
+        //var classId = $("#ClassList :selected").val();
+        //var catId = $("#CategoryListc :selected").val();
+        var segmentId = $("#SegmentListc :selected").val();
+        PeripheralList(segmentId);
+    });
+
+    $("#SegmentListp").change(function () {
+        //var classId = $("#ClassList :selected").val();
+        //var catId = $("#CategoryListp :selected").val();
+        var segmentId = $("#SegmentListp :selected").val();
+        ComponentList(segmentId);
+    });
+    function PeripheralList(segmentId) {
+        $.ajax({
+            url: '/AssetCategory/PeripheralList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ _segmentId: segmentId }),
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#peripheral_list').html('');
+
+                    var result = '';
+                    result += "<option value='0'>Peripheral Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option id='" + response[i].ASSET_CODE + "' data-shortname='" + response[i].MST_TAG + "' value='" + response[i].ASSET_CODE + "' data-shortname='" + response[i].NAME + "'>" + response[i].DESCRIPTION + "</option>";
+
+                    }
+
+                    $('select#peripheral_list').append(result);
+
+                }
+            }
+        });
+    }
+    function ComponentList(segmentId) {
+        $.ajax({
+            url: '/AssetCategory/ComponentList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ _segmentId: segmentId }),
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#component_list').html('');
+
+                    var result = '';
+                    result += "<option value='0'>Component Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option id='" + response[i].ASSET_CODE + "' data-shortname='" + response[i].MST_TAG + "' value='" + response[i].ASSET_CODE + "' data-shortname='" + response[i].NAME + "'>" + response[i].DESCRIPTION + "</option>";
+
+                    }
+
+                    $('select#component_list').append(result);
+
+                }
+            }
+        });
+    }
+    $("#btnFinalUpdate").click(function UpdateData() {
+
+        var parent_code = $('#parent_code ').val(); //identification No
+        var asset = $('#main_asset_code ').val();
+        //var peripheral_code = $('#peripheral_code ').val();
+        //var component_code = $('#component_code ').val();
+        var initial_Tag = $('#initial_Tag').val();
+        var external_Tag = $('#external_Tag ').val();
+        //var p_external_tag = $('#p_external_tag ').val();
+        //var c_external_tag = $('#c_external_tag ').val();
+        var serial_No = $('#serial_No ').val();
+        //var p_serial_no = $('#p_serial_no ').val();
+        //var c_serial_no = $('#c_serial_no ').val();
+        var servicing_Tag = $('#servicing_Tag ').val();
+        var order_No = $('#order_No ').val();
+        var Order_Date = $('#Order_Date ').val();
+        var challan_No = $('#challan_No').val();
+        var Receive_Date = $('#Receive_Date').val();
+        var SupplierList = $('#SupplierList').val();
+        var purchaseCost = $('#purchaseCost ').val();
+        var sales_Price = $('#sales_Price').val();
+        var tax_Amount = $('#tax_Amount ').val();
+        var discount = $('#discount ').val();
+        var land_Value = $('#land_Value ').val();
+        var net_Amount = $('#net_Amount ').val();
+        var depriciation_Rule_Id = $('#depriciation_Rule_Id ').val();
+        var depriciation_Amount = $('#depriciation_Amount').val();
+        var book_Value = $('#book_Value').val();
+        var salvage_Value = $('#salvage_Value').val();
+        var uDF_Value = $('#uDF_Value ').val();
+        var warranty = $('#warranty').val();
+        var warranty_Type = $('#warranty_Type ').val();
+        var Efective_Date = $('#Efective_Date ').val();
+        var aset_Life = $('#aset_Life ').val();
+        var life_Type = $('#life_Type ').val();
+        var Disposed_Date = $('#Disposed_Date ').val();
+        var condition_Id = $('#condition_Id').val();
+        var outletSelect = $('#outletSelect').val();
+        var department_Id = $('#department_Id ').val();
+        var user_Code = $('#user_Code ').val();
+        var status = $('#status ').val();
+
+        if (serial_No == '') {
+            alert('Serial No field is empty !!');
+            return false;
+        }
+        else if (order_No == '') {
+            alert('Order No  field is empty !!');
+            return false;
+        }
+        else if (Order_Date == '') {
+            alert('Select Order Date !!');
+            return false;
+        }
+        else if (challan_No == '') {
+            alert('Challan No  field is empty !!');
+            return false;
+        }
+         else if (Receive_Date == '') {
+            alert('Select Receive Date!!');
+            return false;
+        }
+          else if (Receive_Date == '') {
+            alert('Select Receive Date!!');
+            return false;
+        }
+       else if (warranty == '') {
+            alert('Select Warranty!!');
+            return false;
+        }
+             else if (warranty_Type == '') {
+            alert('Select Warranty Type!!');
+            return false;
+        }
+       else if (Efective_Date == '') {
+            alert('Select Efective Date from Others Information !!');
+            return false;
+        }
+       else if (Disposed_Date == '') {
+            alert('Select Disposed Date !!');
+            return false;
+        }
+       else if (condition_Id == '') {
+            alert('Select Condition Id !!');
+            return false;
+        }
+        else if (outletSelect == '') {
+            alert('Select Outlet !!');
+            return false;
+        }
+        else if (department_Id == '') {
+            alert('Select Department !!');
+            return false;
+        }
+       else if (user_Code == '') {
+            alert('Select User !!');
+            return false;
+        }
+       else if (status == '') {
+            alert('Select status !!');
+            return false;
+        }
+        else {
+               $.ajax({
+            url: '/AssetCategory/updateAssetDetails',
+            type: 'POST',
+            dataType: "json",
+            traditional: true,
+            success: function (response) {
+                //alert("Result" + response);
+                if (response != null) {
+
+
+                    toastr.success(response, 'Asset Details', {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": true,
+                        "positionClass": "toast-top-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    });
+                    $("#modelId").val("");
+                    $("#name").val("");
+                    $("#ClassList").val("");
+                    $("#CategoryList").val("");
+                    $("#SegmentList").val("");
+                    $('.addnew').show();
+                    setTimeout(function () {
+                        location.reload();
+                    }, 5000);
+
+                }
+
+            },
+            data: {
+                parent_code: parent_code,
+                serial_No: serial_No,
+                order_No: order_No,
+                Order_Date: Order_Date,
+                challan_No: challan_No,
+                Receive_Date: Receive_Date,
+                warranty: warranty,
+                warranty_Type: warranty_Type,
+                Efective_Date: Efective_Date,
+                Disposed_Date: Disposed_Date,
+                condition_Id: condition_Id,
+                status: status,
+                outletSelect: outletSelect,
+                department_Id: department_Id,
+                user_Code: user_Code
+
+
+            },
+
+            error: function () {
+                alert("error");
+            }
+        });
+
+        }
+        //ajax passing data to controller
+     
+
+    });
+</script>
+
+<link href="~/Content/Custom/_AssetMaster.css" rel="stylesheet" />

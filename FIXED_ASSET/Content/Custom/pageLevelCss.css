@@ -1,0 +1,60 @@
+﻿/* UI Grid Customized CSS */
+.ui-grid-menu-button {
+    background: whitesmoke;
+    border: 0;
+}
+
+.gridStyle.ui-grid.ng-isolate-scope {
+    height: 500px;
+}
+
+.ui-grid-header-cell .sortable {
+    text-align: center;
+}
+/* End of UI Grid Customized CSS */
+
+/* Angular Validation Styles*/
+.has-error .form-control {
+    /*box-shadow: inset 1px 1px 1px #f77878, 0 0 8px #f77878 !important;
+    box-shadow: inset 1px 1px 1px rgba(247, 120, 120,1), 0 0 8px rgba(247, 120, 120,1) !important;*/
+    border-color: #f77878 !important;
+    outline: 0;
+}
+
+.help-block span {
+    color: red;
+    /*text-shadow: 1px 1px 1px #f77878, 0 0 10px #f77878 !important;
+    text-shadow: 1px 1px 1px rgba(247, 120, 120,1), 0 0 10px rgba(247, 120, 120,1) !important;*/
+}
+.help-block {
+    margin-bottom: 0;
+}
+.has-error label.control-label {
+    color: #333;
+}
+.help-block-success {
+    display: none;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* ========================================================================================== */
+/* Shadow for Box */
+.box {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+/* Button Left Right Margin */
+.btn {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* Entry form bottom margin */
+.formEntrySection {
+    margin-bottom: 15px;
+}
+/* Fontawesome Icons */
+.fa-edit, .fa-trash-o:hover {
+    cursor: pointer;
+}

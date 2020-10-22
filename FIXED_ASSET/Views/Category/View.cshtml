@@ -1,0 +1,1701 @@
+﻿@*@using System.Data
+@using System.Collections
+@using Connection
+@using System.Data
+@using System.Collections
+@using Connection
+@using EMS.Models
+@using EMS.Models.UserManagement
+@using EMS.Models.SetupInfo
+@using EMS.Models.Teacher*@
+@{
+    ViewBag.Title = "Teacher Detail InformationEntry";
+
+    //List<OrganizationListModel> organizationList = new List<OrganizationListModel>();
+    //List<DistrictListModel> districtList = new List<DistrictListModel>();
+    //List<GenderInfoGridModel> genderList = new List<GenderInfoGridModel>();
+    //List<CampusInfoGridModel> campusList = new List<CampusInfoGridModel>();
+    //List<BloodGroupInfoGridModel> bloodgroupList = new List<BloodGroupInfoGridModel>();
+    //List<NationalityInfoGridModel> nationalityList = new List<NationalityInfoGridModel>();
+    //List<ReligionInfoGridModel> religionList = new List<ReligionInfoGridModel>();
+    //List<TeacherInfoGridModel> teacherGridInfoList = new List<TeacherInfoGridModel>();
+    //List<OrganizationListModel> organizationListmap = new List<OrganizationListModel>();
+    //List<TeacherInfoGridModel> teacherList = new List<TeacherInfoGridModel>();
+
+    //if (ViewBag.organizationList != null)
+    //{
+    //    organizationList = ViewBag.organizationList;
+    //}
+    //if (ViewBag.districtList != null)
+    //{
+    //    districtList = ViewBag.districtList;
+    //}
+    //if (ViewBag.genderList != null)
+    //{
+    //    genderList = ViewBag.genderList;
+    //}
+    //if (ViewBag.campusList != null)
+    //{
+    //    campusList = ViewBag.campusList;
+    //}
+    //if (ViewBag.bloodgroupList != null)
+    //{
+    //    bloodgroupList = ViewBag.bloodgroupList;
+    //}
+    //if (ViewBag.nationalityList != null)
+    //{
+    //    nationalityList = ViewBag.nationalityList;
+    //}
+    //if (ViewBag.religionList != null)
+    //{
+    //    religionList = ViewBag.religionList;
+    //}
+    //if (ViewBag.teacherGridInfoList != null)
+    //{
+    //    teacherGridInfoList = ViewBag.teacherGridInfoList;
+    //}
+    //if (ViewBag.organizationListmap != null)
+    //{
+    //    organizationListmap = ViewBag.organizationListmap;
+    //}
+    //if (ViewBag.teacherList != null)
+    //{
+    //    teacherList = ViewBag.teacherList;
+    //}
+
+    //string userCode = string.Empty;
+    //DataTable dtLoginData = new DataTable();
+
+    //if (Session["dtLoginData"] != null)
+    //{
+    //    dtLoginData = (DataTable)Session["dtLoginData"];
+    //}
+
+    //if (dtLoginData.Rows.Count > 0)
+    //{
+    //    ViewBag.userCode = Convert.ToString(dtLoginData.Rows[0]["USER_CODE"]);
+    //}
+
+    //ViewBag.genderList = new SelectList(genderList, "GENDER_CODE", "GENDER_NAME");
+    //ViewBag.campusList = new SelectList(campusList, "CAMPUS_CODE", "CAMPUS_NAME");
+    //ViewBag.bloodgroupList = new SelectList(bloodgroupList, "BLOOD_GROUP_CODE", "BLOOD_GROUP_NAME");
+    //ViewBag.nationalityList = new SelectList(nationalityList, "NATIONALITY_CODE", "NATIONALITY_NAME");
+    //ViewBag.religionList = new SelectList(religionList, "RELIGION_CODE", "RELIGION_NAME");
+    //ViewBag.teacherList = new SelectList(teacherList, "TEACHER_CODE", "DESCR");
+}
+
+@*main content*@
+<div class="main-content">
+    <div class="main-container-inner">
+        <input type="hidden" id="user_code" value="@(ViewBag.userCode)" />
+        <div class="page-content">
+            <div class="page-header">
+                <h1>
+                    Teacher
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        Teacher Detail Information Entry
+                    </small>
+                </h1>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    @*Search teacher data*@
+                    <fieldset>
+                        <legend>Search Teacher Information</legend>
+                        <div class="form-horizontal" role="form">
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right requiredicon" for="againorganization_name"> Organization Name: </label>
+                                <div class="col-sm-4">
+                                    @*<select name="againorganization_name" id="againorganization_name" class="col-xs-12 col-sm-12 againorganization_name select_search" disabled>
+                                        <option value=""> Select Organization</option>
+                                        @{
+                                            for (int i = 0; (i < organizationListmap.Count) && (ViewBag.userCode == "ADMIN"); i++)
+                                            {
+                                                <option value="@organizationListmap[i].ORG_CODE">@organizationListmap[i].ORG_NAME</option>
+                                            }
+                                            for (int i = 0; (i < organizationListmap.Count) && (ViewBag.userCode != "ADMIN"); i++)
+                                            {
+                                                <option value="@organizationListmap[i].ORG_CODE" selected>@organizationListmap[i].ORG_NAME</option>
+                                            }
+                                        }
+                                    </select>*@
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right requiredicon" for="teacher_name_code">  Teacher Name: </label>
+                                @*<div class="col-sm-4">
+                                    @Html.DropDownList("teacher_name_code", (IEnumerable<SelectListItem>)ViewBag.teacherList, "Select Teacher(Code)", new { @class = "col-xs-12 col-sm-12 teacher_name_code select_search" })
+                                </div>*@
+                                <div class="col-sm-1">
+                                    <button type="submit" id="btnFind" class="btn btn-rounded btn-info btnFindDetail"><i class="fa fa-search"></i> Search</button>
+
+                                </div>
+                                <div class="col-sm-1">
+                                    @using (Html.BeginForm("SingleTeacherInformationReportDownload", "TeacherDetailInformationEntry", FormMethod.Post, new { target = "_blank" }))
+                                    {
+                                        <input type="hidden" id="hdnOrganizationName" name="hdnOrganizationName" />
+                                        <input type="hidden" name="report_org_code" id="report_org_code" class="report_org_code" value="">
+                                        <input type="hidden" name="teacherId" id="teacherId" class="teacherId" value="">
+                                        <button type="submit" class="btn btn-rounded btn-warning" id="btnTeacherReport" style="display:none"><i class="fa fa-file-o"></i> Report</button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    @*save teacher entry*@
+                    @*Teacher Detail Information Entry*@
+                    <fieldset>
+                        <legend>Teacher Detail Information Entry</legend>
+                        <div class="form-horizontal" role="form">
+
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-8">
+                                    <button type="submit" class="btn btn-rounded btn-danger" id="btnDeleteTeacherMaster" style="display:none" onclick="DeleteTeacherEntryInformation()"><i class="fa fa-trash-o"></i> Delete</button>
+                                    <button type="submit" id="btnReset" class="btn btn-rounded  btn-purple" style="display:none"><span class="glyphicon glyphicon-refresh"></span>  Clear</button>
+                                    <button type="submit" class="btn btn-rounded btn-success" id="saveTeacher"><i class="fa fa-check-square-o"></i> Save</button>
+                                </div>
+                            </div>
+
+                            @*panel body start*@
+                            <div class="panel-body">
+                                <div class="bs-example">
+
+                                    @*Basic Information & Previous Information tab ul*@
+                                    <ul class="nav nav-pills" style="margin-bottom: 15px;">
+                                        <li class="active"><a href="#home" data-toggle="tab">Basic Information</a></li>
+                                        <li><a href="#education" data-toggle="tab">Previous Education</a></li>
+
+                                    </ul>
+
+                                    @*Tab Content*@
+                                    <div id="myTabContent" class="tab-content form-horizontal">
+
+                                        @*Teacher basic information tab (active-in)*@
+                                        <div class="tab-pane fade active in" id="home" color="blue">
+                                            <div class="form-horizontal" role="form">
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label no-padding-right" for="teacher_image"> Teacher Photo: </label>
+                                                    <div class="col-sm-3">
+                                                        <label for="teacher_image">
+                                                            <img id="teacher_image_source" style="width: 210px;height:126px;border: 1px solid #ddd;padding:3px;cursor:pointer;">
+                                                            <i class="fa fa-plus" id="teacher_upload_icon" style="position: relative; top: 0px;left: -120px;"></i>
+                                                            <input type="file" id="teacher_image" style="display:none">
+                                                        </label>
+
+                                                        <input type="hidden" id="teacher_image_value" value="">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label no-padding-right requiredicon" for="organization_name"> Organization Name: </label>
+                                                    <div class="col-sm-3">
+                                                        @*<select name="organization_name" id="organization_name" class="col-xs-12 col-sm-12 organization_name select_search" disabled>
+                                                            <option value=""> Select Organization</option>
+                                                            @{
+                                                                for (int i = 0; (i < organizationList.Count) && (ViewBag.userCode == "ADMIN"); i++)
+                                                                {
+                                                                    <option value="@organizationList[i].ORG_CODE">@organizationList[i].ORG_NAME</option>
+                                                                }
+                                                                for (int i = 0; (i < organizationList.Count) && (ViewBag.userCode != "ADMIN"); i++)
+                                                                {
+                                                                    <option value="@organizationList[i].ORG_CODE" selected>@organizationList[i].ORG_NAME</option>
+                                                                }
+                                                            }
+                                                        </select>*@
+                                                    </div>
+                                                    <label class="col-sm-3 control-label no-padding-right requiredicon" for="teacher_name"> Teacher Name: </label>
+                                                    <div class="col-sm-3">
+                                                        <input type="hidden" name="teacher_id" id="teacher_id" class="col-xs-12 col-sm-6 teacher_id" value="" />
+                                                        <input type="hidden" name="teacher_code" id="teacher_code" class="col-xs-12 col-sm-6 teacher_code" value="" />
+                                                        <input type="text" name="teacher_name" id="teacher_name" class="col-xs-12 col-sm-12 teacher_name" value="" maxlength="100" placeholder="Example: Md.Abdur Rahim">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label no-padding-right requiredicon" for="father_name"> Father Name: </label>
+                                                    <div class="col-sm-3">
+                                                        <input type="text" name="father_name" id="father_name" class="col-xs-12 col-sm-12 father_name" value="" maxlength="50" placeholder="Example: Md.Kamal Hossan" autocomplete="off">
+                                                    </div>
+                                                    <label class="col-sm-3 control-label no-padding-right requiredicon" for="mother_name"> Mother Name: </label>
+                                                    <div class="col-sm-3">
+                                                        <input type="text" name="mother_name" id="mother_name" class="col-xs-12 col-sm-12 mother_name" value="" maxlength="50" placeholder="Example: Saleha Khatun" autocomplete="off">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label no-padding-right requiredicon" for="mobile_no"> Mobile Number (For SMS): </label>
+                                                    <div class="col-sm-3">
+                                                        <input type="text" name="mobile_no" id="mobile_no" class="col-xs-12 col-sm-12 mobile_no" value="" maxlength="11" placeholder="Example: 017XXXXXXXX" autocomplete="off">
+                                                    </div>
+                                                    <label class="col-sm-3 control-label no-padding-right requiredicon" for="joining_date"> Joining Date: </label>
+                                                    <div class="col-md-3">
+                                                        <div class="input-group">
+                                                            <input type="text" name="joining_date" id="joining_date" class="form-control date_picker joining_date" data-date-format="dd/mm/yyyy" autocomplete="off" placeholder="Example: 01/01/2000">
+                                                            <span class="input-group-addon">
+                                                                <i class="fa fa-calendar bigger-110"></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label no-padding-right requiredicon" for="gender_code"> Gender: </label>
+                                                    <div class="col-sm-3">
+                                                        @*@Html.DropDownList("gender_code", (IEnumerable<SelectListItem>)ViewBag.genderList, "Select Gender", new { @class = "col-xs-12 col-sm-12 gender_code select_search" })*@
+                                                    </div>
+
+                                                    <label class="col-sm-3 control-label no-padding-right requiredicon" for="campus_code"> Campus: </label>
+                                                    <div class="col-sm-3">
+                                                        @*@Html.DropDownList("campus_code", (IEnumerable<SelectListItem>)ViewBag.campusList, "Select Campus", new { @class = "col-xs-12 col-sm-12 campus_code select_search" })*@
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label no-padding-right requiredicon" for="date_of_birth"> Date of Birth: </label>
+                                                    <div class="col-md-3">
+                                                        <div class="input-group">
+                                                            <input type="text" name="date_of_birth" id="date_of_birth" class="form-control date_picker date_of_birth" data-date-format="dd/mm/yyyy" autocomplete="off" placeholder="Example: 01/01/1990">
+                                                            <span class="input-group-addon">
+                                                                <i class="fa fa-calendar bigger-110"></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <label class="col-sm-3 control-label no-padding-right" for="blood_code"> Blood Group: </label>
+                                                    <div class="col-sm-3">
+                                                        @*@Html.DropDownList("blood_code", (IEnumerable<SelectListItem>)ViewBag.bloodgroupList, "Select Blood Group", new { @class = "col-xs-12 col-sm-12 blood_code select_search" })*@
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label no-padding-right" for="nationality_code"> Nationality: </label>
+                                                    <div class="col-sm-3">
+                                                        @*@Html.DropDownList("nationality_code", (IEnumerable<SelectListItem>)ViewBag.nationalityList, "Select Nationality", new { @class = "col-xs-12 col-sm-12 campus_code select_search" })*@
+                                                    </div>
+                                                    <label class="col-sm-3 control-label no-padding-right" for="religion_code"> Religion: </label>
+                                                    <div class="col-sm-3">
+                                                        @*@Html.DropDownList("religion_code", (IEnumerable<SelectListItem>)ViewBag.religionList, "Select Religion", new { @class = "col-xs-12 col-sm-12 religion_code select_search" })*@
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label no-padding-right requiredicon" for="district_name"> Birth Place: </label>
+                                                    <div class="col-sm-3">
+                                                        @*<select name="district_name" id="district_name" class="col-xs-12 col-sm-12 district_name select_search">
+                                                            <option value=""> Select Birth Place</option>
+                                                            @{
+                                                                for (int i = 0; (i < districtList.Count); i++)
+                                                                {
+                                                                    <option value="@districtList[i].DIST_CODE">@districtList[i].DIST_DESCR</option>
+                                                                }
+
+                                                            }
+                                                        </select>*@
+                                                    </div>
+                                                    <label class="col-sm-3 control-label no-padding-right" for="remarks"> Remarks: </label>
+                                                    <div class="col-sm-3">
+                                                        <input type="text" name="remarks" id="remarks" class="form-control col-xs-12 col-sm-12 remarks" placeholder="Example: Remarks" autocomplete="off">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label no-padding-right requiredicon" for="present_address"> Present Address: </label>
+                                                    <div class="col-sm-3">
+                                                        <textarea name="present_address" id="present_address" class="col-xs-12 col-sm-12 present_address" rows="5" cols="10" placeholder="Example: 01,Chamilibagh,Santinagar,Dhaka-1217" style="resize:none" maxlength="1000"></textarea>
+                                                    </div>
+                                                    <label class="col-sm-3 control-label no-padding-right requiredicon" for="permanant_address"> Permanant Address: </label>
+                                                    <div class="col-sm-3">
+                                                        <textarea name="permanant_address" id="permanant_address" class="col-xs-12 col-sm-12 permanant_address" rows="5" cols="10" placeholder="Example: 03,Chamilibagh,Santinagar,Dhaka-1217" style="resize:none" maxlength="1000"></textarea>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-3">
+                                                        <input type="hidden" name="teacher_basic_info_detail_row_status" id="teacher_basic_info_detail_row_status" class="col-xs-12 col-sm-6 teacher_basic_info_detail_row_status" value="1" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        @*Teacher previous education information tab*@
+                                        <div class="tab-pane fade" id="education" color="blue">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="table-responsive">
+                                                        <table id="data_table_data" class="table table-bordered table-striped table-hover table-condensed data_table_data">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="hidden"></th>
+                                                                    <th><input type="checkbox" class="check_all_Table_row_previous_academy_info" value="0" /></th>
+                                                                    <th>Exam <br />Name</th>
+                                                                    <th>Board/<br />University</th>
+                                                                    <th>GPA/<br />Division</th>
+                                                                    <th>Roll<br />No</th>
+                                                                    <th>Registration No</th>
+                                                                    <th>Pass<br />Session</th>
+                                                                    <th>Pass<br />Year</th>
+                                                                    <th>Course Duration</th>
+                                                                    <th>Total<br />Credit</th>
+                                                                    <th>Institute</th>
+                                                                    <th>Last/<br />Qualification</th>
+                                                                    <th class="hidden"></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="more_field_2" class="more_field_2">
+                                                                <tr class="detail_target_field">
+                                                                    <td class="hidden"> <input type='hidden' name='teacher_previous_academy_info_id' id='teacher_previous_academy_info_id' class='form-control teacher_previous_academy_info_id' value='0' disabled> </td>
+                                                                    <td><input type="checkbox" class="thisCheckTableRowPreviousAcademicInformation this_check" name="thisCheckTableRowPreviousAcademicInformation" onclick="checkSingleRowPreviousAcademicInformation(1);" value="0" /></td>
+                                                                    <td>
+                                                                        <input type="text" name="exam" id="exam" class="exam col-md-12" maxlength="100" placeholder="Example:SSC/HSC" autocomplete="off">
+                                                                    </td>
+                                                                    <td>
+                                                                        <select name='previous_academic_info_board_university' id='previous_academic_info_board_university' class='col-md-12 select_search form-control previous_academic_info_board_university'>
+                                                                            <option value=''>Select Board/University</option>
+
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" name="result" id="result" class="result col-md-12" placeholder="Example: 5.00" autocomplete="off">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" name="roll_no" id="roll_no" class="roll_no col-md-12" maxlength="100" placeholder="Example: 0900000" autocomplete="off">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" name="reg_no" id="reg_no" class="reg_no col-md-12" placeholder="Example: 000090" autocomplete="off">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" name="pass_session" id="pass_session" class="pass_session col-md-12" placeholder="Example: 2019" autocomplete="off">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" name="pass_year" id="pass_year" class="pass_year col-md-12" placeholder="Example: 2019" autocomplete="off">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" name="course_duration" id="course_duration" class="course_duration col-md-12" maxlength="100" placeholder="Example: 1 years" autocomplete="off">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" name="total_credit" id="total_credit" class="total_credit col-md-12" placeholder="Example: 153" autocomplete="off">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" name="institution" id="institution" class="institution col-md-12" maxlength="100" placeholder="Example: Memorial High School" autocomplete="off">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" name="last_qualification" id="last_qualification" class="last_qualification col-md-12" maxlength="100" placeholder="Example: Masters" autocomplete="off">
+                                                                    </td>
+                                                                    <td class="hidden">
+                                                                        <input type="hidden" name="detail_row_status" id="detail_row_status" class="form-control detail_row_status" value="1">
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <button type="button" class="btn btn-rounded btn-sm btn-danger deleteTableRowPreviousAcademiInfo" id="deleteTableRowPreviousAcademiInfo"><i class="fa fa-minus"></i> Delete</button>
+                                                    <button type="button" class="btn btn-rounded btn-sm btn-info addTableRowPreviousAcademicInfo" id="addTableRowPreviousAcademicInfo"><i class="fa fa-plus"></i> Add</button>
+                                                </div>
+                                                <div class='col-md-2 '>
+                                                    <button type="submit" class="btn btn-rounded btn-success" id="btnSavePreviousAcademicInformation"><i class="fa fa-check-square-o"></i> Save</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            @*panel body end*@
+
+                        </div>
+                    </fieldset>
+                    @*Teacher Detail Information Entry End*@
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@*Read student image file*@
+<script>
+    function readImageFile() {
+
+        if (this.files && this.files[0]) {
+
+            var FR = new FileReader();
+
+            FR.addEventListener("load", function (e) {
+                document.getElementById("teacher_image_source").src = e.target.result;
+                document.getElementById("teacher_image_value").value = e.target.result;
+                $('#teacher_upload_icon').hide();
+            });
+
+            FR.readAsDataURL(this.files[0]);
+        }
+
+    }
+
+    document.getElementById("teacher_image").addEventListener("change", readImageFile);
+</script>
+
+@*dependency combo field*@
+<script>
+    $(document).ready(function () {
+
+        $("#organization_name").change(function () {
+            var orgName = $('#organization_name :selected').val();
+
+            SetGenderElement(orgName);
+            SetCampusElement(orgName);
+            SetBloodGroupElement(orgName);
+            SetNationalityElement(orgName);
+            SetReligionElement(orgName);
+        });
+
+        var orgName = $('#organization_name').val();
+        SetGenderElement(orgName);
+        SetCampusElement(orgName);
+        SetBloodGroupElement(orgName);
+        SetNationalityElement(orgName);
+        SetReligionElement(orgName);
+
+
+        $("#againorganization_name").change(function () {
+            var againorganization_name = $('#againorganization_name :selected').val();
+            SetTeacherElement(againorganization_name);
+
+        });
+
+        var organization_name = $('#againorganization_name :selected').val();
+        SetTeacherElement(organization_name);
+
+        //make Teacher function
+        function SetTeacherElement(organization_name) {
+            $.ajax({
+                url: '/TeacherDetailInformationEntry/ShowTeacherList',
+                type: 'POST',
+                data: { 'organization_name': organization_name },
+                success: function (data) {
+                    if (data != '') {
+                        var markup = "";
+                        for (var i = 0; i < data.length; i++) {
+                            markup += "<option value=" + data[i].TEACHER_CODE + ">" + data[i].DESCR + "</option>";
+                        }
+                        $("#teacher_name_code").html(markup).show();
+                    }
+                    else {
+                        var markup = "";
+                        $("#teacher_name_code").html(markup).show();
+                    }
+                },
+                error: function () {
+                    swal("error");
+                }
+            });
+        }
+
+        function SetGenderElement(orgName) {
+            $.ajax({
+                url: '/TeacherDetailInformationEntry/ShowGenderList',
+                type: 'POST',
+                data: { 'orgName': orgName },
+                success: function (data) {
+                    if (data != '') {
+                        var markup = "";
+                        for (var x = 0; x < data.length; x++) {
+                            markup += "<option value=" + data[x].GENDER_CODE + ">" + data[x].GENDER_NAME + "</option>";
+                        }
+
+                        $("#gender_code").html(markup).show();
+
+                    }
+                    else {
+                        var markup = "";
+                        $("#gender_code").html(markup).show();
+                    }
+                },
+                error: function () {
+                    swal("error");
+                }
+            });
+        }
+
+        function SetCampusElement(orgName) {
+            $.ajax({
+                url: '/TeacherDetailInformationEntry/ShowCampusList',
+                type: 'POST',
+                data: { 'orgName': orgName },
+                success: function (data) {
+                    if (data != '') {
+                        var markup = "";
+                        for (var x = 0; x < data.length; x++) {
+                            markup += "<option value=" + data[x].CAMPUS_CODE + ">" + data[x].CAMPUS_NAME + "</option>";
+                        }
+
+                        $("#campus_code").html(markup).show();
+
+                    }
+                    else {
+                        var markup = "";
+                        $("#campus_code").html(markup).show();
+                    }
+                },
+                error: function () {
+                    swal("error");
+                }
+            });
+        }
+
+        function SetBloodGroupElement(orgName) {
+            $.ajax({
+                url: '/TeacherDetailInformationEntry/ShowBloodGroupList',
+                type: 'POST',
+                data: { 'orgName': orgName },
+                success: function (data) {
+                    if (data != '') {
+                        var markup = "";
+                        for (var x = 0; x < data.length; x++) {
+                            markup += "<option value=" + data[x].BLOOD_GROUP_CODE + ">" + data[x].BLOOD_GROUP_NAME + "</option>";
+                        }
+
+                        $("#blood_code").html(markup).show();
+
+                    }
+                    else {
+                        var markup = "";
+                        $("#blood_code").html(markup).show();
+                    }
+                },
+                error: function () {
+                    swal("error");
+                }
+            });
+        }
+
+        function SetNationalityElement(orgName) {
+            $.ajax({
+                url: '/TeacherDetailInformationEntry/ShowNationalityList',
+                type: 'POST',
+                data: { 'orgName': orgName },
+                success: function (data) {
+                    if (data != '') {
+                        var markup = "";
+                        for (var x = 0; x < data.length; x++) {
+                            markup += "<option value=" + data[x].NATIONALITY_CODE + ">" + data[x].NATIONALITY_NAME + "</option>";
+                        }
+
+                        $("#nationality_code").html(markup).show();
+
+                    }
+                    else {
+                        var markup = "";
+                        $("#nationality_code").html(markup).show();
+                    }
+                },
+                error: function () {
+                    swal("error");
+                }
+            });
+        }
+
+        function SetReligionElement(orgName) {
+            $.ajax({
+                url: '/TeacherDetailInformationEntry/ShowReligionList',
+                type: 'POST',
+                data: { 'orgName': orgName },
+                success: function (data) {
+                    if (data != '') {
+                        var markup = "";
+                        for (var x = 0; x < data.length; x++) {
+                            markup += "<option value=" + data[x].RELIGION_CODE + ">" + data[x].RELIGION_NAME + "</option>";
+                        }
+
+                        $("#religion_code").html(markup).show();
+
+                    }
+                    else {
+                        var markup = "";
+                        $("#religion_code").html(markup).show();
+                    }
+                },
+                error: function () {
+                    swal("error");
+                }
+            });
+        }
+
+    });
+
+</script>
+
+@*Save Teacher Data*@
+<script>
+    $("#saveTeacher").click(function () {
+        var rowStatus = $('#teacher_basic_info_detail_row_status').val();
+        var orgName = $('#organization_name :selected').val();
+        var teacherName = $('#teacher_name').val();
+        var teacherId = $('#teacher_id').val();
+        var teacherCode = $('#teacher_code').val();
+        var joiningDate = $('#joining_date').val();
+        var genderName = $('#gender_code :selected').val();
+        var campusName = $('#campus_code :selected').val();
+        var mobileNo = $('#mobile_no').val();
+        var fatherName = $('#father_name').val();
+        var motherName = $('#mother_name').val();
+        var dateOfBirth = $('#date_of_birth').val();
+        var bloodGroup = $('#blood_code :selected').val();
+        var nationality = $('#nationality_code :selected').val();
+        var religionName = $('#religion_code :selected').val();
+        var birthPlace = $('#district_name :selected').val();
+        var presentAddress = $('#present_address').val();
+        var permanentAddress = $('#permanant_address').val();
+        var teacherImage = $('#teacher_image_value').val();
+        var remarks = $('#remarks').val();
+        var users = $('#user_code').val();
+
+
+        if (orgName == '') {
+            swal('Please select organization !!');
+        }
+        else if (teacherName == '') {
+            swal('Teacher name field is empty !!');
+        }
+        else if (fatherName == '') {
+            swal('Father name  field is empty !!');
+        }
+        else if (motherName == '') {
+            swal('Mother name field is empty !!');
+        }
+        else if (mobileNo == '') {
+            swal('Mobile number field is empty !!');
+        }
+        else if (mobileNo.length != 11) {
+            swal('Please put 11 digit valid mobile number !!');
+        }
+        else if (joiningDate == '') {
+            swal('Please select joining date !!');
+        }
+        else if (campusName == '') {
+            swal('Please select campus !!');
+        }
+        else if (dateOfBirth == '') {
+            swal('Please select  date of birth  !!');
+        }
+        else if (birthPlace == '') {
+            swal('Please select birth place !!');
+        }
+        else if (presentAddress == '') {
+            swal('Present address field is empty !!');
+        }
+        else if (permanentAddress == '') {
+            swal('Permanant address field is empty !!');
+        }
+        else {
+            //ajax passing data to controller
+            $.ajax({
+                url: '/TeacherDetailInformationEntry/SaveTeacher',
+                type: 'POST',
+                dataType: "json",
+                traditional: true,
+                data: {
+                    'orgName': orgName,
+                    'teacherName': teacherName,
+                    'teacherId': teacherId,
+                    'teacherCode': teacherCode,
+                    'joiningDate': joiningDate,
+                    'genderName': genderName,
+                    'campusName': campusName,
+                    'mobileNo': mobileNo,
+                    'fatherName': fatherName,
+                    'motherName': motherName,
+                    'dateOfBirth': dateOfBirth,
+                    'bloodGroup': bloodGroup,
+                    'nationality': nationality,
+                    'religionName': religionName,
+                    'birthPlace': birthPlace,
+                    'presentAddress': presentAddress,
+                    'permanentAddress': permanentAddress,
+                    'teacherImage': teacherImage,
+                    'remarks': remarks,
+                    'rowStatus': rowStatus,
+                    'users': users
+
+                },
+                success: function (result) {
+                    swal({
+                        title: result[0],
+                        type: "success",
+                        icon: "success",
+                        showLoaderOnConfirm: true
+                    },
+                    function () {
+                        location.reload(true);
+                    });
+
+                    $("h2").css({ color: result[1] });
+                },
+                error: function () {
+                    swal("error");
+                }
+            });
+        }
+
+    });
+</script>
+
+@*save  previous education information*@
+<script>
+    $("#btnSavePreviousAcademicInformation").click(function () {
+        var student_previous_academy_info_organization_code = $('#againorganization_name :selected').val();
+        var student_previous_academy_info_student_code = $('#teacher_name_code :selected').val();
+        var user_code = $('#user_code').val();
+        var student_previous_academy_info_student_code_array;
+        var student_previous_academy_info_organization_code_array;
+
+        var teacher_previous_academy_info_id, exam, previous_academic_info_board_university, result, roll_num, reg_num, pass_session, pass_year, course_duration, total_credit, institute, last_qualification, rowStatus;
+        var is_exam, is_previous_academic_info_board_university = 0, is_result = 0, is_roll_num = 0, is_reg_num = 0, is_pass_session = 0, is_pass_year = 0, is_course_duration = 0, is_total_credit = 0, is_institute = 0;
+
+        var i = 0;
+        var j = [];
+
+        i = 0;
+        $('#data_table_data tr td:first-child').each(function () {
+            if (i == 0) {
+                teacher_previous_academy_info_id = $(this).find('input[type="hidden"]').val();
+            }
+            else {
+                teacher_previous_academy_info_id += "~" + $(this).find('input[type="hidden"]').val();
+            }
+            i++;
+        });
+
+        i = 0;
+        $('#data_table_data tr td:nth-child(3)').each(function () {
+            if (($(this).find('input[type="text"]').val() == "" || $(this).find('input[type="text"]').val() == null)) {
+                is_exam = 1;
+                return false;
+            }
+            if (i == 0) {
+                exam = $(this).find('input[type="text"]').val();
+            }
+            else {
+                exam += "~" + $(this).find('input[type="text"]').val();
+            }
+            i++;
+        });
+
+        i = 0;
+        $('#data_table_data tr td:nth-child(4)').each(function () {
+            if (($(this).find('select').val() == "" || $(this).find('select').val() == null)) {
+                is_previous_academic_info_board_university = 1;
+                return false;
+            }
+            if (i == 0) {
+                previous_academic_info_board_university = $(this).find('select').val();
+                student_previous_academy_info_student_code_array = student_previous_academy_info_student_code;
+                student_previous_academy_info_organization_code_array = student_previous_academy_info_organization_code;
+            }
+            else {
+                previous_academic_info_board_university += "~" + $(this).find('select').val();
+                student_previous_academy_info_student_code_array += "~" + student_previous_academy_info_student_code;
+                student_previous_academy_info_organization_code_array += "~" + student_previous_academy_info_organization_code;
+            }
+            i++;
+        });
+
+        i = 0;
+        $('#data_table_data tr td:nth-child(5)').each(function () {
+            if (($(this).find('input[type="text"]').val() == "" || $(this).find('input[type="text"]').val() == null)) {
+                is_result = 1;
+                return false;
+            }
+            if (i == 0) {
+                result = $(this).find('input[type="text"]').val();
+            }
+            else {
+                result += "~" + $(this).find('input[type="text"]').val();
+            }
+            i++;
+        });
+
+        i = 0;
+        $('#data_table_data tr td:nth-child(6)').each(function () {
+            if (($(this).find('input[type="text"]').val() == "" || $(this).find('input[type="text"]').val() == null)) {
+                is_roll_num = 1;
+                return false;
+            }
+            if (i == 0) {
+                roll_num = $(this).find('input[type="text"]').val();
+            }
+            else {
+                roll_num += "~" + $(this).find('input[type="text"]').val();
+            }
+            i++;
+        });
+
+        i = 0;
+        $('#data_table_data tr td:nth-child(7)').each(function () {
+            if (($(this).find('input[type="text"]').val() == "" || $(this).find('input[type="text"]').val() == null)) {
+                is_reg_num = 1;
+                return false;
+            }
+            if (i == 0) {
+                reg_num = $(this).find('input[type="text"]').val();
+            }
+            else {
+                reg_num += "~" + $(this).find('input[type="text"]').val();
+            }
+            i++;
+        });
+
+        i = 0;
+        $('#data_table_data tr td:nth-child(8)').each(function () {
+            if (($(this).find('input[type="text"]').val() == "" || $(this).find('input[type="text"]').val() == null)) {
+                is_pass_session = 1;
+                return false;
+            }
+            if (i == 0) {
+                pass_session = $(this).find('input[type="text"]').val();
+            }
+            else {
+                pass_session += "~" + $(this).find('input[type="text"]').val();
+            }
+            i++;
+        });
+
+        i = 0;
+        $('#data_table_data tr td:nth-child(9)').each(function () {
+            if (($(this).find('input[type="text"]').val() == "" || $(this).find('input[type="text"]').val() == null)) {
+                is_pass_year = 1;
+                return false;
+            }
+            if (i == 0) {
+                pass_year = $(this).find('input[type="text"]').val();
+            }
+            else {
+                pass_year += "~" + $(this).find('input[type="text"]').val();
+            }
+            i++;
+        });
+
+        i = 0;
+        $('#data_table_data tr td:nth-child(10)').each(function () {
+            if (($(this).find('input[type="text"]').val() == "" || $(this).find('input[type="text"]').val() == null)) {
+                is_course_duration = 1;
+                return false;
+            }
+            if (i == 0) {
+                course_duration = $(this).find('input[type="text"]').val();
+            }
+            else {
+                course_duration  += "~" + $(this).find('input[type="text"]').val();
+            }
+            i++;
+        });
+
+        i = 0;
+        $('#data_table_data tr td:nth-child(11)').each(function () {
+            if (($(this).find('input[type="text"]').val() == "" || $(this).find('input[type="text"]').val() == null)) {
+                is_total_credit = 1;
+                return false;
+            }
+            if (i == 0) {
+                total_credit = $(this).find('input[type="text"]').val();
+            }
+            else {
+                total_credit += "~" + $(this).find('input[type="text"]').val();
+            }
+            i++;
+        });
+
+        i = 0;
+        $('#data_table_data tr td:nth-child(12)').each(function () {
+            if (($(this).find('input[type="text"]').val() == "" || $(this).find('input[type="text"]').val() == null)) {
+                is_institute = 1;
+                return false;
+            }
+            if (i == 0) {
+                institute = $(this).find('input[type="text"]').val();
+            }
+            else {
+                institute += "~" + $(this).find('input[type="text"]').val();
+            }
+            i++;
+        });
+
+        i = 0;
+        $('#data_table_data tr td:nth-child(13)').each(function () {
+            if (($(this).find('input[type="text"]').val() == "" || $(this).find('input[type="text"]').val() == null)) {
+
+            }
+            if (i == 0) {
+                last_qualification = $(this).find('input[type="text"]').val();
+            }
+            else {
+                last_qualification += "~" + $(this).find('input[type="text"]').val();
+            }
+            i++;
+        });
+
+
+        i = 0;
+        $('#data_table_data tr td:nth-child(14)').each(function () {
+            if (i == 0) {
+                rowStatus = $(this).find('input[type="hidden"]').val();
+            }
+            else {
+                rowStatus += "~" + $(this).find('input[type="hidden"]').val();
+            }
+            i++;
+        });
+
+        if (student_previous_academy_info_organization_code == '') {
+            swal('Please select organization !!');
+        }
+        else if (student_previous_academy_info_student_code  == '') {
+            swal('Please select teacher !!');
+        }
+        else if (is_exam == 1) {
+            swal('Exam name field is empty !!');
+        }
+        else if (is_previous_academic_info_board_university == 1) {
+            swal('Please select board/university !!');
+        }
+        else if (is_result == 1) {
+            swal('GPA/Division field is empty !!');
+        }
+        else if (is_roll_num == 1) {
+            swal('Roll no field is empty !!');
+        }
+        else if (is_reg_num == 1) {
+            swal('Registration field is empty !!');
+        }
+        else if (is_pass_session == 1) {
+            swal('Pass session field is empty !!');
+        }
+        else if (is_pass_year == 1) {
+            swal('Pass year field is empty !!');
+        }
+        else if (is_course_duration == 1) {
+            swal('Course duration field is empty !!');
+        }
+        else if (is_total_credit == 1) {
+            swal('Total credit field is empty !!');
+        }
+        else if (is_institute == 1) {
+            swal('Insttitute field is empty !!');
+        }
+        else if (!teacher_previous_academy_info_id) {
+            swal('Please add row before save previous academy information');
+            return false;
+        }
+        else {
+
+        //ajax passing data to controller
+        $.ajax({
+            url: '/TeacherDetailInformationEntry/TeacherPreviousAcademyInformationSave',
+            type: 'POST',
+            data: {
+                'teacher_previous_academy_info_id': teacher_previous_academy_info_id,
+                'student_previous_academy_info_organization_code': student_previous_academy_info_organization_code_array,
+                'student_previous_academy_info_student_code': student_previous_academy_info_student_code_array,
+                'exam': exam,
+                'previous_academic_info_board_university': previous_academic_info_board_university,
+                'result': result,
+                'roll_num': roll_num,
+                'reg_num': reg_num,
+                'pass_session': pass_session,
+                'pass_year': pass_year,
+                'course_duration': course_duration,
+                'total_credit': total_credit,
+                'institute': institute,
+                'last_qualification': last_qualification,
+                'rowStatus': rowStatus,
+                'user_code': user_code
+            },
+
+            success: function (result) {
+                swal({
+                    title: result[0],
+                    type: "success",
+                    icon: "success",
+                    showLoaderOnConfirm: true
+                },
+                function () {
+                    location.reload(true);
+                });
+
+                $("h2").css({ color: result[1] });
+            },
+            error: function () {
+                swal("error");
+            }
+        });
+    }
+    });
+</script>
+
+@*script for search single data*@
+<script>
+    $('#btnFind').click(function () {
+        var againOrgName = $('#againorganization_name :selected').val();
+        var teacher_code = $('#teacher_name_code  :selected').val();
+        var user_code = $('#user_code').val();
+        if (againOrgName == '') {
+            swal("Please select organization");
+        }
+        else if (teacher_code == '') {
+             swal("Please select teacher");
+        }
+        else {
+            SetFormData(teacher_code, user_code);
+
+            SetPreviousAcademyInfoDtlFormData(againOrgName, teacher_code, user_code)
+
+            $("#btnDeleteTeacherMaster").show();
+            $("#btnReset").show();
+            $("#btnTeacherReport").show();
+            $("#btnTeacherReport").prop('disabled', false);
+            $('#report_org_code').val(againOrgName);
+            $('#teacherId').val(teacher_code);
+
+        }
+
+     });
+
+
+    function SetFormData(teacher_code, user_code) {
+        $.ajax({
+        url: '/TeacherDetailInformationEntry/GetDtlFormData',
+        type: 'POST',
+        data: { 'teacher_code': teacher_code, 'user_code': user_code },
+        beforeSend: function () {
+            $("#loader").modal("show");
+        },
+        success: function (data)
+        {
+            if (data == '') {
+                $("#teacher_image_source").removeAttr('src');
+                $("#organization_name").val("");
+                $("#teacher_id").val("");
+                $("#teacher_code").val("");
+                $("#teacher_name").val("");
+                $("#father_name").val("");
+                $("#mother_name").val("");
+                $("#mobile_no").val("");
+                $("#joining_date").val("");
+                $("#gender_code").val("");
+                $("#campus_code").val("");
+                $("#date_of_birth").val("");
+                $("#blood_code").val("");
+                $("#nationality_code").val("");
+                $("#religion_code").val("");
+                $("#district_name").val("");
+                $("#remarks").val("");
+                $("#present_address").val("");
+                $("#permanant_address").val("");
+                $("#permanent_address").val("");
+                $("#loader").modal("hide");
+            }
+            else {
+                $("#teacher_image_source").attr('src', (data[0].TEACHER_IMAGE));
+                $("#organization_name").val(data[0].ORG_CODE);
+                $("#teacher_id").val(data[0].TEACHER_ID);
+                $("#teacher_code").val(data[0].TEACHER_CODE);
+                $("#teacher_name").val(data[0].TEACHER_NAME);
+                $("#father_name").val(data[0].FATHERS_NAME);
+                $("#mother_name").val(data[0].MOTHERS_NAME);
+                $("#mobile_no").val(data[0].SMS_MOBILE_NUM);
+                $("#joining_date").val(data[0].JOINING_DATE);
+                $("#gender_code").val(data[0].GENDER_NAME);
+                $("#campus_code").val(data[0].CAMPUS_NAME);
+                $("#date_of_birth").val(data[0].DATE_OF_BIRTH);
+                $("#blood_code").val(data[0].BLOOD_GROUP_NAME);
+                $("#nationality_code").val(data[0].NATIONALITY_NAME);
+                $("#religion_code").val(data[0].RELIGION_NAME);
+                $("#district_name").val(data[0].BIRTH_PLACE_CODE);
+                $("#remarks").val(data[0].REMARKS);
+                $("#present_address").val(data[0].PRESENT_ADDR);
+                $("#permanant_address").val(data[0].PERMANENT_ADDR);
+                $("#teacher_basic_info_detail_row_status").val("2");
+
+
+                SetGenderElementReload(data[0].ORG_CODE, data[0].GENDER_CODE);
+                SetCampusElementNameReload(data[0].ORG_CODE, data[0].CAMPUS_CODE);
+                SetBloodGroupElementReload(data[0].ORG_CODE, data[0].BLOOD_GROUP_CODE);
+                SetNationalityElementReload(data[0].ORG_CODE, data[0].NATIONALITY_CODE);
+                SetReligionElementReload(data[0].ORG_CODE, data[0].RELIGION_CODE);
+
+
+                    $('.select_search').select2();
+                    $("#loader").modal("hide");
+
+
+                    function SetGenderElementReload(orgName, Gender_Code) {
+                        $.ajax({
+                            url: '/TeacherDetailInformationEntry/ShowGenderList',
+                            type: 'POST',
+                            data: { 'orgName': orgName },
+                            success: function (data) {
+                                if (data != '') {
+                                    var markup = "";
+                                    var GenderCode = Gender_Code;
+                                    for (var x = 0; x < data.length; x++) {
+                                        markup += "<option value=" + data[x].GENDER_CODE + ">" + data[x].GENDER_NAME + "</option>";
+                                    }
+
+                                    $("#gender_code").html(markup).show();
+                                    $("#gender_code").val(GenderCode);
+
+                                }
+                                else {
+                                    var markup = "";
+                                    $("#gender_code").html(markup).show();
+                                }
+                            },
+                            error: function () {
+                                swal("error");
+                            }
+                        });
+                    }
+
+                    function SetCampusElementNameReload(orgName, Campus_Code) {
+                        $.ajax({
+                            url: '/TeacherDetailInformationEntry/ShowCampusList',
+                            type: 'POST',
+                            data: { 'orgName': orgName },
+                            success: function (data) {
+                                if (data != '') {
+                                    var markup = "";
+                                    var CampusCode = Campus_Code;
+                                    for (var x = 0; x < data.length; x++) {
+                                        markup += "<option value=" + data[x].CAMPUS_CODE + ">" + data[x].CAMPUS_NAME + "</option>";
+                                    }
+
+                                    $("#campus_code").html(markup).show();
+                                    $("#campus_code").val(CampusCode);
+
+
+                                }
+                                else {
+                                    var markup = "";
+                                    $("#campus_code").html(markup).show();
+                                }
+                            },
+                            error: function () {
+                                swal("error");
+                            }
+                        });
+                    }
+
+                    function SetBloodGroupElementReload(orgName, Blood_Code) {
+                        $.ajax({
+                            url: '/TeacherDetailInformationEntry/ShowBloodGroupList',
+                            type: 'POST',
+                            data: { 'orgName': orgName },
+                            success: function (data) {
+                                if (data != '') {
+                                    var markup = "";
+                                    var BloodCode = Blood_Code;
+                                    for (var x = 0; x < data.length; x++) {
+                                        markup += "<option value=" + data[x].BLOOD_GROUP_CODE + ">" + data[x].BLOOD_GROUP_NAME + "</option>";
+                                    }
+
+                                    $("#blood_code").html(markup).show();
+                                    $("#blood_code").val(BloodCode);
+
+                                }
+                                else {
+                                    var markup = "";
+                                    $("#blood_code").html(markup).show();
+                                }
+                            },
+                            error: function () {
+                                swal("error");
+                            }
+                        });
+                    }
+
+                    function SetNationalityElementReload(orgName, Nationality_Code) {
+                        $.ajax({
+                            url: '/TeacherDetailInformationEntry/ShowNationalityList',
+                            type: 'POST',
+                            data: { 'orgName': orgName },
+                            success: function (data) {
+                                if (data != '') {
+                                    var markup = "";
+                                    var NationalityCode = Nationality_Code;
+                                    for (var x = 0; x < data.length; x++) {
+                                        markup += "<option value=" + data[x].NATIONALITY_CODE + ">" + data[x].NATIONALITY_NAME + "</option>";
+                                    }
+
+                                    $("#nationality_code").html(markup).show();
+                                    $("#nationality_code").val(NationalityCode);
+                                }
+                                else {
+                                    var markup = "";
+                                    $("#nationality_code").html(markup).show();
+                                }
+                            },
+                            error: function () {
+                                swal("error");
+                            }
+                        });
+                    }
+
+                    function SetReligionElementReload(orgName, Religion_Code) {
+                        $.ajax({
+                            url: '/TeacherDetailInformationEntry/ShowReligionList',
+                            type: 'POST',
+                            data: { 'orgName': orgName },
+                            success: function (data) {
+                                if (data != '') {
+                                    var markup = "";
+                                    var ReligionCode = Religion_Code;
+                                    for (var x = 0; x < data.length; x++) {
+                                        markup += "<option value=" + data[x].RELIGION_CODE + ">" + data[x].RELIGION_NAME + "</option>";
+                                    }
+
+                                    $("#religion_code").html(markup).show();
+                                    $("#religion_code").val(ReligionCode);
+                                }
+                                else {
+                                    var markup = "";
+                                    $("#religion_code").html(markup).show();
+                                }
+                            },
+                            error: function () {
+                                swal("error");
+                            }
+                        });
+                    }
+
+                    $('#teacher_upload_icon').hide();
+
+            }
+        },
+        error: function () {
+            $("#loader").modal("hide");
+            swal("Button Find error");
+        }
+
+        });
+}
+
+    function SetPreviousAcademyInfoDtlFormData(againOrgName, teacher_code, user_code) {
+        $.ajax({
+            url: '/TeacherDetailInformationEntry/GetPreviousAcademyInfoDtlFormData',
+            type: 'POST',
+            data: { 'againOrgName': againOrgName, 'teacher_code': teacher_code, 'user_code': user_code },
+            success: function (data) {
+                $("#data_table_data").find("tr:not(:first)").remove();
+                for (var x = 0; x < data.length; x++) {
+                    previousAcademyInfoAddRow(
+                        data[x].TEA_PREV_ACAD_INFO_ID,
+                        data[x].EXAM_NAME,
+                        data[x].BOARD_UNIV_CODE,
+                        data[x].RESULT,
+                        data[x].ROLL_NUM,
+                        data[x].REG_NUM,
+                        data[x].PASS_SESSION,
+                        data[x].PASS_YEAR,
+                        data[x].COURSE_DUR,
+                        data[x].TOTAL_CREDIT,
+                        data[x].INSTITUTE,
+                        data[x].LAST_EDUCATIONAL_QUALIFICATION
+
+                    );
+                }
+                $('.select_search').select2();
+            },
+            error: function () {
+                swal("Button Find Detail error");
+            }
+        });
+    }
+
+    function previousAcademyInfoAddRow(TEA_PREV_ACAD_INFO_ID, EXAM_NAME, BOARD_UNIV_CODE, RESULT, ROLL_NUM, REG_NUM, PASS_SESSION, PASS_YEAR, COURSE_DUR, TOTAL_CREDIT, INSTITUTE, LAST_EDUCATIONAL_QUALIFICATION) {
+        var table = document.getElementById("data_table_data");
+        var rowCount = table.rows.length;
+        var row = table.insertRow(rowCount);
+
+        var firstCell = row.insertCell(0);
+        var secondCell = row.insertCell(1);
+        var thirdCell = row.insertCell(2);
+        var fourthCell = row.insertCell(3);
+        var fifthCell = row.insertCell(4);
+        var sixthCell = row.insertCell(5);
+        var seventhCell = row.insertCell(6);
+        var eighthCell = row.insertCell(7);
+        var ninthCell = row.insertCell(8);
+        var tenthCell = row.insertCell(9);
+        var eleventhCell = row.insertCell(10);
+        var twelvethCell = row.insertCell(11);
+        var thirteenthCell = row.insertCell(12);
+        var fourteenthCell = row.insertCell(13);
+
+
+        firstCell.innerHTML = "<td class='hidden'><input type='hidden' name='teacher_previous_academy_info_id' id='teacher_previous_academy_info_id' class='form-control student_sibling_id' value='" + TEA_PREV_ACAD_INFO_ID + "' disabled></td>";
+        secondCell.innerHTML = "<td><input type='checkbox' class='thisCheckTableRowPreviousAcademicInformation this_check' name='thisCheckTableRowPreviousAcademicInformation' onclick='checkSingleRowPreviousAcademicInformation(" + rowCount + ");' value='0'/></td>";
+        thirdCell.innerHTML = "<td><input type='text' name='exam' id='exam' class='exam col-md-12' value='" + EXAM_NAME + "' placeholder='Example: SSC' autocomplete='off'></td>";
+        fourthCell.innerHTML = "<td><select name='previous_academic_info_board_university' id='previous_academic_info_board_university' class='col-xs-12 col-sm-12 previous_academic_info_board_university select_search'><option value=''> Select board/university</option></select></td>";
+        fifthCell.innerHTML = "<td><input type='text' name='result' id='result' class='result col-md-12' value='" + RESULT + "' placeholder='Example: 5.00' autocomplete='off'></td>";
+        sixthCell.innerHTML = "<td><input type='text' name='roll_no' id='roll_no' class='roll_no col-md-12' value='" + ROLL_NUM + "' placeholder='Example: 000900' autocomplete='off'></td>";
+        seventhCell.innerHTML = "<td><input type='text' name='reg_no' id='reg_no' class='reg_no col-md-12' value='" + REG_NUM + "' placeholder='Example: 12336778 Khatun' autocomplete='off'></td>";
+        eighthCell.innerHTML = "<td><input type='text' name='pass_session' id='pass_session' class='pass_session col-md-12' value='" + PASS_SESSION + "' placeholder='Example: 2019' autocomplete='off'></td>";
+        ninthCell.innerHTML = "<td><input type='text' name='pass_year' id='pass_year' class='pass_year col-md-12' value='" + PASS_YEAR + "' placeholder='Example: 2019' autocomplete='off'></td>";
+        tenthCell.innerHTML = "<td><input type='text' name='course_duration' id='course_duration' class='course_duration col-md-12' value='" + COURSE_DUR + "' placeholder='Example: 1 Year'></td>";
+        eleventhCell.innerHTML = "<td><input type='text' name='total_credit' id='total_credit' class='total_credit col-md-12' value='" + TOTAL_CREDIT + "' placeholder='Example: 153' autocomplete='off'></td>";
+        twelvethCell.innerHTML = "<td><input type='text' name='institution' id='institution' class='institution col-md-12' value='" + INSTITUTE + "' placeholder='Example: Memorial High School' autocomplete='off'></td>";
+        thirteenthCell.innerHTML = "<td><input type='text' name='last_qualification' id='last_qualification' class='last_qualification col-md-12' value='" + LAST_EDUCATIONAL_QUALIFICATION + "' placeholder='Example: Masters' autocomplete='off'></td>";
+        fourteenthCell.innerHTML = "<td><input type='hidden'  name='detail_row_status' class='form-control detail_row_status' id='detail_row_status' value='2' disabled></td>";
+
+        firstCell.style.display = "none";
+        fourteenthCell.style.display = "none";
+
+        $(".select_search").select2();
+
+        var ORG_CODE = $('#againorganization_name :selected').val();
+        SetPreviousAcademicInfoBoardUniversityElementReload(ORG_CODE, BOARD_UNIV_CODE, rowCount);
+
+
+        //make previous academy info board/University function on detail field
+        function SetPreviousAcademicInfoBoardUniversityElementReload(ORG_CODE, BOARD_UNIV_CODE, rowNum) {
+            $.ajax({
+                url: '/TeacherDetailInformationEntry/ShowBoardUniversityList',
+                type: 'POST',
+                data: { 'organization_name': ORG_CODE, 'rowNum': rowNum },
+                success: function (data) {
+                    if (data != '') {
+                        var markup = "";
+                        var row_num = "";
+                        for (var i = 0; i < data.length; i++) {
+                            markup += "<option value=" + data[i].BOARD_UNIV_CODE + ">" + data[i].BOARD_UNIV_NAME + "</option>";
+                            row_num = data[i].rowNum;
+                        }
+                        var cells = document.getElementById("data_table_data").rows[row_num].cells;
+                        cells[3].children[0].innerHTML = markup;
+                        row.cells[3].children[0].value = BOARD_UNIV_CODE;
+                    }
+                    else {
+                        var markup = "";
+                        var cells = document.getElementById("data_table_data").rows[row_num].cells;
+                        cells[3].children[0].innerHTML = markup;
+                    }
+                },
+                error: function () {
+                    swal("error");
+                }
+            });
+        }
+        $('[id^=roll_number],[id^=father_contact_number],[id^=mother_contact_number],[id^=gurdian_contact_number],[id^=admission_test_marks],[id^=admission_test_position],[id^=sms_mobile_number],[id^=roll_no],[id^=reg_no],[id^=pass_session],[id^=pass_year],[id^=course_duration],[id^=total_credit],[id^=is_total_credit]').keypress(validateNumber);
+    }
+
+
+</script>
+
+@*add previous academic info data*@
+<script>
+    $(document).on("click", ".addTableRowPreviousAcademicInfo", function () {
+        var previous_academic_info_organization_name = $('#againorganization_name :selected').val();
+        if (previous_academic_info_organization_name == '') {
+            swal("Please select organization name !!");
+        }
+        else {
+            var table = document.getElementById("data_table_data");
+            var previous_academic_info_rowCount = table.rows.length;
+            previous_academic_info_add = "<tr class='detail_target_field'>" +
+                                "<td class='hidden'> <input type='hidden' name='teacher_previous_academy_info_id' id='teacher_previous_academy_info_id' class='form-control teacher_previous_academy_info_id' value='0' disabled> </td>" +
+                                "<td><input type='checkbox' class='thisCheckTableRowPreviousAcademicInformation this_check' name='thisCheckTableRowPreviousAcademicInformation' onclick='checkSingleRowPreviousAcademicInformation(" + previous_academic_info_rowCount + ");' value='0'/></td>" +
+                               "<td><input type='text' name='exam' id='exam' class='exam col-md-12' value=''  placeholder='Example:SSC' autocomplete='off'></td>" +
+                               "<td><select name='previous_academic_info_board_university' id='previous_academic_info_board_university' class='col-xs-12 col-sm-12 previous_academic_info_board_university select_search'><option value=''> Select Board/University</option></select></td>" +
+                                "<td><input type='text' name='result' id='result' class='result col-md-12' value='' maxlength='100' placeholder='Example: 5.00' autocomplete='off'></td>" +
+                                "<td><input type='text' name='roll_no' id='roll_no' class='roll_no col-md-12' value='' maxlength='100' placeholder='Example: 00000090' autocomplete='off'></td>" +
+                                "<td><input type='text' name='reg_no' id='reg_no' class='reg_no col-md-12' value='' maxlength='100' placeholder='Example: 00000090' autocomplete='off'></td>" +
+                                "<td><input type='text' name='pass_session' id='pass_session' class='pass_session col-md-12' value='' maxlength='100' placeholder='Example: 2019' autocomplete='off'></td>" +
+                                "<td><input type='text' name='pass_year' id='pass_year' class='pass_year col-md-12' value='' maxlength='100' placeholder='Example: 2019' autocomplete='off'></td>" +
+                                "<td><input type='text' name='course_duration' id='course_duration' class='course_duration col-md-12' value='' maxlength='100' placeholder='Example: 1 years' autocomplete='off'></td>" +
+                                "<td><input type='text' name='total_credit' id='total_credit' class='total_credit col-md-12' value='' maxlength='100' placeholder='Example: 153' autocomplete='off'></td>" +
+                                "<td><input type='text' name='institution' id='institution' class='institution col-md-12' value=''  placeholder='Example: Memorial High School' autocomplete='off'></td>" +
+                                "<td><input type='text' name='last_qualification' id='last_qualification' class='last_qualification col-md-12' value=''  placeholder='Example: Masters' autocomplete='off'></td>" +
+                                "<td class='hidden'><input type='hidden'  name='detail_row_status' class='form-control detail_row_status' id='detail_row_status' value='1' disabled></td>" + "</tr>";
+
+            $('#more_field_2').append(previous_academic_info_add);
+            $('.select_search').select2();
+
+            var previous_academic_info_organization_name = $('#againorganization_name :selected').val();
+            SetPreviousAcademicInfoBoardUniversityElementAddRow(previous_academic_info_organization_name, previous_academic_info_rowCount);
+
+            $('[id^=roll_number],[id^=father_contact_number],[id^=mother_contact_number],[id^=gurdian_contact_number],[id^=admission_test_marks],[id^=admission_test_position],[id^=sms_mobile_number],[id^=roll_no],[id^=reg_no],[id^=pass_session],[id^=pass_year],[id^=course_duration],[id^=total_credit],[id^=is_total_credit]').keypress(validateNumber);
+            $('.select_search').select2();
+        }
+
+    });
+</script>
+
+@*check single and multiple row function for previous academy info*@
+<script>
+    //single check value change
+    function checkSingleRowPreviousAcademicInformation(rowNum) {
+        var cells = document.getElementById("data_table_data").rows[rowNum].cells;
+        if (cells[1].children[0].value == "1")
+            cells[1].children[0].value = "0";
+        else
+            cells[1].children[0].value = "1";
+    }
+
+    // all check value change
+    $(".check_all_Table_row_previous_academy_info").click(function () {
+
+        $('.thisCheckTableRowPreviousAcademicInformation').not(this).prop('checked', this.checked);
+        if (!$(this).prop('checked')) {
+            $('.this_check').val('0');
+        }
+        else {
+            $('.this_check').val('1');
+        }
+
+    });
+</script>
+
+@*dependency combo field for previous academic info*@
+<script>
+    $("#againorganization_name").change(function () {
+        var peviouse_academic_info_organization_name = $('#againorganization_name :selected').val();
+       SetBoardUniversityElementPreviousAcademicInfo(peviouse_academic_info_organization_name);
+    });
+
+
+    //make Board/University detail function
+    function SetBoardUniversityElementPreviousAcademicInfo(peviouse_academic_info_organization_name) {
+        $.ajax({
+            url: '/TeacherDetailInformationEntry/ShowBoardUniversityList',
+            type: 'POST',
+            data: { 'organization_name': peviouse_academic_info_organization_name },
+            success: function (data) {
+                if (data != '') {
+                    var markup = "";
+                    for (var i = 0; i < data.length; i++) {
+                        markup += "<option value=" + data[i].BOARD_UNIV_CODE + ">" + data[i].BOARD_UNIV_NAME + "</option>";
+                    }
+
+                    $("#previous_academic_info_board_university").html(markup).show();
+                }
+                else {
+                    var markup = "";
+                    $("#previous_academic_info_board_university").html(markup).show();
+
+                }
+            },
+            error: function () {
+                swal("error");
+            }
+        });
+    }
+</script>
+
+@*Dependency combo field in detail field for previous academy info*@
+<script>
+    function organizationChange(rowNum) {
+        var cells = document.getElementById("data_table_data").rows[rowNum].cells;
+        var previous_academic_info_organization_name = $('#againorganization_name :selected');
+        SetPreviousAcademicInfoBoardUniversityElementAddRow(previous_academic_info_organization_name, rowNum);
+    }
+
+    //make board/University function on detail field
+    function SetPreviousAcademicInfoBoardUniversityElementAddRow(previous_academic_info_organization_name, rowNum) {
+        $.ajax({
+            url: '/TeacherDetailInformationEntry/ShowBoardUniversityList',
+            type: 'POST',
+            data: { 'organization_name': previous_academic_info_organization_name, 'rowNum': rowNum },
+            success: function (data) {
+                if (data != '') {
+                    var markup = "";
+                    var row_num = "";
+                    for (var i = 0; i < data.length; i++) {
+                        markup += "<option value=" + data[i].BOARD_UNIV_CODE + ">" + data[i].BOARD_UNIV_NAME + "</option>";
+                        row_num = data[i].rowNum;
+                    }
+                    var cells = document.getElementById("data_table_data").rows[row_num].cells;
+                    cells[3].children[0].innerHTML = markup;
+                }
+                else {
+                    var markup = "";
+                    var cells = document.getElementById("data_table_data").rows[row_num].cells;
+                    cells[3].children[0].innerHTML = markup;
+                }
+            },
+            error: function () {
+                swal("error");
+            }
+        });
+    }
+</script>
+
+@*delete table row single and multiple function for previous academic Info*@
+<script>
+    $("#deleteTableRowPreviousAcademiInfo").click(function () {
+        var i = 0;
+        var j = 0;
+
+        var data = [];
+        var rdata = []; //remove data array
+
+        $('#data_table_data tr td:nth-child(2)').each(function () {
+            if ($(this).find('input[type="checkbox"]').val() == '1') {
+                data[i] = $(this).find('input[type="checkbox"]').val();
+            }
+            else {
+
+                data[i] = '0';
+            }
+
+            i++;
+        });
+
+        var k = 0;  //remove variable
+        $('#data_table_data tr td:nth-child(14)').each(function () {
+            if (data[j] == '1') {
+                $(this).find('input[type="hidden"]').val('3');
+                $(this).parent('tr').addClass('hidden');
+                rdata[k] = j;
+                k++;
+            }
+            j++;
+        });
+
+        $('.check_all_Table_row_previous_academy_info').attr("checked", false);
+    });
+
+</script>
+
+@*delete student entry information data*@
+<script>
+    function DeleteTeacherEntryInformation() {
+        swal({
+            title: "Are you sure to delete teacher Information?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Yes",
+            closeOnConfirm: false
+        },
+        function () {
+            var teacher_previous_academy_info_id;
+
+            i = 0;
+            $('#data_table_data tr td:first-child').each(function () {
+                if (i == 0) {
+                    teacher_previous_academy_info_id = $(this).find('input[type="hidden"]').val();
+                }
+                else {
+                    teacher_previous_academy_info_id += "~" + $(this).find('input[type="hidden"]').val();
+                }
+                i++;
+            });
+
+            if (!teacher_previous_academy_info_id) {
+                var teacher_previous_academy_info_id = $('#teacher_previous_academy_info_id').val();
+                var orgName = $('#againorganization_name :selected').val();
+                var teacher_code = $('#teacher_name_code :selected').val();
+                $.ajax({
+                    url: '/TeacherDetailInformationEntry/DeleteTeacherEntryInformation',
+                    type: 'POST',
+                    data: {
+                        'orgName': orgName,
+                        'teacher_code': teacher_code,
+
+                    },
+                    beforeSend: function () {
+                        $("#loader").modal("show");
+                    },
+                    success: function (result) {
+                        swal({
+                            title: result[0],
+                            type: "success",
+                            icon: "success",
+                            showLoaderOnConfirm: true
+                        },
+                        function () {
+                            location.reload(true);
+                        });
+
+                        $("h2").css({ color: result[1] });
+                    },
+                    error: function () {
+                        swal("error");
+                    }
+                });
+            }
+            else {
+                swal("Please delete previous academic information detail data.");
+                return false;
+            }
+        });
+    }
+
+</script>
+
+@*Teacher Report Generate*@
+<script>
+    $("#btnTeacherReport").click(function () {
+        var teacher_code = $('#teacher_name_code :selected').val();
+
+        if (teacher_code == '') {
+            swal('Please select student !!');
+        }
+        else {
+
+        }
+    });
+</script>
+
+@*pass organization name to controller*@
+<script>
+    $("#againorganization_name").change(function () {
+        $("#hdnOrganizationName").val($(this).find("option:selected").text());
+    });
+</script>
+
+@*refresh the page to reset all field value*@
+<script>
+    $("#btnReset").click(function () {
+        location.reload();
+    })
+</script>
+
+@*number field validation*@
+<script>
+
+    $(document).ready(function () {
+        $('[id^=mobile_no],[id^=edit_mobile_no]').keypress(validateNumber);
+    });
+
+    function validateNumber(event) {
+        var key = window.event ? event.keyCode : event.which;
+        if (event.keyCode === 8 || event.keyCode === 46) {
+            return true;
+        } else if (key < 48 || key > 57) {
+            return false;
+        } else {
+            return true;
+        }
+    };
+</script>
+
+@*superplaceholder mobile number field*@
+<script>
+    superplaceholder({
+        el: mobile_no,
+        sentences: ['017XXXXXXXX', '018XXXXXXXX', '015XXXXXXXX', '019XXXXXXXX', '016XXXXXXXX'],
+        options: {
+            letterDelay: 80,
+            loop: true,
+            startOnFocus: false
+        }
+    })
+
+</script>

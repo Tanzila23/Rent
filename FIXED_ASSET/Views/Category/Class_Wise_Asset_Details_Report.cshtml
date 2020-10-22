@@ -1,0 +1,245 @@
+﻿
+@{
+    ViewBag.Title = "Outlet Wise Asset Details Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!-- iCheck for checkboxes and radio inputs -->
+<link rel="stylesheet" href="~/plugins/iCheck/all.css">
+<!-- iCheck 1.0.1 -->
+<script src="~/plugins/iCheck/icheck.min.js"></script>
+<link href="~/Content/css/select2.css" rel="stylesheet" />
+<script src="~/Content/js/select2.full.min.js"></script>
+<!-------------------------------------------------------->
+<link href="~/Content/css/dataTables.bootstrap.min.css" rel="stylesheet" 
+<script src="~/Content/js/jquery.dataTables.min.js"></script>
+<script src="~/Content/js/dataTables.bootstrap.min.js"></script>
+
+
+<section class="content-header">
+    <h1 id="Title" data-reportname="@ViewBag.ReportName">
+        @*Daily Closing Report*@
+        @ViewBag.Title
+        @*<small>Control panel</small>*@
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">@ViewBag.Title</li>
+    </ol>
+</section>
+<!-- Main content -->
+<div class="row" id="searchfrm">
+    <section class="content">
+
+
+        <section class="col-lg-12 connectedSortable">
+
+            <div class="box box-success">
+                <div class="form-horizontal">
+                    <div class="box-body">
+                        <div class="overlay">
+                            <div id="loading-img"></div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 center-block" style="float: none;">
+                            <div class="panel panel-success">
+                                <div class="panel-heading"></div>
+                                <div class="panel-body">
+                                    <div class="col-md-12">
+                                        <input type="hidden" id="hdnPartnerName" name="hdnPartnerName" />
+                                        <input type="hidden" id="hdnPartnerCode" name="hdnPartnerCode" />
+                                        <input type="hidden" id="hdnStartDate" name="hdnStartDate" />
+                                        <input type="hidden" id="hdnEndDate" name="hdnEndDate" />
+                                       
+                                        <div class="form-group">
+                                            <label for="outletSelect" class="col-sm-4 control-label">Outlet</label>
+                                            <div class="col-sm-8">
+                                                @*<select type="text" class="form-control select2 col-md-10" id="CustomerList"></select>*@
+                                                <select type="text" class="form-control select2  col-md-10 outletSelect" id="outletSelect" name="OutletDefine" style="border-radius:5px; height:30px; margin-right:-5px; width: 220px;"></select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="ClassList" class="col-sm-4 control-label">Class</label>
+                                            <div class="col-md-8">
+                                                <select type="text" class="form-control select2 col-md-10" id="ClassList"></select>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            &nbsp;<br />
+                                            <br />
+                                        </div>
+                                    </div>
+
+                                    </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-12">
+
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <div id="external-events">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-lg-offset-4">
+                                <!-------------------------------------
+                                -----------------------------------
+                                ------------------------------>
+
+                                <a href="#" class="btn btn-success btn-sm ad-click-event btn-block" id="btnShowReport">
+                                    S H O W
+                                </a>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+</div>
+</section>
+
+
+
+
+<script>
+    $(document).ready(function () {
+    
+         $('.select2').select2();
+        OutletList();
+        ClassList();
+       
+
+    });
+  function ClassList() {
+
+        $.ajax({
+            url: '/AssetCategory/ClassList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#ClassList').html('');
+                    $('select#ClassListc').html('');
+                    $('select#ClassListp').html('');
+
+                    var result = '';
+                    result += "<option value='0'>Class Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+                        if (response[i].CLASS_ID == $('#ClassList_edit').val()) {
+
+                            result += "<option selected value='" + response[i].CLASS_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].DESCRIPTION + "' value='" + response[i].CLASS_ID + "' data-shortname='" + response[i].CODE + "'>" + response[i].DESCRIPTION + "</option>";
+                        }
+                        else {
+                            result += "<option id='" + response[i].CLASS_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].DESCRIPTION + "' value='" + response[i].CLASS_ID + "' data-shortname='" + response[i].CODE + "'>" + response[i].DESCRIPTION + "</option>";
+                        }
+                    }
+                }
+                $('select#ClassList').append(result);
+                $('select#ClassListc').append(result);
+                $('select#ClassListp').append(result);
+
+
+            }
+        });
+    }
+  function OutletList() {
+
+        $.ajax({
+            url: '/AssetCategory/OutletList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#OutletDefine').html('');
+                    $('select.outletSelect').html('');
+                    // alert("Done");
+                    //  console.log(response);
+                    var result = '';
+                    result += "<option value=''>Select One</option>";
+                    for (var i = 0; response.length > i; i++) {
+                        if (response[i].Organization_ID == $('#outlet_edit').val()) {
+
+                            result += "<option selected value='" + response[i].Organization_ID + "'>" + response[i].External_ID + " " + response[i].Organization_Name + "</option>";
+
+                        }
+                        else {
+                            result += "<option  value='" + response[i].Organization_ID + "'>" + response[i].External_ID + " " + response[i].Organization_Name + "</option>";
+                        }
+                    }
+                    $('select#OutletDefine').append(result);
+                    $('select.outletSelect').append(result);
+                }
+            }
+        });
+    }
+
+      $("#btnShowReport").click(function () {
+        $(".overlay").show();
+        var outletSelect = $("#outletSelect").val();
+        var ClassList = $("#ClassList").val();
+
+        
+        $.ajax({
+            type: "POST",
+            url: "/AssetCategory/Outlet_Wise_Aset_Details_Report",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                    _outletSelect: outletSelect,
+                    _ClassList: ClassList,
+                 
+                   
+                }),
+
+            success: function (response) {
+                if (response) {
+
+                    var ur = '../../Report/View_Outlet_Wise_Asset_Details.aspx';
+                    // var ur = '../../Report/View_ELPL_Stock_Details_Report.aspx';
+
+                    $("#ReportFrame").attr("src", ur);
+
+                    $('#ReportViewer').show();
+                    $('#searchfrm').hide();
+
+                } else {
+                    $(".overlay").hide();
+                    alert(response.responseText);
+
+                    PlaySound();
+                    toastr.error("Error!!", "Time Out Error!! Please Try Again.",
+                        {
+                            "positionClass": "toast-top-right",
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "closeButton": true
+                        });
+
+                }
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+    });
+</script>

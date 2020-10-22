@@ -1,0 +1,287 @@
+﻿@*@model eKYC.t_User*@
+
+@using System;
+@using System.Collections.Generic;
+@using System.Linq;
+@using System.Web;
+@using System.Web.Mvc;
+@using System.Web.UI;
+@using System.Globalization
+@using System.Text
+@*@using eKYC.Controllers*@
+
+@{
+    if (Session["USER_NAME"] != null)
+    {
+
+        Response.Redirect("/Home");
+        //Response.Redirect("/User/Login");
+    }
+
+}
+@{
+    Layout = null;
+    ViewBag.Title = "ELPL - LOGIN";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>
+        @ViewBag.Message | Log in
+    </title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link href="../../Content/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <!-- Font Awesome -->
+    <link href="../../Content/local.google.fonts.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../../dist/css/AdminLTE.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="../../plugins/iCheck/square/blue.css">
+    <link href="../../Content/animate.css" rel="stylesheet" />
+    <script src="~/Scripts/toastr.js"></script>
+    <link href="~/Content/toastr.css" rel="stylesheet" />
+    <link rel="Shortcut Icon" href="../../images/favicon.ico" />
+
+</head>
+<body class="hold-transition login-page wow pulse animated" >
+  
+    <div class="login-box">
+        <div class="login-logo wow pulse animated infinite">
+            <a href="/User/Login"><b style="
+    color: cornsilk;
+">@FIXED_ASSET.Resource.Resource.Rent_Application</b></a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="login-box-body">
+            <p class="login-box-msg">Sign in to start your session</p>
+
+            <div class="form-horizontal col-md-12">
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" placeholder="User Name" id="UserID">
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input type="password" class="form-control" placeholder="Password" id="PassWord">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-5 col-xs-offset-3">
+                        <button type="submit" onclick="SignIn()" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                    </div>
+                    <div class="col-md-11 col-md-offset-1">
+                        <span id="Login_Error" class="wow pulse animated infinite" style="color:red"></span>
+                    </div>
+                </div>
+            </div>
+            <br><br>
+            <hr /><br><br>
+            <hr />
+        </div>
+
+    </div>
+    <style>
+        .error {
+            border-color: Red;
+        }
+    </style>
+
+    <!-- jQuery 2.2.3 -->
+    <script src="~/plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="../../Content/js/bootstrap.min.js"></script>
+    <!-- iCheck -->
+    <script src="~/plugins/iCheck/icheck.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+
+            document.addEventListener("keydown", keyPress, false);
+        });
+
+
+        $('.login-page').on('mousedown', function (e) {
+            if (e.button == 0 && e.ctrlKey) {
+                alert('THIS IS UPDATE 17-01-2019');
+            } else if (e.button == 2 && e.ctrlKey) {
+                alert('ভাই, লগইন করেন, এত গুতাইয়েন না। কামের কাম করেন। আপনার সবকিছু আমাদের নজরে আছে :) ');
+            }
+        });
+
+
+        $("#PassWord").keypress(function (e) {
+
+            var keyCode = e.keyCode;
+            if (keyCode === 13) {
+
+                if (typeof vUserName != "" && typeof vPass != "") {
+                    SignIn();
+                }
+                else if (typeof vUserName == "" && typeof vPass != "") {
+                    PlaySound();
+
+                    $('.form-control').addClass('error');
+
+                    $('#Login_Error').html("Plese Give your UserName");
+
+                }
+                else if (typeof vUserName != "" && typeof vPass == "") {
+                    PlaySound();
+
+                    $('.form-control').addClass('error');
+
+                    $('#Login_Error').html("Plese Give your Password.");
+                }
+                else {
+                    PlaySound();
+
+                    $('.form-control').addClass('error');
+
+                    $('#Login_Error').html("Plese Give your UserName and Password.");
+
+                }
+            }
+        });
+        
+
+        $("#UserID").keypress(function (e) {
+
+            var keyCode = e.keyCode;
+            if (keyCode === 13) {
+
+                if (typeof vUserName != "") {
+                    $("#PassWord").focus();
+                }
+            }
+
+        });
+        
+
+
+        function keyPress(e) {
+            //debugger;
+            var keyCode = e.keyCode;
+            var vUserName = $('#UserID').val(),
+                vPass = $('#PassWord').val();
+
+            //keyCode = 113 Mean: F2 Button Press
+            if (keyCode === 13) {
+
+                if (typeof vUserName != "" && typeof vPass != "") {
+                    SignIn();
+                } else {
+                    PlaySound();
+
+                    $('.form-control').addClass('error');
+
+                    $('#Login_Error').html("Plese Give your UserName and Password.");
+
+                }
+            }
+        }
+        // new WOW().init();
+        $(function () {
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
+        });
+        function PlaySound() {
+            var sound = document.getElementById("audio");
+            sound.play()
+        }
+
+        function SignIn() {
+            var vUserID = $('#UserID').val(),
+                vPassWord = $('#PassWord').val();
+            $('#Login_Error').html("");
+            $('.form-control').removeClass('error');
+
+
+            if (vUserID != "" || vPassWord != "") {
+                $.ajax({
+                    type: "POST",
+                    url: "/User/Login",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify(
+                        {
+                            _UName: vUserID,
+                            _Pass: vPassWord
+
+                        }),
+
+                    success: function (response) {
+                        if (response) {
+
+                            location.replace("/RentHome/RentIndex/");
+                        }
+                        else {
+                            $('.form-control').addClass('error');
+
+
+                            $('#Login_Error').html("Plese Give Currect UserName and Password.");
+                            PlaySound();
+                            toastr.error("Plese Give Currect UserName and Password.", "Error..!!", {
+                                "positionClass": "toast-top-right",
+                                "showDuration": "300",
+                                "hideDuration": "1000",
+                                "timeOut": "5000",
+                                "closeButton": true
+                            });
+                            e.preventDefault();
+
+                        }
+
+
+                    },
+
+                    failure: function (response) {
+                        $('.form-control').addClass('error');
+                        PlaySound();
+                        $('#Login_Error').html("Plese Give Currect UserName and Password.");
+                    },
+                    error: function (response) {
+                        $('.form-control').addClass('error');
+                        PlaySound();
+
+                        $('#Login_Error').html("Plese Give Currect UserName and Password.");
+                        toastr.error("Plese Give Currect UserName and Password.", "Error..!!", {
+                            "positionClass": "toast-top-right",
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "closeButton": true
+                        });
+                    }
+                });
+            }
+            else {
+
+                $('#Login_Error').html("Plese Give your UserName and Password.");
+                $('.form-control').addClass('error');
+                PlaySound();
+                toastr.error("Plese Give your UserName and Password.", "Error..!!", {
+                    "positionClass": "toast-top-right",
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "closeButton": true
+                });
+
+
+            }
+
+
+        }
+    </script>
+    <audio id="audio" src="~/sounds/beep.wav" autostart="false"></audio>
+</body>
+
+</html>

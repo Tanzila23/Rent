@@ -1,0 +1,269 @@
+﻿
+@{
+    ViewBag.Title = "Department Wise User Asset List Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!-- iCheck for checkboxes and radio inputs -->
+<link rel="stylesheet" href="~/plugins/iCheck/all.css">
+<!-- iCheck 1.0.1 -->
+<script src="~/plugins/iCheck/icheck.min.js"></script>
+<link href="~/Content/css/select2.css" rel="stylesheet" />
+<script src="~/Content/js/select2.full.min.js"></script>
+<!-------------------------------------------------------->
+<link href="~/Content/css/dataTables.bootstrap.min.css" rel="stylesheet"
+<script src="~/Content/js/jquery.dataTables.min.js"></script>
+<script src="~/Content/js/dataTables.bootstrap.min.js"></script>
+
+
+<section class="content-header">
+    <h1 id="Title" data-reportname="@ViewBag.ReportName">
+        @*Daily Closing Report*@
+        @ViewBag.Title
+        @*<small>Control panel</small>*@
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">@ViewBag.Title</li>
+    </ol>
+</section>
+<!-- Main content -->
+<div class="row" id="searchfrm">
+    <section class="content">
+
+
+        <section class="col-lg-12 connectedSortable">
+
+            <div class="box box-success">
+                <div class="form-horizontal">
+                    <div class="box-body">
+                        <div class="overlay">
+                            <div id="loading-img"></div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 center-block" style="float: none;">
+                            <div class="panel panel-success">
+                                <div class="panel-heading"></div>
+                                <div class="panel-body">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="department_Id" class="col-sm-4 control-label">Department</label>
+                                            <div class="col-sm-8">
+                                                <select type="text" class="form-control select2  col-md-10 departmenSelect" id="department_Id" style="border-radius:5px; height:30px; margin-right:-5px; width: 283px;"></select>
+                                            </div>
+                                        </div>
+                                      
+                                        <div class="form-group">
+                                            <label for="user_Code" class="col-sm-4 control-label">User</label>
+                                            <div class="col-md-8">
+                                                <select type="text" class="form-control select2 col-md-10" data-placeholder="User" id="user_Code"></select>
+                                            </div>
+                                        </div>
+
+                                           <div class="form-group">
+                                            &nbsp;<br />
+                                            <br />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-12">
+
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <div id="external-events">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-lg-offset-4">
+                                <!-------------------------------------
+                                -----------------------------------
+                                ------------------------------>
+
+                                <a href="#" class="btn btn-success btn-sm ad-click-event btn-block" id="btnShowDepartmentUserReport">
+                                    S H O W
+                                </a>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+</div>
+
+
+
+<section class="content">
+
+    <div class="row" id="ReportViewer">
+        <section class="col-lg-12 connectedSortable">
+            <div class="box box-success">
+                <div class="box-header">
+                    <h3 class="box-title">&nbsp;  @ViewBag.Title</h3>
+                </div>
+
+
+                <div class="box-body">
+
+                    <div class="col-lg-12 table-responsive">
+                        <div class="col-md-2">
+                            <a href="#" class="btn btn-success btn-sm ad-click-event btn-block" id="btnBack">
+                                B A C K
+                            </a>
+                        </div>
+                        <br />
+                        <iframe id="ReportFrame" src="" width="100%" height="1200px" style="border:none"></iframe>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+</section>
+
+
+<script>
+    $(document).ready(function () {
+
+        $('.select2').select2();
+        UserList();
+        DepartmentList();
+        $('#ReportViewer').hide();
+
+    });
+    function UserList() {
+
+        $.ajax({
+            url: '/AssetCategory/UserList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#user_Code').html('');
+                    var result = '';
+                   result += "<option value='0'>User Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+                        if (response[i].EMP_ID == $('#user_edit').val()) {
+
+                            result += "<option selected  value='" + response[i].EMP_ID + "'>" + response[i].Name + "</option>";
+                        }
+                        else {
+                            result += "<option  value='" + response[i].EMP_ID + "'>" + response[i].Name + "</option>";
+                        }
+                    }
+                }
+                $('select#user_Code').append(result);
+
+
+
+            }
+        });
+    }
+    function DepartmentList() {
+
+        $.ajax({
+            url: '/AssetCategory/DepartmentList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#department_Id').html('');
+                    var result = '';
+                    result += "<option value='0'>Department Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+                        if (response[i].DEPT_ID == $('#department_edit').val()) {
+                            result += "<option selected value='" + response[i].DEPT_ID + "'>" + response[i].DESCRIPTION + "</option>";
+                        }
+                        else {
+                            result += "<option  value='" + response[i].DEPT_ID + "'>" + response[i].DESCRIPTION + "</option>";
+                        }
+
+
+                    }
+                }
+                $('select#department_Id').append(result);
+
+
+
+            }
+        });
+    }
+
+    $("#btnShowDepartmentUserReport").click(function () {
+        $(".overlay").show();
+        var department_Id = $("#department_Id").val();
+        var user_Code = $("#user_Code").val();
+
+
+        $.ajax({
+            type: "POST",
+            url: "/Report/Department_User_Wise_Asset_List",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                    _department_Id: department_Id,
+                    _user_Code: user_Code,
+
+
+                }),
+
+            success: function (response) {
+                if (response) {
+
+                    var ur = '../../Report/View_Department_User_Wise_Asset_List.aspx';
+                    // var ur = '../../Report/View_ELPL_Stock_Details_Report.aspx';
+
+                    $("#ReportFrame").attr("src", ur);
+
+                    $('#ReportViewer').show();
+                    $('#searchfrm').hide();
+
+                } else {
+                    $(".overlay").hide();
+                    alert(response.responseText);
+
+                    PlaySound();
+                    toastr.error("Error!!", "Time Out Error!! Please Try Again.",
+                        {
+                            "positionClass": "toast-top-right",
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "closeButton": true
+                        });
+
+                }
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+    });
+     $("#btnBack").on("click", function () {
+        $('#ReportViewer').hide();
+        $('#searchfrm').show();
+        $(".overlay").hide();
+    });
+</script>

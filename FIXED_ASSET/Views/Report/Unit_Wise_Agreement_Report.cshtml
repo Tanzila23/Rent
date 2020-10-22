@@ -1,0 +1,313 @@
+﻿
+@{
+    ViewBag.Title = "Unit Wise Agreement Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!-- iCheck for checkboxes and radio inputs -->
+<link rel="stylesheet" href="~/plugins/iCheck/all.css">
+<!-- iCheck 1.0.1 -->
+<script src="~/plugins/iCheck/icheck.min.js"></script>
+<link href="~/Content/css/select2.css" rel="stylesheet" />
+<script src="~/Content/js/select2.full.min.js"></script>
+<!-------------------------------------------------------->
+<link href="~/Content/css/dataTables.bootstrap.min.css" rel="stylesheet"
+<script src="~/Content/js/jquery.dataTables.min.js"></script>
+<script src="~/Content/js/dataTables.bootstrap.min.js"></script>
+
+
+<section class="content-header">
+    <h1 id="Title" data-reportname="@ViewBag.ReportName">
+        @*Daily Closing Report*@
+        @ViewBag.Title
+        @*<small>Control panel</small>*@
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">@ViewBag.Title</li>
+    </ol>
+</section>
+<!-- Main content -->
+<div class="row" id="searchfrm">
+    <section class="content">
+
+
+        <section class="col-lg-12 connectedSortable">
+
+            <div class="box box-success">
+                <div class="form-horizontal">
+                    <div class="box-body">
+                        <div class="overlay">
+                            <div id="loading-img"></div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 center-block" style="float: none;">
+                            <div class="panel panel-success">
+                                <div class="panel-heading"></div>
+                                <div class="panel-body">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="ProjectList" class="col-sm-4 control-label">Project</label>
+                                            <div class="col-sm-8">
+                                                <select type="text" class="form-control select2 " style="width:250px;" id="ProjectList"></select>
+                                                @*<select type="text" class="form-control select2 " style="width:315px;" id="ProjectList"></select>*@
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="UnitList" class="col-sm-4 control-label">Unit</label>
+                                            <div class="col-md-8">
+                                                <select type="text" class="form-control select2 " style="width:250px;" id="UnitList" data-placeholder="Unit Name"></select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="AgreementList" class="col-sm-4 control-label">Agreement</label>
+                                            <div class="col-md-8">
+                                                <select type="text" class="form-control select2 " style="width:250px;" id="AgreementList" data-placeholder="Agreement"></select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            &nbsp;<br />
+                                            <br />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-12">
+
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <div id="external-events">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-lg-offset-4">
+                                <!-------------------------------------
+                                -----------------------------------
+                                ------------------------------>
+
+                                <a href="#" class="btn btn-success btn-sm ad-click-event btn-block" id="btnShowUnitWiseAgreementReport">
+                                    S H O W
+                                </a>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+</div>
+
+
+
+<section class="content">
+
+    <div class="row" id="ReportViewer">
+        <section class="col-lg-12 connectedSortable">
+            <div class="box box-success">
+                <div class="box-header">
+                    <h3 class="box-title">&nbsp;  @ViewBag.Title</h3>
+                </div>
+
+
+                <div class="box-body">
+
+                    <div class="col-lg-12 table-responsive">
+                        <div class="col-md-2">
+                            <a href="#" class="btn btn-success btn-sm ad-click-event btn-block" id="btnBack">
+                                B A C K
+                            </a>
+                        </div>
+                        <br />
+                        <iframe id="ReportFrame" src="" width="100%" height="1200px" style="border:none"></iframe>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+</section>
+
+
+<script>
+    $(document).ready(function () {
+
+        $('.select2').select2();
+        ProjectList();
+        $('#ReportViewer').hide();
+
+    });
+    $("#ProjectList").change(function () {
+        var projectId = $(this).val();
+
+        Unitist(projectId);
+    });
+      $("#UnitList").change(function () {
+        var unitId = $(this).val();
+
+        Agreementist(unitId);
+    });
+     function ProjectList() {
+
+        $.ajax({
+            url: '/AssetCategory/RentProjectList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#ProjectList').html('');
+                    var result = '';
+                    result += "<option value='0'>Project Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option id='" + response[i].Project_ID + "'  data-STORAGE_ID='" + response[i].External_ID + "' title='" + response[i].Project_Name + "'value='" + response[i].Project_ID + "'>" + response[i].Project_Name + "</option>";
+
+                    }
+                }
+                $('select#ProjectList').append(result);
+
+
+            }
+        });
+    }
+     function Unitist(projectId) {
+
+        $.ajax({
+            url: '/AssetCategory/UnitList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+             data: JSON.stringify({ _projectId: projectId }),
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#UnitList').html('');
+                    var result = '';
+                   result += "<option value='0'>Unit Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+                         if (response[i].UNIT_ID == $('#UnitList_edit').val()) {
+                             result += "<option selected value='" + response[i].UNIT_ID + "'>" + response[i].UNIT_NAME + "</option>";
+                              //result += "<option selected id='" + response[i].UNIT_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].UNIT_NAME + "'value='" + response[i].UNIT_ID + "'>" + response[i].UNIT_NAME + "</option>";
+                        }
+                         else {
+                              result += "<option id='" + response[i].UNIT_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].UNIT_NAME + "'value='" + response[i].UNIT_ID + "'>" + response[i].UNIT_NAME + "</option>";
+                         }
+                       
+
+                    }
+                }
+                $('select#UnitList').append(result);
+
+
+            }
+        });
+    }
+     function Agreementist(unitId) {
+
+        $.ajax({
+            url: '/AssetCategory/Agreementist',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+             data: JSON.stringify({ _unitId: unitId }),
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#AgreementList').html('');
+                    var result = '';
+                   result += "<option value='0'>Agreement Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+                         if (response[i].Agreement_ID == $('#UnitList_edit').val()) {
+                             result += "<option selected value='" + response[i].Agreement_ID + "'>" + response[i].External_ID + "</option>";
+                              //result += "<option selected id='" + response[i].UNIT_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].UNIT_NAME + "'value='" + response[i].UNIT_ID + "'>" + response[i].UNIT_NAME + "</option>";
+                        }
+                         else {
+                              result += "<option id='" + response[i].Agreement_ID + "'+ value='" + response[i].External_ID + "' >" + response[i].External_ID + "</option>";
+                         }
+                       
+
+                    }
+                }
+                $('select#AgreementList').append(result);
+
+
+            }
+        });
+    }
+
+    $("#btnShowUnitWiseAgreementReport").click(function () {
+        $(".overlay").show();
+        var ProjectList = $("#ProjectList").val();
+        var UnitList = $("#UnitList").val();
+         var AgreementList = $("#AgreementList").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/Report/Unit_Wise_Agreement_Report",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                    _ProjectList: ProjectList,
+                    _UnitList: UnitList,
+                     _AgreementList: AgreementList,
+
+
+                }),
+
+            success: function (response) {
+                if (response) {
+
+                    var ur = '../../Report/View_Unit_Wise_Agreement_Details.aspx';
+                    // var ur = '../../Report/View_ELPL_Stock_Details_Report.aspx';
+
+                    $("#ReportFrame").attr("src", ur);
+
+                    $('#ReportViewer').show();
+                    $('#searchfrm').hide();
+
+                } else {
+                    $(".overlay").hide();
+                    alert(response.responseText);
+
+                    PlaySound();
+                    toastr.error("Error!!", "Time Out Error!! Please Try Again.",
+                        {
+                            "positionClass": "toast-top-right",
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "closeButton": true
+                        });
+
+                }
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+    });
+     $("#btnBack").on("click", function () {
+        $('#ReportViewer').hide();
+        $('#searchfrm').show();
+        $(".overlay").hide();
+    });
+</script>

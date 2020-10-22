@@ -1,0 +1,243 @@
+﻿@using System;
+@using System.Collections.Generic;
+@using System.Linq;
+@using System.Web;
+@using System.Web.Mvc;
+@using System.Web.UI;
+@using System.Globalization
+@using System.Text
+@using POSX.Controllers
+@using System.Data;
+@using POSX.DAL;
+@using POSX.Utilities;
+
+@{
+
+    UserDAL _UserDAL = new UserDAL();
+    string site_lan = "en";
+    HttpCookie cookie = HttpContext.Current.Request.Cookies["Language"];
+    if (cookie != null)
+    {
+        site_lan = cookie.Value;
+    }
+    ViewBag.site_lan = site_lan;
+    if (Session[POSxSession.LoggedUser] == null)
+    {
+        Response.Redirect("/User/Login");
+        return;
+    }
+    else
+    {
+        DataTable dtLoggedUser = (DataTable)Session[POSxSession.LoggedUser];
+        if (dtLoggedUser.Rows.Count > 0)
+        {
+            ViewBag.User_Name = dtLoggedUser.Rows[0]["Name"].ToString();
+            ViewBag.User_ID = dtLoggedUser.Rows[0]["emp_id"].ToString();
+
+            ViewBag.DeviceID = dtLoggedUser.Rows[0]["REGISTERID"].ToString();
+            ViewBag.BID = dtLoggedUser.Rows[0]["Organization_ID"].ToString();
+            @*<add key="OutLetRegNo" value="R009" />
+            <add key="Device_ID" value="700999DB-2F2F" />*@
+        string _Version = POSX.Controllers.BaseController._Version;
+        ViewBag.Version = _Version;
+    }
+
+}
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="author" content="Mehedi Hasan | mehedi_aiub@hotmail.com | www.hasanmehedi.com" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>@POSX.Resource.Resource.Application_Name @ViewBag.Title</title>
+    <link href="../../Content/css/bootstrap.css" rel="stylesheet" type="text/css" />
+
+    <link rel="Shortcut Icon" href="../../images/favicon.ico" />
+    <!-- Font Awesome -->
+    <link href="../../Content/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">*@
+    @*<link href="../../Content/css/font-awesome.min.css" rel="stylesheet" />*@
+    <!-- Ionicons -->
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">*@
+    @*<link href="../../Content/css/ionicons.min.css" rel="stylesheet" />*@
+    @*<link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />*@
+    @*<link href="../../Content/css/css.css" rel="stylesheet" type="text/css" />*@
+    <link href="../../Content/local.google.fonts.css" rel="stylesheet" type="text/css" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../..//dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+
+    <link rel="stylesheet" href="../..//dist/css/skins/_all-skins.min.css">
+    @*iCheck
+        <link rel="stylesheet" href="../..//plugins/iCheck/flat/blue.css">*@
+    <link rel="stylesheet" href="../../Content/css/animate.css">
+    <link href="../../Content/toastr.css" rel="stylesheet" />
+
+    @*<link href="../../Content/css/custom.css" rel="stylesheet" type="text/css" />*@
+    <!-- jQuery 3 -->
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>*@
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+
+    <!-- Angular -->
+    <script src="~/Scripts/toastr.js"></script>
+    @*<script src="~/Scripts/Added/autoFitColumns.min.js"></script>*@
+</head>
+<body class="hold-transition skin-blue sidebar-collapse">
+    <!-- Preloader End-->
+    <div class="wrapper" style="height: auto; min-height:100%;">
+        <header class="main-header">
+            <!-- Logo -->
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <div class="pull-left hidden-xs">
+                    <a href="http://www.lottobangladesh.com">
+                        <img src="/Images/Logo.jpg" style="height: 26px;
+    margin-left: 16px;">
+                    </a>
+                </div>
+                <!-- Sidebar toggle button-->
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown notifications-menu">
+                            <a>
+                                <span>
+                                    Business Date:  <span id="BillDate"></span>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="~/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                                <span id="User_ID" class="hidden-xs" data-UserID="@ViewBag.User_ID" data-deviceid="@ViewBag.DeviceID" data-BID="@ViewBag.BID"> @ViewBag.User_Name.ToUpper()</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    @*<img src="~/Images/ASD_LOGO.png" class="img-circle" alt="User Image">*@
+                                    <img src="~/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                    <p>
+                                        @ViewBag.User_Name.ToUpper()
+                                        @*<small>Last LogIn Time -  @ViewBag.LastLoginTime </small>*@
+                                    </p>
+                                </li>
+                                <!-- Menu Body -->
+                                <li class="user-body">
+                                    <div class="row">
+                                    </div>
+                                    <!-- /.row -->
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <input id="btn_Cash_Close" type="button" class="btn bg-purple btn-flat margin" value="Cash Close" onclick="location.href='@Url.Action("Cash_Close", "Sales")'" />
+                                    </div>
+                                    <div class="pull-right">
+                                        <input type="button" class="btn bg-maroon btn-flat margin" value="Sign out" onclick="location.href='@Url.Action("LogOut", "User")'" />
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Control Sidebar Toggle Button -->
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <div class="content-wrapper">
+
+            <!-- Main content -->
+            @RenderBody()
+
+            @RenderSection("scripts", required: false)
+
+
+            <!-- /.content -->
+        </div>
+
+        <!-- /.content-wrapper -->
+        @*<audio id="audio" src="~/sounds/sound.wav" autostart="false"></audio>*@
+        <audio id="audio" src="~/sounds/beep.wav" autostart="false"></audio>
+
+        <footer class="main-footer" style="    clear: both;
+    position: relative;">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> @ViewBag.Version
+
+            </div>
+            <strong>
+                Powered By -
+            </strong>
+            <a href="http://www.lottobangladesh.com"><img src="~/Images/lotto_LOGO.jpg" style="height: 17px;" /></a>
+        </footer>
+
+        <!-- Control Sidebar -->
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed
+             immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
+    </div>
+    <!-- ./wrapper -->
+    <link href="~/Content/Site.css" rel="stylesheet" />
+
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../..//dist/js/app.min.js"></script>
+
+    <script src="~/Content/js/wow.min.js"></script>
+
+    <script src="~/Scripts/date_time.js"></script>
+    <script type="text/javascript">
+        window.onload = date_time('BillDate');
+        function PlaySound() {
+            var sound = document.getElementById("audio");
+            sound.play()
+        }
+        function winPopUp(URL) {
+            day = new Date();
+            id = day.getTime();
+            str = 'addressbar=0,toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=0,screenX=0,screenY=0,top=0,left=0,maximize=0,'
+            str = str + 'height=' + screen.availHeight + ', width=' + screen.availWidth
+            eval('page' + id + '=window.open(URL, id,str )')
+        }
+
+
+//        //Script courtesy of BoogieJack.com
+//        var message = "NoRightClicking";
+//        function defeatIE() { if (document.all) { (message); return false; } }
+//        function defeatNS(e) {
+//            if
+//(document.layers || (document.getElementById && !document.all)) {
+//                if (e.which == 2 || e.which == 3) { (message); return false; }
+//            }
+//        }
+//        if (document.layers) { document.captureEvents(Event.MOUSEDOWN); document.onmousedown = defeatNS; }
+//        else { document.onmouseup = defeatNS; document.oncontextmenu = defeatIE; }
+//        document.oncontextmenu = new Function("return false")
+    </script>
+    <style>
+        .main-header .navbar {
+            margin-left: 0px;
+        }
+
+        .main-footer {
+            padding: 7px;
+        }
+
+        .navbar {
+            min-height: 32px !important;
+        }
+
+        body {
+            font-size: 12px;
+        }
+    </style>
+
+</body>
+
+</html>

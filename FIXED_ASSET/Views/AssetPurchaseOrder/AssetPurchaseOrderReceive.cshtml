@@ -1,0 +1,845 @@
+﻿
+@{
+    ViewBag.Title = "AssetPurchaseOrderReceive";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section id="PurchaseOrder">
+
+    <section class="content-header ">
+        @if (!ViewBag.GetReport)
+        {
+            <h1 style="font-weight: bolder;">
+                <span style="font-size: 17px;">Invoice# <span id="invno" style="color: #428dbd;">@ViewBag.GRCVInvoiceNo</span></span>
+            </h1>
+        }
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i>PurchaseOrder Receive</a></li>
+        </ol>
+    </section>
+    <section class="content">
+
+        @if (ViewBag.GetReport)
+        {
+
+            <div class="row">
+                <section class="col-lg-12 connectedSortable">
+                    <div class="box box-success">
+                        <div class="box-header">
+                            <h3 class="box-title"><b> Purchase Order Receive</b> </h3>
+                        </div>
+                        <div class="box-body">
+                            <button type="button" class="btn btn-primary" id="btnSearch" onclick="Back();">B A C K</button>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <iframe id="ReportFrame" src="" width="100%" height="500px" style="border:none"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+        }
+        else
+        {
+
+            <div class="row">
+                <section class="col-lg-8">
+                    <div class="box box-primary wow fadeInLeft">
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-primary">PO Number</button>
+                                        </div>
+                                        <input type="text" class="form-control" id="pono" style="width: 272px;font-size: 15px;" disabled="disabled">
+
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-primary">Order Date</button>
+                                        </div>
+                                        <input type="text" class="form-control" id="orddt" style="width: 250px;font-size: 15px;" disabled="disabled">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-primary">Supplier</button>
+                                        </div>
+                                        <input type="text" class="form-control" id="supp" style="width: 289px;font-size: 15px;" disabled="disabled">
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-primary">Expire Date</button>
+                                        </div>
+                                        <input type="text" class="form-control" id="expdt" style="width: 250px;font-size: 15px;" disabled="disabled">
+
+                                    </div>
+                                </div>
+                            </div>  <br />
+                            <div class="row">
+
+                                <div class="col-lg-6">
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-btn">
+
+                                            <button type="button" class="btn btn-primary">Article</button>
+                                        </div>
+                                        <select style="width: 301px;" type="text" class="form-control select2" id="POList"></select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-primary">Order Type </button>
+                                        </div>
+                                        <input type="text" class="form-control" id="ordtype" style="width: 250px;font-size: 15px;" disabled="disabled">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="col-lg-4">
+                    <div class="box box-primary wow fadeInRight" data-wow-delay=".3s" style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInRight;">
+                        <div class="box-body">
+
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <table style="width: 94%;margin-left: 14px;">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <label>Total Quantity</label>
+                                                                <input id="Total_Quantity" type="text" class="form-control" style="
+                                                                    width: 76%;
+                                                                    text-align: right;
+                                                                " placeholder="0" disabled="">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <label>Total Amount</label>
+                                                                <input id="Total_Amt" type="text" style="
+                                                            width: 171px;text-align:right;
+                                                        " class="form-control" placeholder="0" disabled="">
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="col-md-6">
+                                <button class="btn-block btn btn-danger btn-lg" id="btnClear" type="button"
+                                        onclick="btnClear_Click()">
+                                    <span style="float:none"><b>D I S C A R D</b></span>
+                                </button>
+
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn-block btn btn-block btn-success btn-lg" id="btnSave" type="button"
+                                        onclick="Grcvpost()">
+                                    <span style="float:none"><b>S A V E</b></span>
+
+                                </button>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="row">
+                <section class="col-lg-12">
+                    @*<div class="row" id="">*@
+
+                    <div class="box box-primary" style="width:100%;" id="DetailsInformation">
+                        <div class="box-body">
+                            <div class="box-header">
+                                <h3 class="box-title">Article Information</h3>
+                                <div class="box-tools pull-right">
+                                    <a href="#" onclick="ViewAddArticleInfo()"><span class="label label-success">View Added Article Info</span></a>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12 ">
+
+                                    <table class="fixed_headers" id="tblDetails"></table>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="box-footer clearfix">
+
+                            <a href="javascript:void(0)" id="btn_Addart" onclick="rcv_temp();" class="btn btn-sm btn-default btn-flat pull-right btn-success">ADD Article</a>
+                        </div>
+                    </div>
+
+
+                    <div id="AddedArticleInformation">
+                        <div class="box box-primary wow fadeInLeft" style="width: 100%; visibility: visible; animation-name: fadeInLeft;">
+                            <div class="box-body" id="details2">
+                                <div class="box-header">
+                                    <h3 class="box-title">Currently Added Article Detalis Information</h3>
+                                    <div class="box-tools pull-right">
+                                        <a href="##" onclick="ViewArticleInfo()"><span class="label label-success">View Article Info</span></a>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-12 table-wrapper-scroll-y">
+                                        <table class="fixed_headers" id="tblDetails2"></table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+            </div>
+        }
+
+
+
+    </section>
+
+
+</section>
+
+<style>
+    .btn-app-primary {
+        color: #fff;
+        border: 1px solid transparent;
+        background-color: #3c8dbc;
+        border-color: #367fa9;
+    }
+
+    .btn-orange {
+        color: #fff;
+        background-color: #dd4b39;
+        border-color: #d73925;
+    }
+
+    #table_PayButton td {
+        width: 25%;
+    }
+
+
+
+    tr.highlight td {
+        color: black;
+        background-color: red;
+    }
+
+    /*////////////////////////////*/
+    .fixed_headers {
+        table-layout: fixed;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+
+    .fixed_header tbody {
+        display: block;
+        width: 100%;
+        overflow: auto;
+        height: 350px;
+    }
+
+    .fixed_headers th {
+        text-decoration: none;
+    }
+
+    .fixed_headers th,
+    .fixed_headers td {
+        padding: 5px;
+        text-align: left;
+    }
+
+        .fixed_headers td:nth-child(1),
+        .fixed_headers th:nth-child(1) {
+            min-width: 102px;
+        }
+
+        .fixed_headers td:nth-child(2),
+        .fixed_headers th:nth-child(2) {
+            min-width: 66px;
+        }
+
+        .fixed_headers td:nth-child(3),
+        .fixed_headers th:nth-child(3) {
+            width: 61px;
+        }
+
+        .fixed_headers td:nth-child(4),
+        .fixed_headers th:nth-child(4) {
+            width: 61px;
+        }
+
+        .fixed_headers td:nth-child(5),
+        .fixed_headers th:nth-child(5) {
+            width: 61px;
+        }
+
+        .fixed_headers td:nth-child(6),
+        .fixed_headers th:nth-child(6) {
+            width: 61px;
+        }
+
+        .fixed_headers td:nth-child(7),
+        .fixed_headers th:nth-child(7) {
+            width: 61px;
+        }
+
+        .fixed_headers td:nth-child(8),
+        .fixed_headers th:nth-child(8) {
+            width: 61px;
+        }
+
+        .fixed_headers td:nth-child(9),
+        .fixed_heades th:nth-child(9) {
+            width: 61px;
+        }
+
+        .fixed_headers td:nth-child(10),
+        .fixed_headers th:nth-child(10) {
+            width: 61px;
+        }
+
+        .fixed_headers td:nth-child(11),
+        .fixed_headers th:nth-child(11) {
+            width: 61px;
+        }
+
+        .fixed_headers td:nth-child(12),
+        .fixed_headers th:nth-child(12) {
+            width: 61px;
+        }
+
+        .fixed_headers td:nth-child(13),
+        .fixed_headers th:nth-child(13) {
+            width: 61px;
+        }
+
+        .fixed_headers td:nth-child(14),
+        .fixed_headers th:nth-child(14) {
+            width: 61px;
+        }
+
+    .fixed_headers thead {
+        background-color: #3c8dbc;
+        /*background-color: #333333;
+       color: #fdfdfd;*/
+        color: #fdfdfd;
+    }
+
+        .fixed_headers thead tr {
+            display: block;
+            position: relative;
+        }
+
+    .fixed_headers tbody {
+        display: block;
+        overflow: auto;
+        width: 100%;
+        /*height: 374px;*/
+    }
+
+        .fixed_headers tbody tr:nth-child(even) {
+            background-color: #cfddea;
+        }
+
+    .fixed_headers tr {
+        font-weight: bold;
+    }
+
+    /*////////////////////////////////////////*/
+</style>
+
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+<link href="/Content/css/select2.css" rel="stylesheet" />
+<script src="/Content/js/select2.full.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        $("body").removeClass("skin-blue sidebar-mini").addClass("skin-blue sidebar-mini sidebar-collapse");
+        $('#DetailsInformation').hide();
+        $('#AddedArticleInformation').show();
+        $('.select2').select2();
+        POList();
+        POrcv_view();
+        $('#ReportViewer').hide();
+          @if(ViewBag.GetReport)
+         {
+            <text>
+        $('#ReportViewer').show();
+        LoadReport();
+             </text>
+         }
+
+
+    });
+
+
+    function LoadReport() {
+
+        var url = '../../Report/Purchase_OrderRCV_Report.aspx';
+
+        $("#ReportFrame").attr("src", url);
+        $('#ReportViewer').show();
+
+
+    }
+
+
+    function POList() {
+
+        $.ajax({
+            url: '/AssetPurchaseOrder/PO_Art',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+
+            success: function (response) {
+                $('select#POList').html('');
+                var result = '';
+                result += "<option value='0' title='0' selected>-- Select One--</option>";
+                if (response.length > 0) {
+                    for (var i = 0; response.length > i; i++) {
+                        result += "<option id='" + response[i].MODEL_NO + "' data-Supplier_ID='" + response[i].MODEL_NO + "' data-Sales_Price='" + response[i].SALES_PRICE + "' data-Outlet_ID='" + response[i].P_COST + "'  title='" + response[i].MODEL_NO + "' value='" + response[i].MODEL_NO + "' data-shortname='" + response[i].MODEL_NO + "' >" + response[i].DESCRIPTION + "</option>";
+
+                        $('#pono').val(response[i].EXTERNALID)
+                        //$('#expdt').val(response[i].EXPIRE_DATE)
+                        $('#orddt').val(response[i].CREATE_AT)
+                        $('#supp').val(response[i].NAME + ' (' + response[i].EXTERNAL_ID + ')')
+                        $('#ordtype').val(response[i].CNAME)
+                        //$('#storage').val(response[i].STORAGE_Name)
+
+                    }
+                }
+                $('select#POList').append(result);
+
+            }
+        });
+    }
+
+    function ViewAddArticleInfo() {
+        $('#DetailsInformation').hide();
+        $('#AddedArticleInformation').show();
+        ArticleInformation();
+    }
+
+    function ViewArticleInfo() {
+        $('#DetailsInformation').show();
+
+        $('#AddedArticleInformation').hide();
+    }
+
+    $("#ChannelList").change(function () {
+
+
+        var vOID = $("#ChannelList").val();
+        $('#SuppID').val($("#ChannelList").val());
+    });
+
+    $("#artselect").change(function () {
+
+        $('#size_details').remove();
+    });
+
+    $("#btn_Addart").click(function () {
+        $('#size_detailsview').remove();
+        $('#size_details').remove();
+    });
+
+    function ArticleInformation() {
+        var artcode = $('#POList').val();
+        $('#size_details').remove();
+
+        $.ajax({
+            type: "POST",
+            url: "/PurchaseOrder/Get_Rcvstock",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+
+            data: JSON.stringify(
+                {
+                    artno: artcode
+                }
+            ),
+            success: function (response) {
+                if (response.First) {
+
+                    $('#tblDetails table').empty();
+                    var result = "<table id='size_details' class='table table- striped'><tr>";
+                    if (response.Second.length > 0) {
+                        for (var i = 0; i < response.Second.length; i++) {
+                            result += "  <th style='text-align: center;'>" + response.Second[i].Column_Name + "</th>";
+                            var sizeid = [];
+                            for (var x = 1; x < response.Second.length - 1; x++) {
+                                sizeid.push(response.Second[x].Column_Name);
+                            }
+                        }
+                        result += "</tr>";
+                        for (var j = 0; j < response.Third.length; j++) {
+                            result += "<tr>";
+                            for (var i = 0; i < response.Second.length; i++) {
+
+                                var columnName = response.Second[i].Column_Name;
+                                result += "<td style='text-align: center;' data-size=" + response.Second[i].Column_Name + " id= detailqty_" + response.Second[i].Column_Name + ">" + response.Third[j][columnName] + "</td>";
+                            }
+                            result += "</tr>";
+                        }
+                        result += "<tr id='columnsValue'><td style='text-align:center;'><b> Receive Qty</b></td>";
+                        result += "<td style='text-align:center;'><b>" + response.Third[0]['ARTICLE'] + "</b></td>";
+                        //Fourth
+                        for (var i = 2; i < response.Second.length; i++) {
+                            var columnName = response.Second[i].Column_Name;
+                            result += "<td style='text-align: center;'  id=" + response.Second[i].Column_Name + "><input size= '4' style= 'text-align: center;' class='input' onkeyup='qtyCheck(this.id);'  data-size=" + response.Second[i].Column_Name + " id= qty_" + response.Second[i].Column_Name + " value = '0' onfocus = 'this.select()' /></td > ";
+                        }
+                        result += "</tr></table>";
+                    }
+                    $('#tblDetails').append(result);
+                }
+            }
+        })
+    }
+
+    $("#POList").change(function () {
+        $('#DetailsInformation').show();
+        $('#AddedArticleInformation').hide();
+        ArticleInformation();
+
+
+    });
+
+    function btnClear_Click() {
+
+        $.ajax({
+            type: "POST",
+            url: "/PurchaseOrder/GrcvArtdel",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                    _article: "",
+                    _con: 0
+                }),
+            success: function (response) {
+
+                toastr.success("Discard Sucessfully  !!! ", " Goods Receive Discard Sucessfully  !!! ",
+                    {
+                        "positionClass": "toast-top-right",
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "closeButton": true
+                    });
+
+                setTimeout(function () {
+                    location.reload();
+                }, 2000);
+            },
+            failure: function (response) {
+
+                alert(response.responseText);
+                location.reload();
+            },
+            error: function (response) {
+
+                alert(response.responseText);
+                location.reload();
+            }
+        });
+
+    }
+
+    function POrcv_view() {
+
+        $.ajax({
+            type: "POST",
+            url: "/PurchaseOrder/Porcv_view",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+
+
+            success: function (response) {
+                $('#DetailsInformation').hide();
+                $('#AddedArticleInformation').show();
+
+                $('#tblDetails2 table').empty();
+                $('#size_detailsview table').empty();
+                if (response.First) {
+
+                    var result = "<table  id='size_detailsview' class='table table- striped fixed_header'><tr>";
+                    if (response.Second.length > 0) {
+
+                        for (var i = 0; i < response.Second.length -2; i++) {
+
+                            result += "  <th style='text-align: center;'>" + response.Second[i].Column_Name + "</th>";
+                            var sizeid = [];
+                            for (var x = 1; x < response.Second.length - 1; x++) {
+
+                                sizeid.push(response.Second[x].Column_Name);
+
+                            }
+
+                        }
+                        result += "  <th style='text-align: center;'>Action</th>";
+
+                        result += "</tr>";
+                        console.log(response.Second);
+                        for (var j = 0; j < response.Third.length; j++) {
+                            result += "<tr>";
+                            for (var i = 0; i < response.Second.length -2; i++) {
+
+                                var columnName = response.Second[i].Column_Name;
+                                result += "<td style='text-align: center;' data-size=" + response.Second[i].Column_Name + " id= detailqty_" + response.Second[i].Column_Name + ">" + response.Third[j][columnName] + "</td>";
+
+                            }
+                            result += "<td style='text-align: center;'><button id='TempDataDelete' onclick=TempDataDelete('" + response.Third[0].ARTICLE + "')><i class='fa fa-trash-o'></i></button></td>";
+                            result += "</tr>";
+                        }
+                        result += "</tr></table>";
+                        if (response.Third.length > 0) {
+                            $('#Total_Amt').val(response.Third[0]['GValue'])
+                            $('#Total_Quantity').val(response.Third[0]['GTotal'])
+                        }
+                    }
+                    $('#tblDetails2').append(result);
+                }
+            }
+        })
+    };
+
+    function rcv_temp() {
+
+        var vSize = "", vQty = "";
+
+        $("#tblDetails #size_details td input").each(function () {
+
+            vSize += $(this).attr("data-size") + ',';
+            //vQuantity += $(this).attr("data-Quantity") + ',';
+            vQty += $('#qty_' + $(this).attr("data-size")).val() + ',';
+
+        });
+
+        var v_size = vSize.replace(/Total,/g, '')
+
+        var v_qty = vQty.slice(0, -1)
+
+
+        var v_art = $('#POList').val();
+        var v_outlet = $('#ChannelList').val();
+        var v_costprice = $("#POList").find(':selected').attr("data-outlet_id");
+        var v_salesprice = $("#POList").find(':selected').attr("data-Sales_Price");
+        $.ajax({
+            type: "POST",
+            url: "/PurchaseOrder/Rcv_tmp",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                    _article: v_art,
+                    _qty: v_qty,
+                    _costprice: v_costprice,
+                    _size: v_size,
+                    _salesprice: v_salesprice
+
+                }),
+            success: function (response) {
+                POrcv_view();
+
+
+            },
+            failure: function (response) {
+
+                alert(response.responseText);
+                location.reload();
+            },
+            error: function (response) {
+
+                alert(response.responseText);
+                location.reload();
+            }
+        });
+
+
+
+
+
+    }
+
+
+    function TotalQty(a) {
+
+        $("#tblDetails #size_details td input").each(function () {
+            var $tr = $(this).closest('tr'); // get tr which contains the input
+            var tot = 0; // variable to sore sum
+            $('input', $tr).each(function () { // iterate over inputs
+                tot += Number($(this).val()) || 0; // parse and add value, if NaN then add 0
+            });
+            $('td:last', $tr).text(tot); // update last column value
+        }).trigger('input'); // trigger input to set initial value in column
+
+    }
+
+
+    function Grcvpost() {
+
+
+        $.ajax({
+            type: "POST",
+            url: "/PurchaseOrder/GRcv_Post",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response) {
+                    toastr.success("SAVE Sucessfully  !!! ", " Article Add SAVE Sucessfully  !!! ",
+                        {
+
+                            "positionClass": "toast-top-right",
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "closeButton": true
+                        });
+                    setTimeout(function () {
+
+                      //  alert("REPORT");
+                      //  window.location.href = '/PurchaseOrder/PendingPO';
+
+                        location.reload();
+
+                    }, 2000);
+                }
+                else {
+                    toastr.error("ERROR !!! ", "Save Failed SAVE Sucessfully  !!! ",
+                        {
+
+                            "positionClass": "toast-top-right",
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "closeButton": true
+                        });
+                }
+
+
+
+
+
+
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+                location.reload();
+            },
+            error: function (response) {
+                alert(response.responseText);
+                location.reload();
+            }
+        });
+
+    }
+
+
+    function TempDataDelete(art) {
+        //  alert(art);
+        $.ajax({
+            type: "POST",
+            url: "/PurchaseOrder/GrcvArtdel",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                    _article: art,
+                    _con: 1
+                }),
+            success: function (response) {
+
+                POrcv_view();
+            },
+            failure: function (response) {
+
+                alert(response.responseText);
+                // location.reload();
+            },
+            error: function (response) {
+
+                alert(response.responseText);
+                // location.reload();
+            }
+        });
+
+    }
+
+
+    function qtyCheck(info) {
+
+        $("#tblDetails #size_details td input").each(function () {
+            var $tr = $(this).closest('tr'); // get tr which contains the input
+            var tot = 0; // variable to sore sum
+            $('input', $tr).each(function () { // iterate over inputs
+                tot += Number($(this).val()) || 0; // parse and add value, if NaN then add 0
+            });
+            $('td:last', $tr).text(tot); // update last column value
+        }).trigger('input'); // trigger input to set initial value in column
+    }
+
+    function Back() {
+        $.ajax({
+            type: "POST",
+
+            url: "/PurchaseOrder/RCVReprintBack",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+
+            success: function (response) {
+
+                window.location.href = '../Home';
+            }
+        });
+    }
+
+
+</script>
+
+
+

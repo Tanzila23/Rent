@@ -1,0 +1,303 @@
+﻿@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/css/select2.min.css" rel="stylesheet" />
+<link href="~/Content/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<script src="~/Content/js/jquery.dataTables.min.js"></script>
+<script src="~/Content/js/dataTables.bootstrap.min.js"></script>
+
+<script src="~/Content/js/jquery.validate.min.js"></script>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        @ViewBag.Title
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Designation</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+
+    <!-- /.box -->
+    <!-- Default box -->
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">All Users List</h3>
+            <div class="box-tools pull-right">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="box-body table-responsive">
+                <table id="UserRole" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>User Name</th>
+                            <th>User Role</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var list in ViewBag.userList)
+                        {
+                            <tr id="@list.EMP_ID">
+                                <td>@list.EMP_ID</td>
+                                <td>@list.Name</td>
+                                <td>
+                                    <select class="form-control Role" disabled="disabled" style="width:100%;" onclick="roleChange(@list.EMP_ID);"
+                                            id="user_role_@list.EMP_ID" name="user_role" data-placeholder="User Role" tabindex="-1" aria-hidden="true"
+                                            data-selector="@list.Role_ID"></select>
+
+                                </td>
+
+                                @* <td><a href="@list.R_ID" id="@list.R_ID" class="btn btn-primary editRole">Edit</a> </td>*@
+                                <td>
+                                    <button class="btn btn-primary editRole" onclick="editRole(@list.EMP_ID)" id="edit_role_@list.EMP_ID" value="@list.EMP_ID">Role Assign</button>
+                                    <button class="btn btn-success hidden updateRole" onclick="updateRole(@list.EMP_ID)" id="update_role_@list.EMP_ID" value="@list.EMP_ID">Change Role</button>
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>User ID</th>
+                            <th>User Name</th>
+                            <th>User Role</th>
+                            <th>Action</th>
+
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+            Footer
+        </div>
+        <!-- /.box-footer-->
+    </div>
+    <!-- /.box -->
+
+</section>
+<!-- /.content -->
+
+<script>
+
+    $(document).ready(function () {
+
+        roleId();
+        $('.select2').select2();
+        $('.show-form').hide();
+        $('.addnew').hide();
+        $('.hide-form').hide();
+
+        roleList();
+
+        if ($('.editRole').val() == '') {
+            $('.editRole').html('Change Role')
+        }
+
+        $('.editRole').keyup(function () {
+            if ($(this).val() == '') {
+                $('button.editRole').text('Hello');
+            } else {
+                $('button.editRole').text('World');
+            }
+        });
+
+        $('#table').bootstrapTable();
+
+        $('#updateUser').click(function (event) {
+            event.preventDefault();
+            alert("updateUser");
+        });
+    });
+
+
+    function roleChange(empId)
+        {
+            $('#user_role_' + empId).find('option:selected').removeAttr("selected");
+        }
+
+    function updateRole(empID) {
+     
+        var a = $("#user_role_" + empID).val();
+        var b = $('#user_role_' + empID).val();
+
+        //alert(b);
+        $("#user_role_" + empID).attr('disabled', 'disabled');
+        //var b = $("#edit_role_" + empID).text();
+
+       // alert(empID + " " + b);
+        $("#edit_role_" + empID).removeClass("hidden");
+        $("#update_role_" + empID).addClass("hidden");
+
+        var emproleObj = {
+            RoleID: b,
+            EmpID: empID
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/User/UpdateUser",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(emproleObj),
+            success: function (response) {
+                if (response != null) {
+                    //alert(response.message);
+                    toastr.success(response.message, 'Insert', {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": true,
+                        "positionClass": "toast-top-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    });
+                    setTimeout(function () { location.reload();; }, 2000);
+                }
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        })
+    }
+
+    function editRole(empID) {
+
+        var a = $("#user_role_" + empID).text();
+        $("#user_role_" + empID).removeAttr('disabled');
+        var b = $("#edit_role_" + empID).text();
+
+        //  alert(empID + " " + $('select.Role').val() + " " + b);
+        $("#edit_role_" + empID).addClass("hidden");
+        $("#update_role_" + empID).removeClass("hidden");
+       
+    };
+
+    function roleId() {
+        $.ajax({
+            url: '/User/RoleList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select.Role').html('');
+                    // alert("Done");
+
+                    var result = '';
+                    result += "<option value=''>Select One</option>";
+
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option id='" + response[i].R_ID + "' value='" + response[i].R_ID + "'>" + response[i].RNAME + "</option>";
+
+                    }
+                    $('select.Role').append(result);
+                    setDropdown();
+                }
+            }
+        });
+    }
+
+    function setDropdown() {
+
+        $("#UserRole tr").each(function () {
+
+            var id = $(this).closest('tr').attr('id');
+            //  alert(id);
+
+            var selector = $('#UserRole tr #user_role_' + id).attr("data-selector");
+            // alert(selector);
+            if (typeof selector != 'undefined' || selector !== '') {
+                $("#user_role_" + id + " Option[id='" + selector + "']").attr("selected", true);
+            }
+
+            // $('#user_role_' + id).val(selector);
+            // alert('#user_role_' + id);
+
+        });
+    }
+
+    $(function () {
+
+        $('#UserRole').DataTable();
+
+        var table =  $('#UserRole').DataTable();
+
+        //$('#UserRole_filter input').on('keyup', function () {
+        //    table.search(this.value).draw();
+        //    alert(table.fnFilter(this.value).draw());
+        //});
+        //$("div.dataTables_filter input").keyup( function (e) {
+        //    //if (e.keyCode == 13) {
+        //        table.fnFilter( this.value );
+        //   // }
+        //    });
+
+
+        $('#UserRole').on('search.dt', function () {
+            //var value = $('.dataTables_filter input').val();
+            //console.log(value); // <-- the value
+            //alert(Page);
+
+            roleId();
+        });
+
+        $('#UserRole').on('page.dt', function () {
+            //alert('page');
+            roleId();
+        })
+
+    })
+
+    function roleList() {
+        $.ajax({
+            url: '/User/RoleList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select').html('');
+                    // alert("Done");
+                    console.log(response);
+                    var result = '';
+                    result += "<option value=''>Select One</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option id='helloworld' value='" + response[i].R_ID + "'>" + response[i].RNAME + "</option>";
+                    }
+                    $('select').append(result);
+
+
+
+
+                }
+            }
+        });
+    }
+
+</script>

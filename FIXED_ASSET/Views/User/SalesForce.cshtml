@@ -1,0 +1,278 @@
+﻿
+@{
+    ViewBag.Title = "Sales Force";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/css/select2.css" rel="stylesheet" />
+<script src="~/Content/js/select2.full.min.js"></script>
+<link href="~/Content/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<script src="~/Content/js/jquery.dataTables.min.js"></script>
+<script src="~/Content/js/dataTables.bootstrap.min.js"></script>
+<link href="../../dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+
+<script src="../../dist/js/bootstrap-datepicker.min.js"></script>
+
+<section class="content-header">
+    <h1>
+        &nbsp;
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">@ViewBag.Title</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="center-block col-md-6" style="float: none;">    </div>
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">@ViewBag.Title</h3>
+        </div>
+        <div class="box-body">
+                  <div class="box box-info">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="box-body ">
+                            <table id="example1" class="table table-bordered table-striped compact hover" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Employee ID</th>
+                                        <th>Name</th>
+                                        <th>Business Unit</th>
+                                        <th>Business Unit Assign</th>
+                                        <th>Role</th>
+                                        <th>Start Date</th>
+                                        <th>Start Date Assign</th>
+                                        <th>End Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var employeeList in ViewBag.Employees)
+                                    {
+                                        <tr id="@employeeList.EMP_ID">
+                                            <td>@employeeList.EMP_ID</td>
+                                            <td>@employeeList.Name</td>
+                                            <td class="disabled">@employeeList.Assigned_BU_ID</td>
+                                            <td>
+
+                                                <select class="form-control businessUnit" disabled="disabled" style="width:100%;"
+                                                        id="businessUnit_@employeeList.EMP_ID" name="ddBusinessUnit" data-placeholder="Please Select" tabindex="-1" aria-hidden="true"
+                                                        data-selector=""></select>
+                                            </td>
+                                            <td class="disabled">@employeeList.RNAME</td>
+                                            <td><input type="text" class="form-control text-center" id="StartDate_@employeeList.EMP_ID" value="@employeeList.Start_Date.ToString("MM/dd/yyyy")" disabled="disabled"></td>
+                                            <td><input type="text" class="form-control datepicker text-center" disabled="disabled" id="datepicker_@employeeList.EMP_ID" data-provide="datepicker"></td>
+                                            <td><input type="text" class="form-control text-center" id="EndDate_@employeeList.EMP_ID" disabled="disabled" value="@employeeList.End_Date.ToString("MM/dd/yyyy")"></td>
+                                            <td>
+                                                <button type="button" class="btn btn-success add_salesforce" onclick="addSalesforce(@employeeList.EMP_ID)" id="add_salesforce_@employeeList.EMP_ID" value="@employeeList.EMP_ID"><i class="fa fa-plus-circle" style="font-size:18px;" aria-hidden="true"></i></button>&nbsp;&nbsp;
+                                                <button type="button" class="btn btn-primary hidden update_salesforce" onclick="updateSalesforce(@employeeList.EMP_ID)" id="update_salesforce_@employeeList.EMP_ID" value="@employeeList.EMP_ID"><i class="fa fa-pencil-square" style="font-size:18px;" aria-hidden="true"></i></button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+
+
+</section>
+<!-- /.content -->
+
+<script>
+    $('.select2').select2();
+
+    $(document).ready(function () {
+
+        $('#example1').DataTable({
+            "processing": true,
+            "deferRender": true,
+            "columnDefs": [
+                { "width": "12%", "targets": 3 }
+            ]
+        });
+
+        $('.datepicker').datepicker({
+            format: 'mm/dd/yyyy'
+        });
+        businessUnitList();
+
+    });
+
+    $('#example1').on('search.dt', function () {
+        businessUnitList();
+    });
+
+    $('#example1').on('page.dt', function () {
+        businessUnitList();
+    })
+
+    function addSalesforce(empID) {
+
+        $("#businessUnit_" + empID).removeAttr('disabled');
+        $("#datepicker_" + empID).removeAttr('disabled');
+        var b = $("#add_salesforce_" + empID).text();
+
+        $("#add_salesforce_" + empID).addClass("hidden");
+        $("#update_salesforce_" + empID).removeClass("hidden");
+    };
+
+    function updateSalesforce(empID) {
+        debugger;
+        var b = $('#businessUnit_' + empID).val();
+        var businessunit = parseInt(b);
+        var date = $("#datepicker_" + empID).val();
+        var oldDate = $("#StartDate_" + empID).val();
+
+        var myOldDate = new Date(oldDate);
+        var currentDate = new Date(date);
+
+        if ($('#businessUnit_' + empID).val() == "" || businessunit.length == 0) {
+            toastr.error("Please Select BusinessUnit", 'Error', {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            });
+            return false;
+        }
+
+        if (date == "") {
+            toastr.error("Please Enter Start Date", 'Error', {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            });
+            return false;
+        }
+
+        if (myOldDate > currentDate) {
+            toastr.error("Please Enter Start Date Greater than Current Date", 'Error', {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            });
+            return false;
+        }
+
+        $("#businessUnit_" + empID).attr('disabled', 'disabled');
+        $("#datepicker_" + empID).attr('disabled', 'disabled');;
+       
+        $("#add_salesforce_" + empID).removeClass("hidden");
+        $("#update_salesforce_" + empID).addClass("hidden");
+
+        $.ajax({
+            type: "POST",
+            url: "/User/SalesforceAssign",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({ EmpID: empID, BusinessUnitID: businessunit, StartDt: date }),
+            success: function (response) {
+                if (response != null) {
+                 
+                    toastr.success(response.message, 'Insert', {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": true,
+                        "positionClass": "toast-top-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    });
+                }
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        })
+    }
+
+    function businessUnitList() {
+        $.ajax({
+            url: '/User/BusinessUnitList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+
+            dataType: "json",
+            success: function (data) {
+                var result = '';
+                if (data.length > 0) {
+                
+                    result += "<option value=''>Please Select</option>";
+
+                    for (var i = 0; data.length > i; i++) {
+
+                        result += "<option id='" + data[i].Organization_ID + "' value='" + data[i].Organization_ID + "'>" + data[i].Organization_Name + "</option>";
+
+                    }
+                }
+                $('#example1 select.businessUnit').append(result);
+            }
+        });
+    }
+
+    function setDropdown() {
+        debugger;
+        $("#example1 tr").each(function () {
+
+            var id = $(this).closest('tr').attr('id');
+           
+            var selector = $('#example1 tr #businessUnit_' + id).attr("data-selector");
+            if (typeof selector != 'undefined' || selector !== '') {
+                $("#businessUnit_" + id + " Option[id='" + selector + "']").attr("selected", true);
+            }
+
+        });
+    }
+</script>

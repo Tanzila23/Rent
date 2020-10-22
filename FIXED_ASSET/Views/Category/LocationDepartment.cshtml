@@ -1,0 +1,247 @@
+﻿
+@{
+    ViewBag.Title = "Location Wise Department Entry";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!-- iCheck for checkboxes and radio inputs -->
+<link rel="stylesheet" href="~/plugins/iCheck/all.css">
+<!-- iCheck 1.0.1 -->
+<script src="~/plugins/iCheck/icheck.min.js"></script>
+<link href="~/Content/css/select2.css" rel="stylesheet" />
+<script src="~/Content/js/select2.full.min.js"></script>
+<!-------------------------------------------------------->
+<link href="~/Content/css/dataTables.bootstrap.min.css" rel="stylesheet"
+<script src="~/Content/js/jquery.dataTables.min.js"></script>
+<script src="~/Content/js/dataTables.bootstrap.min.js"></script>
+
+
+<section class="content-header">
+    <h1 id="Title" data-reportname="@ViewBag.ReportName">
+        @*Daily Closing Report*@
+        @ViewBag.Title
+        @*<small>Control panel</small>*@
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">@ViewBag.Title</li>
+    </ol>
+</section>
+<!-- Main content -->
+<div class="row" id="searchfrm">
+    <section class="content">
+
+
+        <section class="col-lg-12 connectedSortable">
+
+            <div class="box box-success">
+                <div class="form-horizontal">
+                    <div class="box-body">
+                        <div class="overlay">
+                            <div id="loading-img"></div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 center-block" style="float: none;">
+                            <div class="panel panel-success">
+                                <div class="panel-heading"></div>
+                                <div class="panel-body">
+                                    <div class="col-md-12">
+                                      <div class="form-group">
+                                            <label for="outletSelect" class="col-sm-4 control-label">Location</label>
+                                            <div class="col-sm-8">
+                                                <select type="text" class="form-control select2  col-md-10 outletSelect" id="outletSelect" name="OutletDefine" style="border-radius:5px; height:30px; margin-right:-5px; width: 283px;"></select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="department_Id" class="col-sm-4 control-label">Department</label>
+                                            <div class="col-sm-8">
+                                                <select type="text" class="form-control select2  col-md-10 departmenSelect" id="department_Id" style="border-radius:5px; height:30px; margin-right:-5px; width: 283px;"></select>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            &nbsp;<br />
+                                            <br />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-12">
+
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <div id="external-events">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-lg-offset-4">
+                                <!-------------------------------------
+                                -----------------------------------
+                                ------------------------------>
+
+                                <a href="#" class="btn btn-success btn-sm ad-click-event btn-block" id="btnSave">
+                                    SAVE
+                                </a>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        $('.select2').select2();
+        OutletList();
+        DepartmentList();
+        $('#ReportViewer').hide();
+
+    });
+ 
+      function OutletList() {
+
+        $.ajax({
+            url: '/AssetCategory/OutletList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#OutletDefine').html('');
+                    $('select.outletSelect').html('');
+                    // alert("Done");
+                    //  console.log(response);
+                    var result = '';
+                    result += "<option value='0'>Select One</option>";
+                    for (var i = 0; response.length > i; i++) {
+                        if (response[i].Organization_ID == $('#outlet_edit').val()) {
+
+                            result += "<option selected value='" + response[i].Organization_ID + "'>" + response[i].External_ID + " " + response[i].Organization_Name + "</option>";
+
+                        }
+                        else {
+                            result += "<option  value='" + response[i].Organization_ID + "'>" + response[i].External_ID + " " + response[i].Organization_Name + "</option>";
+                        }
+                    }
+                    $('select#OutletDefine').append(result);
+                    $('select.outletSelect').append(result);
+                }
+            }
+        });
+    }
+      function DepartmentList() {
+
+        $.ajax({
+            url: '/AssetCategory/DepartmentList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#department_Id').html('');
+                    var result = '';
+                    result += "<option value='0'>Department Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+                        if (response[i].DEPT_ID == $('#department_edit').val()) {
+                            result += "<option selected value='" + response[i].DEPT_ID + "'>" + response[i].DESCRIPTION + "</option>";
+                        }
+                        else {
+                            result += "<option  value='" + response[i].DEPT_ID + "'>" + response[i].DESCRIPTION + "</option>";
+                        }
+
+
+                    }
+                }
+                $('select#department_Id').append(result);
+
+
+
+            }
+        });
+    }
+ 
+    $("#btnSave").click(function () {
+      
+        var outletSelect = $('#outletSelect ').val();
+        var department_Id = $('#department_Id').val();
+       
+           //ajax passing data to controller
+            $.ajax({
+
+                type: "POST",
+                url: '/AssetCategory/SaveLocationDepartment',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //alert("Result" + response);
+                    if (response != null) {
+
+
+                        toastr.success(response, 'LocationDepartment', {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": true,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        });
+                        $("#modelId").val("");
+                        $("#name").val("");
+                        $("#ClassList").val("");
+                        $("#CategoryList").val("");
+                        $("#SegmentList").val("");
+                        // $("#active_status").val(-1);
+                        $('.addnew').show();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 5000);
+                        // $('#datatable').load(document.URL + ' #datatable');
+
+                    }
+
+                },
+                data: JSON.stringify({
+                    outletSelect: outletSelect,
+                    department_Id: department_Id,
+                   
+
+                }),
+                //success: function (result) {
+                //    location.reload(true);
+
+                //    $("h2").css({ color: result[1] });
+                //},
+                error: function () {
+                    alert("error");
+                }
+            });
+        
+
+    });
+
+</script>

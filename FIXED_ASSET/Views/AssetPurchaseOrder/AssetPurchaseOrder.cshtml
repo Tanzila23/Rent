@@ -1,0 +1,1480 @@
+﻿
+@{
+    ViewBag.Title = "AssetPurchaseOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+
+<section id="PurchaseOrder">
+    <div class="form-horizontal">
+        <section class="content-header ">
+            <h1 style="font-weight: bolder;">
+                <span style="font-size: 17px;">Asset Purchase Order Invoice# <span id="invno" style="color: #428dbd;">@ViewBag.InvoiceNo</span></span>
+            </h1>
+            @if (!ViewBag.GetReport)
+            {
+                <h1 style="font-weight: bolder;">
+                    <span style="font-size: 17px;">Asset Purchase Order Invoice# <span id="invno" style="color: #428dbd;">@ViewBag.InvoiceNo</span></span>
+                </h1>}
+
+
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Sales</a></li>
+            </ol>
+        </section>
+        <!-- Main content -->
+
+        <section class="content">
+
+
+
+            <div class="row">
+                <section class="col-lg-12">
+                    <div class="box box-primary wow fadeInLeft">
+
+                        <div class="box-body">
+                            <br />
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSix">
+                                            ADDRESS DETAILS
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseSix" class="panel-collapse collapse">
+                                    <div class="row">
+
+                                        <div class="col-lg-4">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">VENDOR DETAILS</div>
+
+                                                <div class="panel-body">
+                                                    <div class="col-lg-3">
+                                                        <div class="input-group input-group-sm">
+                                                            <label>Vendor:</label>
+                                                            <select style="width: 200px;" type="text" class="form-control items" id="VendorList"></select>
+                                                            <br />
+                                                            <br />
+
+                                                            <label>Address:</label>
+
+
+                                                            <textarea class="form-control" aria-label="With textarea" id="txtArSupplier" style="width:372px ; height:105px" disabled></textarea>
+
+                                                        </div>
+
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">SHIPPING ADDRESS</div>
+                                                <div class="panel-body">
+                                                    <div class="col-lg-3">
+                                                        <div class="input-group input-group-sm">
+                                                            <label>Name:</label>
+                                                            <select style="width: 200px;" type="text" class="form-control items" id="ShipOrgList"></select>
+                                                            <br />
+                                                            <br />
+
+                                                            <label>Address:</label>
+                                                            <textarea class="form-control" aria-label="With textarea" id="ShipOrgDetails" style="width:372px ; height:105px" disabled></textarea>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">BILLING ADDRESS</div>
+                                                <div class="panel-body">
+                                                    <div class="col-lg-3">
+                                                        <div class="input-group input-group-sm">
+                                                            <label>Name:</label>
+                                                            <select style="width: 200px;" type="text" class="form-control items" id="BillOrgList"></select>
+                                                            <br />
+                                                            <br />
+
+                                                            <label>Address:</label>
+                                                            <textarea class="form-control" aria-label="With textarea" id="BillOrgDetails" style="width:372px ; height:105px" disabled></textarea>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="input-group input-group-sm ">
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-primary">Project Name</button>
+                                        </div>
+                                        <select style="width: 160px;" type="text" class="form-control items" id="ProjectName"> </select>
+
+
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-lg-4">
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-primary">Order for</button>
+                                        </div>
+                                        <select style="width: 180px;" type="text" class="form-control items" id="deptlist"></select>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-1">
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-primary">Ref</button>
+                                        </div>
+                                        <input type="text" class="form-control" id="ref" style="width: 141px; font-size:20px" onclick="test()" autocomplete="off">
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="input-group input-group-sm ">
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-primary">Asset Class</button>
+                                        </div>
+                                        <select style="width: 180px;" type="text" class="form-control items" id="AssetClass" onchange="AssetClassCat()"> </select>
+
+
+
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-lg-4">
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-primary">Payment Type</button>
+                                        </div>
+                                        <select style="width: 155px;" type="text" class="form-control items" id="PaymentType">
+                                            <option>CASH</option>
+                                            <option>CREDIT</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                                @*<div class="col-lg-1">
+                                        <div class="input-group input-group-sm">
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-primary">Model</button>
+                                            </div>
+                                            <input type="text" class="form-control" id="ref2" style="width: 141px; font-size:20px" onclick="test()" autocomplete="off" value="@ViewBag.Reference">
+
+
+                                        </div>
+                                    </div>*@
+                                <br />
+                                <br />
+
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+
+                                            <th>Asset Category</th>
+                                            <th>Asset Segment</th>
+                                            <th>Model</th>
+                                            <th>Qty</th>
+                                            <th>Rate</th>
+                                            <th>Total Price</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="tr_clone">
+
+                                            <td>
+                                                <select style="width: 200px;" type="text" class="form-control items" id="AssetCat" onchange="AssetSegment()"></select>
+                                            </td>
+                                            <td>
+                                                <select style="width: 200px;" type="text" class="form-control items" id="AssetSeg" onchange="AssetModel()"></select>
+                                            </td>
+                                            <td>
+                                                <select style="width: 200px;" type="text" class="form-control items" id="AssetModel"></select>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control" id="qty" style="width: 80px; font-size:20px" onkeyup="calcvalue()" autocomplete="off">
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control" id="rate" style="width: 80px; font-size:20px" onclick="test()" autocomplete="off" disabled>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control" id="totalprice" style="width: 80px; font-size:20px" onclick="test()" autocomplete="off" disabled>
+                                            </td>
+                                            <td>
+                                                <div class="row">
+                                                    <a href="#" class="btn btn-primary a-btn-slide-text">
+                                                        <span class="glyphicon glyphicon-plus tr_clone_add" aria-hidden="true" onclick="apo_temp()">  ADD</span>
+                                                        <span><strong></strong></span>
+                                                    </a>
+
+                                                    @*<a href="#" class="btn btn-primary a-btn-slide-text">
+                                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                                            <span><strong></strong></span>
+                                                        </a>*@
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+
+            </div>
+
+            <div class="row">
+                <section class="col-lg-12">
+                    <div class="box box-primary wow fadeInLeft" style="width:100%;" id="ArtInfo">
+                        <div class="box-body" id="details">
+                            <div class="box-header">
+                                <h3 class="box-title">Currently Article Information</h3>
+                                <div class="box-tools pull-right">
+                                    <a href="#" onclick="ViewDetailsInfo()"><span class="label label-danger">View Details Info</span></a>
+                                </div>
+                            </div>
+                            <div class="row">
+
+
+
+                            </div>
+                        </div>
+                        <div class="box-footer clearfix">
+
+                            <a href="javascript:void(0)" id="btnAdd" onclick="po_temp();" class="btn btn-sm btn-default btn-flat pull-right btn-success">ADD Article</a>
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="box box-primary wow fadeInLeft" style="width:100%;" id="CurAddedInfo">
+                        <div class="box-body" id="details2">
+                            <div class="box-header">
+                                <h3 class="box-title">Order Details</h3>
+                                @*<div class="box-tools pull-right">
+                                        <a href="#" onclick="ViewArticleInfo();SupplierChk_ArticleInfo();"><span class="label label-success">View Article Info</span></a>
+                                    </div>*@
+                            </div>
+
+                            <div class="col-lg-12" style="width:100%; ">
+                                <table id="tblDetails" class="table table-bordered table-striped">
+
+                                    <thead class="thead-dark">
+                                        <tr bgcolor="#A4B1CB">
+
+                                            <th style="text-align:center">CATEGORY</th>
+                                            <th style="text-align:center">SEGMENT</th>
+                                            <th style="text-align:center">MODEL NAME</th>
+                                            <th style="text-align:center">QUANTITY</th>
+                                            <th style="text-align:center">COST</th>
+                                            <th style="text-align:center">TOTAL VALUE</th>
+                                            <th style="text-align:center">ACTION</th>
+
+
+                                            @*<th style="text-align:center">VIEW</th>*@
+                                        </tr>
+                                    </thead>
+                                    <tbody id="PendingLIST"></tbody>
+                                    <tfoot>
+                                        <tr></tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                </section>
+                @*<section class="col-lg-12">
+                        <div class="box box-primary wow fadeInRight" data-wow-delay=".3s">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <div class="input-group input-group-sm">
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-primary">TOTAL QUANTITY</button>
+                                            </div>
+                                            <input type="text" class="form-control" id="totalqty" style="width: 141px; font-size:20px" onclick="test()" autocomplete="off">
+
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-lg-3">
+                                        <div class="input-group input-group-sm">
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-primary">TOTAL VALUE</button>
+                                            </div>
+                                            <input type="text" class="form-control" id="totalval" style="width: 141px; font-size:20px" onclick="test()" autocomplete="off">
+
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="input-group input-group-sm">
+                                            <div class="col-md-6">
+                                                <button class="btn-block btn btn-info btn-lg" id="" type="button"
+                                                        onclick="draft()">
+                                                    <span style="float:none"><b>D R A F T</b></span>
+                                                </button>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <button class="btn-block btn btn-danger btn-lg" id="" type="button"
+                                                        onclick="PO_Discard()">
+                                                    <span style="float:none"><b>D I S C A R D</b></span>
+                                                </button>
+
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <br />
+                                    <br />
+
+
+                                    <div class="col-lg-12">
+
+                                        <div class="col-md-6">
+
+
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button class="btn-block btn btn-block btn-success btn-lg" id="btnSave" type="button"
+                                                    onclick="POpost()">
+                                                <span style="float:none"><b>S A V E</b></span>
+
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+                    </section>*@
+                <section class="col-lg-12">
+                    <div class="box box-primary wow fadeInRight" data-wow-delay=".3s">
+                        <div class="box-body">
+                            <div class="col-lg-12">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <table style="width: 94%;margin-left: 45px;">
+                                                <tr>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <label>Total Quantity</label>
+                                                            <input id="Total_Quantity" type="text" class="form-control" style="
+                                                                    width: 76%;
+                                                                    text-align: right;
+                                                                " placeholder="0" value="@ViewBag.Total_Quantity" disabled>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <label>Total Amount</label>
+                                                            <input id="Total_Amt" type="text" style="
+                                                            width: 171px;text-align:right;
+                                                        " class="form-control" placeholder="0" value="@ViewBag.Total_Item" disabled>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                                <div class="col-lg-6">
+
+                                    <div class="col-md-6">
+                                        <button class="btn-block btn btn-info btn-lg" id="" type="button"
+                                                onclick="draft()">
+                                            <span style="float:none"><b>D R A F T</b></span>
+                                        </button>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button class="btn-block btn btn-danger btn-lg" id="" type="button"
+                                                onclick="PO_Discard()">
+                                            <span style="float:none"><b>D I S C A R D</b></span>
+                                        </button>
+
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+                                <br />
+
+
+                                <div class="col-lg-6">
+
+
+                                    <div class="col-md-12">
+                                        <button class="btn-block btn btn-block btn-success btn-lg" id="btnSave" type="button"
+                                                onclick="APOpost()">
+                                            <span style="float:none"><b>S A V E</b></span>
+
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                </section>
+            </div>
+
+
+
+
+
+        </section>
+
+    </div>
+</section>
+
+
+
+<style>
+    .btn-app-primary {
+        color: #fff;
+        border: 1px solid transparent;
+        background-color: #3c8dbc;
+        border-color: #367fa9;
+    }
+
+    .btn-orange {
+        color: #fff;
+        background-color: #dd4b39;
+        border-color: #d73925;
+    }
+
+    #table_PayButton td {
+        width: 25%;
+    }
+
+
+
+    tr.highlight td {
+        color: black;
+        background-color: red;
+    }
+
+    /*////////////////////////////*/
+    .fixed_headers {
+        table-layout: fixed;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+
+    .fixed_header tbody {
+        display: block;
+        width: 106%;
+        overflow: auto;
+        height: 350px;
+    }
+
+    .fixed_headers th {
+        text-decoration: none;
+    }
+
+    .fixed_headers th,
+    .fixed_headers td {
+        padding: 5px;
+        text-align: left;
+    }
+
+        .fixed_headers td:nth-child(1),
+        .fixed_headers th:nth-child(1) {
+            min-width: 103px;
+        }
+
+        .fixed_headers td:nth-child(2),
+        .fixed_headers th:nth-child(2) {
+            min-width: 86px;
+        }
+
+        .fixed_headers td:nth-child(3),
+        .fixed_headers th:nth-child(3) {
+            width: 89px;
+        }
+
+        .fixed_headers td:nth-child(4),
+        .fixed_headers th:nth-child(4) {
+            width: 100px;
+        }
+
+        .fixed_headers td:nth-child(5),
+        .fixed_headers th:nth-child(5) {
+            width: 100px;
+        }
+
+        .fixed_headers td:nth-child(6),
+        .fixed_headers th:nth-child(6) {
+            width: 100px;
+        }
+
+        .fixed_headers td:nth-child(7),
+        .fixed_headers th:nth-child(7) {
+            width: 100px;
+        }
+
+        .fixed_headers td:nth-child(8),
+        .fixed_headers th:nth-child(8) {
+            width: 100px;
+        }
+
+
+        .fixed_headers td:nth-child(9),
+        .fixed_headers th:nth-child(9) {
+            width: 100px;
+        }
+
+        .fixed_headers td:nth-child(10),
+        .fixed_headers th:nth-child(10) {
+            width: 100px;
+        }
+
+        .fixed_headers td:nth-child(11),
+        .fixed_headers th:nth-child(11) {
+            width: 50px;
+        }
+
+        .fixed_headers td:nth-child(12),
+        .fixed_headers th:nth-child(12) {
+            width: 100px;
+        }
+
+        .fixed_headers td:nth-child(13),
+        .fixed_headers th:nth-child(13) {
+            width: 100px;
+        }
+
+        .fixed_headers td:nth-child(14),
+        .fixed_headers th:nth-child(14) {
+            width: 100px;
+        }
+
+        .fixed_headers td:nth-child(15),
+        .fixed_headers th:nth-child(15) {
+            width: 100px;
+        }
+
+        .fixed_headers td:nth-child(16),
+        .fixed_headers th:nth-child(16) {
+            width: 100px;
+        }
+
+        .fixed_headers td:nth-child(17),
+        .fixed_headers th:nth-child(17) {
+            width: 100px;
+        }
+
+        .fixed_headers td:nth-child(18),
+        .fixed_headers th:nth-child(18) {
+            width: 100px;
+        }
+
+        .fixed_headers td:nth-child(19),
+        .fixed_headers th:nth-child(19) {
+            width: 100px;
+        }
+
+        .fixed_headers td:nth-child(20),
+        .fixed_headers th:nth-child(20) {
+            width: 100px;
+        }
+
+    .fixed_headers thead {
+        background-color: #3c8dbc;
+        /*background-color: #333333;
+       color: #fdfdfd;*/
+        color: #fdfdfd;
+    }
+
+        .fixed_headers thead tr {
+            display: block;
+            position: relative;
+        }
+
+    .fixed_headers tbody {
+        display: block;
+        overflow: auto;
+        width: 100%;
+        /*height: 374px;*/
+    }
+
+        .fixed_headers tbody tr:nth-child(even) {
+            background-color: #cfddea;
+        }
+
+    .fixed_headers tr {
+        font-weight: bold;
+    }
+
+    /*////////////////////////////////////////*/
+</style>
+
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+<link href="/Content/css/select2.css" rel="stylesheet" />
+<script src="/Content/js/select2.full.min.js"></script>
+
+<link href="../../dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+<script src="../../dist/js/bootstrap-datepicker.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("body").removeClass("skin-blue sidebar-mini").addClass("skin-blue sidebar-mini sidebar-collapse");
+        $.fn.datepicker.defaults.autoclose = true;
+        $("#date").datepicker("setDate", new Date());
+
+        $('.items').select2();
+      //  $('.select2').select2();
+        //ChannelList();
+        AssetProject();
+        VendorList();
+        OrgList();
+        DeptList();
+        AssetClassList();
+        APO_view();
+        var counter = 2;
+
+
+        ViewDetailsInfo();
+        //PO_view();
+
+          $('#ReportViewer').hide();
+
+           @if(ViewBag.GetReport)
+         {
+            <text>
+        LoadReport();
+
+             </text>
+         }
+
+
+    });
+
+
+    function LoadReport() {
+       // alert("ok");
+        var url = '../../Reportl/APurchase_Order_Report.aspx';
+
+        $("#ReportFrame").attr("src", url);
+
+        $('#ReportViewer').show();
+
+    }
+
+    function add() {
+        alert("");
+        //counter++;
+                 $('table').append(
+                     '<tr><td></td><td>' + '<select style="width: 200px;" type="text" class="form-control items" id="ChannelList" ">' + '</select>' + '</td><td>' + '<select style="width: 200px;" type="text" class="form-control items" id="ChannelList" ">' + '</select>' + '</td><td>' + '<select style="width: 200px;" type="text" class="form-control items" id="ChannelList" ">' + '</select>' + '</td></tr>');
+        $('.items').select2();
+
+    }
+
+    //<select style="width: 200px;" type="text" class="form-control select2" id="ChannelList" "></select>
+
+
+
+    //$("table").on('click', '.tr_clone_add', function () {
+    //    $('.items').select2("destroy");
+    //    var $tr = $(this).closest('.tr_clone');
+    //    var $clone = $tr.clone();
+    //    $tr.after($clone);
+    //    $('.items').select2();
+    //    $clone.find('.items').select2('val', '');
+    //});
+
+
+
+    //$("#addrow").on("click", function () {
+    //    var newRow = $("<tr>");
+    //    var cols = "";
+
+    //    cols += '<td><input type="text" class="form-control" name="name' + counter + '"/></td>';
+    //    cols += '<td><input type="text" class="form-control" name="mail' + counter + '"/></td>';
+    //    cols += '<td><input type="text" class="form-control" name="phone' + counter + '"/></td>';
+
+    //    cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete"></td>';
+    //    newRow.append(cols);
+    //    $("table.order-list").append(newRow);
+    //    counter++;
+    //});
+
+
+
+
+
+    function ViewArticleInfo() {
+        $('#CurAddedInfo').hide();
+        $('#ArtInfo').show();
+        //  SupplierChk_ArticleInfo();
+    }
+
+    function ViewDetailsInfo() {
+        $('#CurAddedInfo').show();
+        $('#ArtInfo').hide();
+
+
+    }
+
+
+
+
+    function VendorList() {
+
+        $.ajax({
+            url: '/AssetPurchaseOrder/SupplierList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#VendorList').html('');
+                    var result = '';
+                    result += "<option value='0' title='0' selected>--Select--</option>";
+
+                    for (var i = 0; response.length > i; i++) {
+
+
+
+                        result += "<option id='" + response[i].SUPPLIER_ID + "' data-Outlet_ID='" + response[i].ADDRESS + "' title='" + response[i].SUPPLIER_ID + "' value='" + response[i].SUPPLIER_ID + "' data-shortname='" + response[i].SUPPLIER_ID + "'>" + response[i].SUPPLIER_ID + "--------" + response[i].NAME + "" + "</option>";
+
+
+
+
+                    }
+                    $('select#VendorList').append(result);
+                }
+
+            }
+        });
+    }
+
+
+
+    function OrgList() {
+
+        $.ajax({
+            url: '/AssetPurchaseOrder/Organization_List',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#ShipOrgList').html('');
+                    $('select#BillOrgList').html('');
+                    var result = '';
+                    result += "<option value='0' title='0' selected>--Select--</option>";
+
+                    for (var i = 0; response.length > i; i++) {
+
+
+
+                        result += "<option id='" + response[i].Organization_ID + "' data-Outlet_ID='" + response[i].R_Type + "' title='" + response[i].Organization_ID + "' value='" + response[i].Organization_ID + "' data-shortname='" + response[i].Organization_ID + "'>" + response[i].Organization_Name + "--------" + response[i].External_ID + "" + "</option>";
+
+
+
+
+                    }
+                    $('select#ShipOrgList').append(result);
+                    $('select#BillOrgList').append(result);
+                }
+
+            }
+        });
+    }
+
+
+    function DeptList() {
+
+        $.ajax({
+            url: '/AssetPurchaseOrder/DeptType',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if (response.length > 0) {
+                    //$('select#deptlist').html('');
+
+                    var result = '';
+                    result += "<option value='0' title='0' selected>--Select--</option>";
+
+                    for (var i = 0; response.length > i; i++) {
+
+
+
+                        result += "<option id='" + response[i].DEPT_ID + "' data-Outlet_ID='" + response[i].DEPT_ID + "' title='" + response[i].DEPT_ID + "' value='" + response[i].DEPT_ID + "' data-shortname='" + response[i].DEPT_ID + "'>" + response[i].DESCRIPTION + "" + "</option>";
+
+
+
+
+                    }
+                    $('select#deptlist').append(result);
+
+                }
+
+            }
+        });
+    }
+
+
+    $("#VendorList").change(function () {
+        var V_ID = $("#VendorList").val();
+
+
+        $.ajax({
+            url: '/AssetPurchaseOrder/SupplierDetails',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                    _supID: V_ID
+                }),
+            success: function (response) {
+
+                if (response.length > 0) {
+                  //  alert("");
+                    $("#txtArSupplier").val(response[0].details);
+                }
+
+            }
+        });
+
+    });
+
+
+    $("#ShipOrgList").change(function () {
+        var O_ID = $("#ShipOrgList").val();
+
+
+        $.ajax({
+            url: '/AssetPurchaseOrder/Org_Details',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                    _o_id: O_ID
+                }),
+            success: function (response) {
+
+                if (response.length > 0) {
+                    //  alert("");
+                    $("#ShipOrgDetails").val(response[0].details);
+                }
+
+            }
+        });
+
+    });
+
+
+    $("#BillOrgList").change(function () {
+        var O_ID = $("#BillOrgList").val();
+
+
+        $.ajax({
+            url: '/AssetPurchaseOrder/Org_Details',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                    _o_id: O_ID
+                }),
+            success: function (response) {
+
+                if (response.length > 0) {
+                    //  alert("");
+                    $("#BillOrgDetails").val(response[0].details);
+                }
+
+            }
+        });
+
+    });
+
+
+
+    function AssetClassList() {
+
+        $.ajax({
+            url: '/AssetPurchaseOrder/AssetClass',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#AssetClass').html('');
+                    var result = '';
+                    result += "<option value='0' title='0' selected>--Select--</option>";
+
+                    for (var i = 0; response.length > i; i++) {
+
+
+
+                        result += "<option id='" + response[i].CLASS_ID + "' title='" + response[i].CLASS_ID + "' value='" + response[i].CLASS_ID + "' data-shortname='" + response[i].SUPPLIER_ID + "'>" + response[i].DESCRIPTION + "--------" + response[i].CLASS_ID + "" + "</option>";
+
+
+
+
+                    }
+                    $('select#AssetClass').append(result);
+                }
+
+            }
+        });
+    }
+
+
+
+    function AssetClassCat() {
+
+
+        class_id = $('#AssetClass').val();
+        $.ajax({
+            url: '/AssetPurchaseOrder/AssetCategory',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                    cl_id: class_id
+                }),
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#AssetCat').html('');
+                    var result = '';
+                    result += "<option value='0' title='0' selected>--Select--</option>";
+
+                    for (var i = 0; response.length > i; i++) {
+
+
+
+                        result += "<option id='" + response[i].CAT_ID + "' title='" + response[i].CAT_ID + "' value='" + response[i].CAT_ID + "' data-shortname='" + response[i].SUPPLIER_ID + "'>" + response[i].DESCRIPTION + "--------" + response[i].CAT_ID + "" + "</option>";
+
+
+
+
+                    }
+                    $('select#AssetCat').append(result);
+                }
+
+            }
+        });
+    }
+
+
+    function AssetSegment() {
+
+
+        vcat_id = $('#AssetCat').val();
+       // alert(vcat_id);
+        $.ajax({
+            url: '/AssetPurchaseOrder/AssetSegment',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                    cat_id: vcat_id
+                }),
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#AssetSeg').html('');
+                    var result = '';
+                    result += "<option value='0' title='0' selected>--Select--</option>";
+
+                    for (var i = 0; response.length > i; i++) {
+
+
+
+                        result += "<option id='" + response[i].SEG_ID + "' title='" + response[i].SEG_ID + "' value='" + response[i].SEG_ID + "' data-shortname='" + response[i].SEG_ID + "'>" + response[i].DESCRIPTION + "--------" + response[i].SEG_ID + "" + "</option>";
+
+
+
+
+                    }
+                    $('select#AssetSeg').append(result);
+                }
+
+            }
+        });
+    }
+
+
+    function AssetModel() {
+
+
+        vsegid_id = $('#AssetSeg').val();
+        $.ajax({
+            url: '/AssetPurchaseOrder/AssetModel',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                    seg_id: vsegid_id
+                }),
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#AssetModel').html('');
+                    var result = '';
+                    result += "<option value='0' title='0' selected>--Select--</option>";
+
+                    for (var i = 0; response.length > i; i++) {
+
+
+
+                        result += "<option id='" + response[i].MODEL_ID + "' title='" + response[i].MODEL_ID + "' value='" + response[i].MODEL_ID + "' data-shortname='" + response[i].MODEL_ID + "'>" + response[i].MODEL_NAME + "--------" + response[i].MODEL_ID + "" + "</option>";
+
+
+
+
+                    }
+                    $('select#AssetModel').append(result);
+                }
+
+            }
+        });
+    }
+
+
+    function AssetProject() {
+
+
+
+        $.ajax({
+            url: '/AssetPurchaseOrder/AssetProject',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#ProjectName').html('');
+                    var result = '';
+                    result += "<option value='0' title='0' selected>--Select--</option>";
+
+                    for (var i = 0; response.length > i; i++) {
+
+
+
+                        result += "<option id='" + response[i].PRO_ID + "' title='" + response[i].PRO_ID + "' value='" + response[i].PRO_ID + "' data-shortname='" + response[i].PRO_ID + "'>" + response[i].PRO_NAME + "--------" + response[i].PRO_ID + "" + "</option>";
+
+
+
+
+                    }
+                    $('select#ProjectName').append(result);
+                }
+
+            }
+        });
+    }
+
+
+
+    $("#VendorList").change(function () {
+        var V_ID = $("#VendorList").val();
+
+
+        $.ajax({
+            url: '/AssetPurchaseOrder/SupplierDetails',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                    _supID: V_ID
+                }),
+            success: function (response) {
+
+                if (response.length > 0) {
+                    //  alert("");
+                    $("#txtArSupplier").val(response[0].details);
+                }
+
+            }
+        });
+
+    });
+
+
+    $("#AssetModel").change(function () {
+        var vmo_ID = $("#AssetModel").val();
+
+
+        $.ajax({
+            url: '/AssetPurchaseOrder/GetModelInfo',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                    mod_id: vmo_ID
+                }),
+            success: function (response) {
+
+                if (response.length > 0) {
+                    //  alert("");
+                    $("#rate").val(response[0].P_COST);
+                }
+
+            }
+        });
+
+    });
+
+
+    function apo_temp() {
+
+        $.ajax({
+            type: "POST",
+            url: "/AssetPurchaseOrder/POrder_tmp",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                    AssetCat: $('#AssetCat').val(),
+                    AssetSeg: $('#AssetSeg').val(),
+                    Model_id: $('#AssetModel').val(),
+                    Quantity: $('#qty').val(),
+                    supplierid: $('#VendorList').val(),
+                    shipid: $('#ShipOrgList').val(),
+                    Billid: $("#BillOrgList").val(),
+                    valid_till: "12/02/2020",
+                    Project: 0,// $('#ProjectName').val(),
+                    Ref: $('#ref').val()
+
+
+                }),
+            success: function (response) {
+
+                APO_view();
+
+
+
+
+            },
+            failure: function (response) {
+
+                alert(response.responseText);
+                location.reload();
+            },
+            error: function (response) {
+
+                alert(response.responseText);
+                location.reload();
+            }
+        });
+
+    }
+
+
+
+
+
+
+    function APO_view() {
+
+
+
+        //alert(vcustno);
+        $.ajax({
+            type: "POST",
+            url: "/AssetPurchaseOrder/Porder_view",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+
+            data: JSON.stringify(
+                {
+
+                    _refid: 0
+
+                }
+            ),
+            success: function (response) {
+                $('#PendingLIST').empty();
+                var result = "";
+                if (response.length > 0) {
+                    console.log(response)
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<tr data-orderno=" + response[i].NAME + " >";
+                        result += "<td style='text-align: center;'>" + response[i].DESCRIPTION + "</td><td style='text-align: center;'>" + response[i].SEGMENT + "</td><td style='text-align: center;'>" + response[i].MODEL_NAME + "</td><td style = 'text-align: center;' > " + response[i].QUANTITY + "</td><td style = 'text-align: center;' > " + response[i].PURCHASE_COST + "</td><td style = 'text-align: center;' > " + response[i].GROSSAMOUNT + "</td><td style = 'text-align: center;'> <button id='TempDataDelete' > <i class='fa fa-eye'></i></ button></td>";
+
+                        //result += "<td style='text-align: center;'>" + response[i].NAME + "</td><td style='text-align: center;'>" + response[i].DESCRIPTION + "</td><td style='text-align: center;'>" + response[i].EMAIL + "</td><td style='text-align: center;'>" + response[i].ActivityDetails + "</td><td style='text-align: center;'>" + response[i].ActivityDetails + "</td><td style = 'text-align: center;' > " + response[i].NAME + "</td><td style = 'text-align: center;'> <button id='TempDataDelete' > <i class='fa fa-eye'></i></ button></td>";
+                        result += "</tr>";
+                        $('#Total_Quantity').val(response[0]['TQTY'])
+                        $('#Total_Amt').val(response[0]['TVAL'])
+                        //$('#custCard').val(response[0]['DESCRIPTION'])
+                        //$('#custPhone').val(response[0]['P_MOB_NO'])
+                        //$('#custAddress').val(response[0]['ADDRESS'])
+                        //$('#custEmail').val(response[0]['EMAIL'])
+                        //$('#custPoints').val(response[0]['L_POINTS'])
+                        //$('#custIssueLocation').val(response[0]['Organization_Name'])
+                        //$('#custIssueDate').val(response[0]['SIGN_DATE'])
+                        //$('#custGender').val(response[0]['GENDER'])
+                        //$('#custDOB').val(response[0]['DOB'])
+                        //$('#custProf').val(response[0]['PROFESSION'])
+                        //$('#custMstatus').val(response[0]['M_STATUS'])
+                        //$('#custno').val(response[0]['P_MOB_NO'])
+                        //$('#custid').val(response[0]['CUSTOMER_ID'])
+
+                    }
+                }
+                $('#PendingLIST').append(result);
+
+            }
+
+        });
+
+
+
+    }
+
+
+    function APOpost() {
+        var today = new Date();
+        var date = today.getMonth() + '-' + (today.getDate() + 1) + '-' + today.getFullYear();
+
+        //console.log(date);
+        //if ($('#doctype').val() == 0 || $('#date').val() == 0) {
+        //    //  alert("Please Insert data properly")
+
+        //    toastr.error("Error !!! ", " Please Select Date or Doctype !!! ",
+        //        {
+
+        //            "positionClass": "toast-top-right",
+        //            "showDuration": "300",
+        //            "hideDuration": "1000",
+        //            "timeOut": "5000",
+        //            "closeButton": true
+        //        });
+
+        //}
+
+            $.ajax({
+                type: "POST",
+                url: "/AssetPurchaseOrder/POrder_header",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(
+                    {
+                        _projectid: $('#ProjectName').val()
+                        , _shipid: $('#ShipOrgList').val()
+                        , _aclass: $("#AssetClass").val()
+                        , _supid: $('#VendorList').val()
+                        , _gramt: $('#Total_Amt').val()
+                        , _netamt: $('#Total_Amt').val()
+                        , _ref: $('#ref').val()
+
+                    }),
+                success: function (response) {
+                    if (response) {
+                        toastr.success("SAVE Sucessfully  !!! ", " Article Add SAVE Sucessfully  !!! ",
+                            {
+
+                                "positionClass": "toast-top-right",
+                                "showDuration": "300",
+                                "hideDuration": "1000",
+                                "timeOut": "5000",
+                                "closeButton": true
+                            });
+                        setTimeout(function () {
+                            location.reload();
+
+
+                        }, 2000);
+                    }
+                    else {
+                        toastr.error("ERROR !!! ", "Save Failed !!! ",
+                            {
+
+                                "positionClass": "toast-top-right",
+                                "showDuration": "300",
+                                "hideDuration": "1000",
+                                "timeOut": "5000",
+                                "closeButton": true
+                            });
+                    }
+
+
+
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                    location.reload();
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                    location.reload();
+                }
+            });
+
+
+
+    }
+
+
+
+  function  calcvalue(){
+      var qty = $('#qty').val();
+        var cp = $('#rate').val();
+        var val = qty * cp;
+        $('#totalprice').val(val);
+       // alert(val);
+
+
+
+    }
+
+     function draft() {
+
+
+        var item = $('#Total_Quantity').val();
+        if (item == 0) {
+
+            toastr.error("Error!!", " Please Add Any article First !!! ",
+                {
+                    "positionClass": "toast-top-right",
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "closeButton": true,
+                    "preventDuplicates": true
+                });
+            return;
+
+        }
+        $.ajax({
+            type: "POST",
+            url: "/AssetPurchaseOrder/PurchaseOrder_Draft",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                    _typ: "PO"
+                }
+            ),
+            success: function (response) {
+                if (response) {
+                    toastr.success("DRAFT Sucessfully  SAVE !!! ", " Sales Order DRAFT SAVE Sucessfully  !!! ",
+                        {
+                            "positionClass": "toast-top-right",
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "closeButton": true,
+                            "preventDuplicates": true
+                        });
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
+                }
+
+                else {
+                    toastr.error("DRAFT ERROR!!! ", "DRAFT ERROR PLEASE TRY AGAIN !!! ",
+                        {
+                            "positionClass": "toast-top-right",
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "closeButton": true,
+                            "preventDuplicates": true
+                        });
+                }
+
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+                location.reload();
+            },
+            error: function (response) {
+                alert(response.responseText);
+                location.reload();
+            }
+        });
+    }
+</script>
+

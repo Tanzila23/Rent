@@ -1,0 +1,1000 @@
+﻿
+@{
+    ViewBag.Title = "Raw Material Item";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/css/select2.css" rel="stylesheet" />
+<link href="~/Content/Custom/_Item.css" rel="stylesheet" />
+<script src="~/Content/js/select2.full.min.js"></script>
+<link href="~/Content/css/bootstrap3-wysihtml5.min.css" rel="stylesheet" />
+<link href="~/Content/css/bootstrap-select.css" rel="stylesheet" />
+<link href="~/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+<script src="~/dist/js/bootstrap-datepicker.min.js"></script>
+
+<script src="~/Content/js/bootstrap3-wysihtml5.all.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+
+<style>
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* The container */
+    .container {
+        display: block;
+        position: relative;
+        padding-left: 35px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size: 22px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    /* Hide the browser's default checkbox */
+    c.ontainer input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    /* Create a custom checkbox */
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 25px;
+        width: 25px;
+        background-color: #F03434;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .container:hover input ~ .checkmark {
+        background-color: #ccc;
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .container input:checked ~ .checkmark {
+        background-color: #2196F3;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .container input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    /* Style the checkmark/indicator */
+    .container .checkmark:after {
+        left: 9px;
+        top: 5px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        .switch input {
+            display: none;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+    /*.select2-selection__rendered {
+        line-height: 32px !important;
+    }
+
+    .select2-selection {
+        height: 34px !important;
+    }*/
+
+</style>
+
+<section class="content-header">
+    <h1 style="font-weight: bolder;">
+        <span style="font-size: 17px;">RAW MATERIAL<span id="invno" style="color: #428dbd;"></span></span>
+    </h1>
+    <small>Control panel</small>
+
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Raw Material Item</li>
+    </ol>
+</section>
+
+<section class="content">
+    <!-- Default box -->
+    <div class="box box-solid">
+        <div class="box-header">
+            <h3 class="box-title">
+                Raw Material &nbsp;&nbsp;&nbsp;
+                <strong class="articleInfo">
+                    <span class="categoryShortCode" style="color:#16a085;"></span>
+                    <span class="subcategoryShortCode" style="color:#16a085;"></span>
+                    <span class="segmentShortCode" style="color:#16a085;"></span>
+                    <span class="gradeShortCode" style="color:#16a085;"></span>
+                    <span id="fullBarcode" style="color:#16a085; display:none;"></span>
+                </strong>
+            </h3>
+
+        </div>
+
+
+        <div class="box-body">
+            <div class="box-group" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                General
+                            </a>
+                        </h4>
+
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-md-3">
+
+                                        <div class="form-group">
+                                            <label for="ItemName">Item Name</label>
+                                            <input type="text" class="form-control" id="ItemName" placeholder="Item Name" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+
+                                        <div class="form-group">
+                                            <label for="CHILDCODE">Child Code</label>
+                                            <input type="text" class="form-control" id="ChildCode" placeholder="Child Code" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+
+                                        <div class="form-group">
+                                            <label for="Sample No">Sample No</label>
+                                            <input type="text" class="form-control" id="SampleNo" placeholder="Sample No" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Type">Type</label>
+                                            <select class="form-control select2" style="width:100%;" id="Type" name="Type" data-plugin="xin_select" data-placeholder="Type" tabindex="-1" aria-hidden="true"></select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Category">Category</label>
+                                            <select class="form-control select2" style="width:100%;" id="category_id" name="category_id" data-plugin="xin_select" data-placeholder="Category Name" tabindex="-1" aria-hidden="true"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Sub Category">Sub Category</label>
+                                            <select class="form-control select2" style="width:100%;" id="subcategory_id" name="subcategory_id" data-plugin="xin_select" data-placeholder="Sub Category" tabindex="-1" aria-hidden="true"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+
+                                        <div class="form-group">
+                                            <label for="Description">Description</label>
+                                            <input type="text" class="form-control" id="Description" placeholder="Description" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="SecondDescription">Second Description</label>
+                                            <input type="text" class="form-control" id="SecondDescription" placeholder="Second Description" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Material" title="Stock keeping unit">SKU</label>
+                                            <input type="text" class="form-control" id="SKU" placeholder="SKU" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="EAN" title="International Article Number">EAN</label>
+                                            <input type="text" class="form-control" id="Ean" placeholder="Ean" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="SecondEan">Second Ean</label>
+                                            <input type="text" class="form-control" id="SecondEan" placeholder="Second Ean" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="SecondType">Second Type</label>
+                                            <select class="form-control select2" style="width:100%;" id="SecondType" name="SecondType" data-plugin="xin_select" data-placeholder="Second Type" tabindex="-1" aria-hidden="true"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSix">
+                                Details
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseSix" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="Trademark">Trademark</label>
+                                            <input type="text" class="form-control" id="Trademark" placeholder="Trademark" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="Shelf No">Shelf No.</label>
+                                            <input type="text" class="form-control" id="Shelf_No" placeholder="Shelf No" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="Serial No">Serial No.</label>
+                                            <input type="text" class="form-control" id="Serial_No" placeholder="Serial No" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="Lot Number">Lot Number</label>
+                                            <input type="text" class="form-control" id="Lot_Number" placeholder="Lot Number" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="Selling Price">Selling Price</label>
+                                            <input type="text" class="form-control" id="Selling_Price" placeholder="Selling Price" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="Supplier">Supplier</label>
+                                            <select class="form-control select2" style="width:100%;" id="Supplier" name="Supplier" data-plugin="xin_select" data-placeholder="Supplier" tabindex="-1" aria-hidden="true"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="Purchase Price">Purchase Price</label>
+                                            <input type="text" class="form-control" id="Purchase_Price" placeholder="Purchase Price" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="Landing Cost">Landing Cost</label>
+                                            <input type="text" class="form-control" id="Landing_Cost" placeholder="Landing Cost" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="Shipping Days">Shipping Days</label>
+                                            <input type="text" class="form-control" id="Shipping_Days" placeholder="Shipping Days" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="Max Purchase Price">Maximum Purchase Price</label>
+                                            <input type="text" class="form-control" id="Maximum_Purchase_Price" placeholder="Maximum Purchase Price" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="Quantity">Quantity</label>
+                                            <input type="text" class="form-control" id="Quantity" placeholder="Quantity" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="MinimumQuantity">Minimum Quantity</label>
+                                            <input type="text" class="form-control" id="MinimumQuantity" placeholder="Minimum Quantity" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="panel panel-default" id="">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                Measurement
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="UOM" title="Unit Of Measurement">UOM</label>
+                                            <select class="form-control select2" style="width:100%;" id="Unit_Id" name="Unit_Id" data-plugin="xin_select" data-placeholder="Unit Of Measurement" tabindex="-1" aria-hidden="true"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="SecondUom" title="Second Unit Of Measurement">Second UOM</label>
+                                            <select class="form-control select2" style="width:100%;" id="SecondUom" name="SecondUom" data-plugin="xin_select" data-placeholder="Second Unit Of Measurement" tabindex="-1" aria-hidden="true"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="GrossUom" title="Gross Unit Of Measurement">Gross UOM</label>
+                                            <select class="form-control select2" style="width:100%;" id="GrossUom" name="GrossUom" data-plugin="xin_select" data-placeholder="Gross Unit Of Measurement" tabindex="-1" aria-hidden="true"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Size">Size</label>
+                                            <select class="form-control select2" style="width:100%;" id="Size" name="Size" data-plugin="xin_select" data-placeholder="Size" tabindex="-1" aria-hidden="true"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Height">Height</label>
+                                            <input type="text" class="form-control" id="Height" placeholder="Height" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Width">Width</label>
+                                            <input type="text" class="form-control" id="Width" placeholder="Width" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Length">Length</label>
+                                            <input type="text" class="form-control" id="Length" placeholder="Length" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Dimension">Dimension</label>
+                                            <input type="text" class="form-control" id="Dimension" placeholder="Dimension" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Net Weight">Net Weight</label>
+                                            <input type="text" class="form-control" id="Net_Weight" placeholder="Net Weight" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Gross Weight">Gross Weight</label>
+                                            <input type="text" class="form-control" id="Gross_Weight" placeholder="Gross Weight" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Volume">Volume</label>
+                                            <input type="text" class="form-control" id="Volume" placeholder="Volume" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Color">Color</label>
+                                            <input type="text" class="form-control" id="Color" placeholder="Color" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                Additional Information
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse">
+
+                        <div class="panel-body">
+
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Country">Country</label>
+                                            <select class="form-control select2" style="width:100%;" id="Country" name="Supplier" data-plugin="xin_select" data-placeholder="Country" tabindex="-1" aria-hidden="true"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Tarrif">Tarrif</label>
+                                            <input type="text" class="form-control" id="Tarrif" placeholder="Tarrif" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Duty Rate">Duty Rate</label>
+                                            <input type="text" class="form-control" id="Duty_Rate" placeholder="Duty Rate" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Manufacturer">Manufacturer</label>
+                                            <input type="text" class="form-control" id="Manufacturer" placeholder="Manufacturer" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Manual">Manual</label>
+                                            <select id="Manual" class="form-control select2" style="width:100%;" name="Manual">
+                                                <option>Select one</option>
+                                                <option value="1">Yes</option>
+                                                <option value="0">No</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Warranty">Warranty</label>
+                                            <select id="Warranty" class="form-control select2" style="width:100%;" name="Warranty">
+                                                <option>Select one</option>
+                                                <option value="1">Yes</option>
+                                                <option value="0">No</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Expiry Date">Expiry Date</label>
+                                            <div class="input-group date input-group-sm" data-provide="datepicker">
+                                                <input type="text" data-date-format="mm/dd/yyyy" id="Expiry_Date" class="form-control datepicker" style="border-radius:5px; height:28px;">
+                                                <div class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-th"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="ItemImage">Item Image</label>
+                                            <input type="file" class="form-control" id="ItemImage" placeholder="Item Image" style="border-radius:5px; height:35px;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse8">
+                                Stock Information
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse8" class="panel-collapse collapse">
+
+                        <div class="panel-body">
+
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="On Hand">On Hand</label>
+                                            <input type="text" class="form-control" id="On_Hand" placeholder="On Hand" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Reserved Quantity">Reserved Quantity</label>
+                                            <input type="text" class="form-control" id="Reserved_Quantity" placeholder="Reserved Quantity" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Commited Quantity">Commited Quantity</label>
+                                            <input type="text" class="form-control" id="Commited_Quantity" placeholder="Commited Quantity" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Stock Price">Stock Price</label>
+                                            <input type="text" class="form-control" id="Stock_Price" placeholder="Stock Price" style="border-radius:5px; height:28px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+                @*   <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">
+                                    Outlet Define
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseSeven" class="panel-collapse collapse">
+
+                            <div class="panel panel-primary">
+                                <div class="panel-body  col-md-6 center-block" style="float: none;">
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="OutletDefine">Define For All Outlet ??</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <input type="checkbox" id="allOutlet" data-toggle="toggle" data-size="small" data-onstyle="success" data-offstyle="danger">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="OutletDefine">Outlet Grade</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <select class="form-control select2" multiple style="width:100%;" id="OutletCategory" name="OutletCategory"></select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="OutletWise" class="">Outlet Wise Select</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="container">
+                                                        <input type="checkbox" id="OutletWiseCheck">
+                                                        <span class="checkmark"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6 hideOutlet">
+                                                    <div class="form-group">
+                                                        <label for="OutletDefine"class="hideOutlet">Outlet</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 hideOutlet">
+                                                    <div class="form-group">
+                                                        <select class="form-control select2 hideOutlet" multiple style="width:100%;" id="OutletDefine" name="OutletDefine"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        <div class="col-md-6 hideOutlet">
+                                            <div class="form-group">
+                                                <select class="form-control select2 hideOutlet" multiple style="width:100%;" id="OutletDefine" name="OutletDefine"></select>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseEight">
+                                    Other Information
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseEight" class="panel-collapse collapse">
+
+                            <div class="panel-body panel-primary">
+                                <fieldset>
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <legend>Old Category</legend>
+                                                <div class="form-group">
+                                                    <label for="Designation">RPT-Category</label>
+                                                    <select class="form-control select2" style="width:100%;" id="old_category_id" name="category_id" data-placeholder="Category" tabindex="-1" aria-hidden="true"></select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="SubCategory">RPT-SubCategory</label>
+                                                    <select class="form-control select2" style="width:100%;" id="old_subcategory_id" name="subcategory_id" data-placeholder=" SubCategory" tabindex="-1" aria-hidden="true"></select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="Product Class">Product Class</label>
+                                                    <select class="form-control select2" style="width:100%;" id="product_class" name="product_class" data-placeholder="Product Class" tabindex="-1" aria-hidden="true">
+                                                        <option value="">SELECT ONE</option>
+                                                        <option value="AD1">AD1</option>
+                                                        <option value="AD2">AD2</option>
+                                                        <option value="AD3">AD3</option>
+                                                        <option value="AD4">AD4</option>
+                                                        <option value="CORE">CORE</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="row">
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="Product Type">Product Type</label>
+                                                    <select class="form-control select2" style="width:100%;" id="product_type" name="product_type" data-placeholder="Product Type" tabindex="-1" aria-hidden="true">
+                                                        <option value="">SELECT ONE</option>
+                                                        <option value="DC">DC</option>
+                                                        <option value="LQ">LQ</option>
+                                                        <option value="NW">NW</option>
+                                                        <option value="ST">ST</option>
+                                                        <option value="WS">WS</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label style="margin-top: 24px;">
+                                                        <input type="checkbox" name="r3" class="flat-red" id="chkBestseller">Best Seller
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label style="margin-top: 24px;">
+                                                        <input type="checkbox" name="r3" class="flat-red" id="chkNoos"> Noos
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="text-right">
+                                                <button type="submit" class="btn btn-primary" id="submitCategory" onclick="addcat();">Submit</button>
+                                            </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+
+
+                        </div>
+                    </div>*@
+
+            </div>
+            <div class="text-right">
+                <button type="button" class="btn btn-default">Cancel</button> &nbsp;&nbsp;
+                <button type="button" class="btn btn-primary" id="btnSubmit" onclick="CheckArtNoExists()">Submit</button>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- /.box -->
+</section>
+<script>
+    $(document).ready(function () {
+
+        $('.select2').select2();
+        bindRMCategory();
+        bindConversionUnit();
+        bindRMCountry();
+        $.fn.datepicker.defaults.autoclose = true;
+
+        $("#Expiry_Date").datepicker("setDate", new Date());
+
+    });
+
+    $("select#category_id").change(function () {
+        bindRMSubCategory();
+
+    })
+
+    function bindRMCategory() {
+        $.ajax({
+            type: "POST",
+            url: "/RawMaterial/Bind_Category",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+
+                }),
+
+            success: function (response) {
+                $('#category_id').html('');
+                var result = "";
+                console.log(response);
+                if (response.First.length > 0) {
+
+
+                    if (response.First.length > 0) {
+                        result += "<option value=''>Select One</option>";
+                        for (var i = 0; i < response.First.length; i++) {
+                            result += "<option id='" + response.First[i].C_ID + "' title='" + response.First[i].C_ID + "' value='" + response.First[i].C_ID + "'>" + response.First[i].Description + "</option>";
+                        }
+
+                    }
+                    $('#category_id').append(result);
+
+                }
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function bindRMSubCategory() {
+
+        var CID = $('#category_id :selected').val();
+
+        $.ajax({
+            type: "POST",
+            url: "/RawMaterial/Bind_Sub_Category",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                    CATID: CID
+                }),
+
+            success: function (response) {
+                $('#subcategory_id').html('');
+                var result = "";
+                console.log(response);
+                if (response.First.length > 0) {
+
+
+                    if (response.First.length > 0) {
+                        result += "<option value=''>Select One</option>";
+                        for (var i = 0; i < response.First.length; i++) {
+                            result += "<option id='" + response.First[i].SUB_C_ID + "' title='" + response.First[i].SUB_C_ID + "' value='" + response.First[i].SUB_C_ID + "'>" + response.First[i].Description + "</option>";
+                        }
+
+                    }
+                    $('#subcategory_id').append(result);
+
+                }
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function bindConversionUnit() {
+
+
+        $.ajax({
+            type: "POST",
+            url: "/RawMaterial/bindConversionUnit",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+
+                }),
+
+            success: function (response) {
+                $('#Unit_Id').html('');
+                var result = "";
+                console.log(response);
+                if (response.First.length > 0) {
+
+
+                    if (response.First.length > 0) {
+                        result += "<option value=''>Select One</option>";
+                        for (var i = 0; i < response.First.length; i++) {
+                            result += "<option id='" + response.First[i].UNIT_ID + "' title='" + response.First[i].UNIT_ID + "' value='" + response.First[i].UNIT_ID + "'>" + response.First[i].UNIT_NAME + "</option>";
+                        }
+
+                    }
+                    $('#Unit_Id').append(result);
+
+                }
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function bindRMCountry() {
+        $.ajax({
+            type: "POST",
+            url: "/RMItem/Bind_Country",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(
+                {
+
+                }),
+
+            success: function (response) {
+                $('#Country').html('');
+                var result = "";
+                console.log(response);
+                if (response.First.length > 0) {
+
+
+                    if (response.First.length > 0) {
+                        result += "<option value=''>Select One</option>";
+                        for (var i = 0; i < response.First.length; i++) {
+                            result += "<option id='" + response.First[i].Country_ID + "' title='" + response.First[i].Country_ID + "' value='" + response.First[i].Country_ID + "'>" + response.First[i].Country_Name + "</option>";
+                        }
+
+                    }
+                    $('#Country').append(result);
+
+                }
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+</script>
+
+@{
+    ViewBag.Title = "RawMatItem";
+}
+
+<h2>RawMatItem</h2>
+

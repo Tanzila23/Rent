@@ -1,0 +1,771 @@
+﻿@using System.Data
+@using System.Collections
+@using FIXED_ASSET.DTO
+@using System.Data
+@using System.Collections
+
+@{
+    ViewBag.Title = "Rent Discount";
+    Layout = "~/Views/Shared/_RentLayout.cshtml";
+    List<ViewManufactureDTO> ManufactureGridList = new List<ViewManufactureDTO>();
+
+
+    if (ViewBag.ManufactureGridList != null)
+    {
+        ManufactureGridList = ViewBag.ManufactureGridList;
+    }
+}
+
+
+<link href="~/Content/css/select2.css" rel="stylesheet" />
+<script src="~/Content/js/select2.full.min.js"></script>
+<link href="~/Content/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<script src="~/Content/js/jquery.dataTables.min.js"></script>
+<script src="~/Content/js/dataTables.bootstrap.min.js"></script>
+
+<style type="text/css">
+
+    div.addnew {
+        display: none
+    }
+
+    html {
+        overflow-y: scroll;
+    }
+</style>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        @ViewBag.Title
+        <small>Control panel</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Rent Discount</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="center-block col-md-6" style="float: none;">    </div>
+    <div class="box box-primary addnew">
+        <div class="box-header with-border">
+            <h3 class="box-title">@ViewBag.Title</h3>
+            <div class="box-tools pull-right">
+                <button class="btn btn-primary bg-blue-gradient hide-form">Hide</button>
+            </div>
+        </div>
+
+        <form role="form"></form>
+        <div class="box-body">
+            <div class="panel panel-primary col-md-12 center-block" style="float: none;">
+                <div class="panel-body">
+                    <fieldset>
+                        <legend>Rent Discount</legend>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="ProjectList">Project/Outlet</label>
+                                    <select type="text" class="form-control select2 " style="width:290px;" id="ProjectList"></select>
+                                    @*<select type="text" class="form-control select2 " style="width:315px;" id="ProjectList"></select>*@
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="UnitList">Unit</label>
+                                    <input type="hidden" class="form-control" id="UnitList_edit" placeholder="">
+                                    @*<input type="hidden" class="form-control" id="UnitList_edit" placeholder="">*@
+                                    <select type="text" class="form-control select2 " style="width:290px;" id="UnitList" data-placeholder="Unit Name"></select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="AgreementList">Agreement</label>
+                                    <input type="hidden" class="form-control" id="AgreementList_edit" placeholder="">
+                                    <select type="text" class="form-control select2 " style="width:290px;" id="AgreementList" data-placeholder="Agreement"></select>
+                                    @*<select type="text" class="form-control select2 " style="width:315px;" id="ProjectList"></select>*@
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="discountId">Discount ID</label>
+                                    <input type="text" class="form-control col-sm-4" id="discountId" placeholder="Discount ID">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="discount_Rent_Start_Date">Start Date</label>
+                                    <div class="input-group date" data-provide="datepicker">
+                                        <input type="text" data-date-format="mm/dd/yyyy" id="discount_Rent_Start_Date" class="form-control datepicker" placeholder="Select Date">
+                                        <div class="input-group-addon">
+                                            <span class="glyphicon glyphicon-th"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="discount_Rent_End_Date">End Date</label>
+                                    <div class="input-group date" data-provide="datepicker">
+                                        <input type="text" data-date-format="mm/dd/yyyy" id="discount_Rent_End_Date" class="form-control datepicker" placeholder="Select Date">
+                                        <div class="input-group-addon">
+                                            <span class="glyphicon glyphicon-th"></span>
+                                        </div>
+                                    </div>
+                                  </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="Rent_Discount_Type">Discount Type</label>
+                                    <select id="rent_Discount_Type" class="form-control" name="Rent_Discount_Type">
+                                        <option value="1">Percentage</option>
+                                        <option value="2">Amount</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="rent_Amount">Rent Amount</label>
+                                    <input type="text" class="form-control" id="rent_Amount" value="0" placeholder="Rent Amount/Percentage">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="advance_Calculate_Type">Advance Calculate Type</label>
+                                    <select id="advance_Calculate_Type" class="form-control" name="Advance Calculate Type">
+                                        <option value="1">Percentage</option>
+                                        <option value="2">Amount</option>
+                                        <option value="2">None</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="advance_Amount">Advance Amount</label>
+                                    <input type="text" class="form-control" id="advance_Amount" value="0" placeholder="Advance Amount/Percentage">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="aIT_Calculate_Type">AIT Calculate Type</label>
+                                    <select id="aIT_Calculate_Type" class="form-control" name="AIT Calculate Type">
+                                        <option value="1">Percentage</option>
+                                        <option value="2">Amount</option>
+                                        <option value="2">None</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="aIT_Amount">AIT Amount</label>
+                                    <input type="text" class="form-control" id="aIT_Amount" value="0" placeholder="AIT Amount">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                             <div class="col-md-4">
+                                    <label for="">Status</label>
+                                    <select id="active_status" class="form-control" name="active_status">
+                                        <option value="true">Active</option>
+                                        <option value="false">InActive</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="box-body table-responsive no-padding">
+                                <table id="slotdatatable" class="table table-bordered table-striped compact hover" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th id="Start_Date">Expected Rent Pay Day</th>
+                                            @*<th id="End_Date">Year</th>*@
+                                            <th id="Increment_Amount">Basic Rent</th>
+                                            <th id="Increment_VAT">Tax Based Amount</th>
+
+                                        </tr>
+                                        @*<tr>
+                            <td style="width:300px" data-bind="First_start_date">
+
+                            </td>
+                        </tr>*@
+
+                                    </thead>
+                                    <tbody id="rentalDate">
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <div class="text-right">
+                            @*<button type="submit" class="btn btn-primary" id="generateRentDetails">Generate</button>*@
+                            <button type="submit" class="btn btn-info" id="submitRentDiscount">Submit</button>
+                            <button class="btn btn-sm btn-primary " id="updateRentDiscount">
+                                <i class="ace-icon fa fa-check"></i> Update
+                            </button>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <!-- /.box -->
+    <!-- Default box -->
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">List All Rent Discount</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool show-form text-info bg-blue-gradient"><i class="fa fa-plus"></i>Add New</button>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="box-body table-responsive no-padding">
+                <table id="datatable" class="table table-bordered table-striped compact hover" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+
+                            @*<th class="hidden"></th>*@
+                            <th>Id</th>
+                            <th>Project</th>
+                            @*<th class="hidden"></th>*@
+                            <th>Unit</th>
+                            <th>Agreement</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Discount Type</th>
+                            <th>Rent Discount Amount</th>
+                            <th>Advance Calculate Type</th>
+                            <th>Advance Discount Amount</th>
+                            <th>AIT Calculate Type</th>
+                            <th>AIT Discount Amount</th>
+                            <th>Status</th>
+                            <th style="font-size:15px;width:100px;">Actions</th>
+                        </tr>
+                    </thead>
+
+
+                </table>
+
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <div class="box-footer">
+            Footer
+        </div>
+        <!-- /.box-footer-->
+    </div>
+    <!-- /.box -->
+
+</section>
+<!-- /.content -->
+<link href="../../dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+<script src="../../dist/js/bootstrap-datepicker.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+@*<script src="http://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>*@
+<script>
+
+
+    $(document).ready(function () {
+      $('#slotdatatable').hide();
+        //$("#organization").validate();
+        //statusList();
+        $('.select2').select2();
+        // readImageFile();
+        $.fn.datepicker.defaults.autoclose = true;
+        //$("#intervale_Start_Date").datepicker("setDate", new Date());
+        //$("#intervale_End_Date").datepicker("setDate", new Date());
+
+        $('.addnew').hide();
+        $('.show-form').click(function () {
+            $('.addnew').show();
+            $('.show-form').hide();
+            $('#updateRentDiscount').hide();
+        });
+        $('.hide-form').click(function () {
+            $('.addnew').hide();
+            $('.show-form').show();
+        });
+
+       // $('#submitRentDetails').hide();
+
+       
+        //  debugger;
+        getData();
+        ProjectList();
+       // Unitist(0);
+       // Agreementist(0);
+
+    });
+
+      $("#ProjectList").change(function () {
+        var projectId = $(this).val();
+
+        Unitist(projectId);
+    });
+      $("#UnitList").change(function () {
+        var unitId = $(this).val();
+
+        Agreementist(unitId);
+    });
+     function ProjectList() {
+
+        $.ajax({
+            url: '/AssetCategory/RentProjectList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#ProjectList').html('');
+                    var result = '';
+                    result += "<option value='0'>Project Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option id='" + response[i].Project_ID + "'  data-STORAGE_ID='" + response[i].External_ID + "' title='" + response[i].Project_Name + "'value='" + response[i].Project_ID + "'>" + response[i].Project_Name + "</option>";
+
+                    }
+                }
+                $('select#ProjectList').append(result);
+
+
+            }
+        });
+    }
+     function Unitist(projectId) {
+
+        $.ajax({
+            url: '/AssetCategory/UnitList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+             data: JSON.stringify({ _projectId: projectId }),
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#UnitList').html('');
+                    var result = '';
+                   result += "<option value='0'>Unit Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+                         if (response[i].UNIT_ID == $('#UnitList_edit').val()) {
+                             result += "<option selected value='" + response[i].UNIT_ID + "'>" + response[i].UNIT_NAME + "</option>";
+                              //result += "<option selected id='" + response[i].UNIT_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].UNIT_NAME + "'value='" + response[i].UNIT_ID + "'>" + response[i].UNIT_NAME + "</option>";
+                        }
+                         else {
+                              result += "<option id='" + response[i].UNIT_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].UNIT_NAME + "'value='" + response[i].UNIT_ID + "'>" + response[i].UNIT_NAME + "</option>";
+                         }
+                       
+
+                    }
+                }
+                $('select#UnitList').append(result);
+
+
+            }
+        });
+    }
+     function Agreementist(unitId) {
+
+        $.ajax({
+            url: '/AssetCategory/Agreementist',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+             data: JSON.stringify({ _unitId: unitId }),
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#AgreementList').html('');
+                    var result = '';
+                   result += "<option value='0'>Agreement Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+                         if (response[i].Agreement_ID == $('#AgreementList_edit').val()) {
+                             result += "<option selected value='" + response[i].Agreement_ID + "'+ value='" + response[i].External_ID + "'>" + response[i].External_ID + "</option>";
+                              //result += "<option selected id='" + response[i].UNIT_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].UNIT_NAME + "'value='" + response[i].UNIT_ID + "'>" + response[i].UNIT_NAME + "</option>";
+                        }
+                         else {
+                              result += "<option id='" + response[i].Agreement_ID + "'+ value='" + response[i].External_ID + "' >" + response[i].External_ID + "</option>";
+                         }
+                       
+
+                    }
+                }
+                $('select#AgreementList').append(result);
+
+
+            }
+        });
+    }
+
+    function getData() {
+
+        $('#datatable').DataTable({
+            "searching": true,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "language":
+            {
+                "processing": "<div class='overlay custom-loader-background'><i class='fa fa-cog fa-spin custom-loader-color'></i></div>"
+            },
+            "processing": true,
+            "ajax": {
+                "url": "/AssetCategory/RentDiscountList",
+                "type": "GET",
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "External_ID", "autoWidth": true },
+                { "data": "Project_Name", "autoWidth": true },
+                { "data": "UNIT_NAME", "autoWidth": true },
+                 { "data": "Agreement_ID", "autoWidth": true },
+                {
+                    "data": "Start_DT", "autoWidth": true,
+                  render: function(d) {
+                  return moment(d).format("DD-MM-YYYY");
+                    }
+                },
+                {
+                    "data": "End_DT", "autoWidth": true,
+                      render: function(d) {
+                  return moment(d).format("DD-MM-YYYY");
+                    }
+                },
+                { "data": "Rent_Disc_Type", "autoWidth": true },
+                 { "data": "Rent_Disc_Amount", "autoWidth": true },
+                { "data": "Adv_Adj_Type", "autoWidth": true },
+                { "data": "Adv_Adj_Amount", "autoWidth": true },
+                { "data": "AIT_CalType", "autoWidth": true },
+                  { "data": "AIT_Amount", "autoWidth": true },
+                { "data": "Status", "autoWidth": true },
+                {
+                    "data": "Discount_ID", "width": "50px", "render": function (data) {
+                        return '<button type="button" class="btn btn-primary" onclick="editRentDiscount(' + data + ')">Edit</button>';
+                        // return '<div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu"><li><button type="button" class="btn btn-primary" onclick="getbyID(' + data + ')">DETAIL</button></li><li><button type="button" class="btn btn-info" onclick="getOldCategory(' + data + ')"> OLD CATEGORY</button></li><li><button type="button" class="btn btn-info" onclick="getbyInventoryInsert(' + data + ')">INVENTORY INSERT</button></li><li><button type="button" class="btn btn-warning" onclick="getbyInventoryView(' + data+')">INVENTORY VIEW</button></li></ul></div>';
+                    }
+                }
+            ]
+        });
+
+    }
+
+    function editRentDiscount(discountId) {
+        $("#External_ID").prop("disabled", true);
+        // $("#ClassList").prop("disabled", true);
+        $('.addnew').show();
+        $('#updateRentDiscount').show();
+        $('#submitRentDiscount').hide();
+          $('#submitAgreementIncrement').hide();
+
+        $.ajax({
+            type: "POST",
+            url: "/AssetCategory/Edit_RentDiscount",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                //  obj: asd
+                discountId: discountId
+
+            }),
+            success: function (response) {
+
+                console.log(response);
+                console.log(response.data);
+
+
+                $("#discountId").val(response.data.External_ID);
+                $("#ProjectList").val(response.data.Project_ID).trigger('change');
+                $("#UnitList_edit").val(response.data.Unit_ID).trigger('change');
+                AgreementistListReload(response.data.Unit_ID, response.data.Agreement_ID);
+               // alert(response.data.Unit_ID, response.data.Agreement_ID);
+              //  $("#AgreementList_edit").val(response.data.Agreement_ID);
+                $("#discount_Rent_Start_Date").val(response.data.Start_DT);
+                $("#discount_Rent_End_Date").val(response.data.End_DT);
+                $("#rent_Discount_Type").val(response.data.Rent_Disc_Type);
+                $("#rent_Amount").val(response.data.Rent_Disc_Amount);
+                $("#advance_Calculate_Type").val(response.data.Adv_Adj_Type);
+                $("#advance_Amount").val(response.data.Adv_Adj_Amount);
+                $("#aIT_Calculate_Type").val(response.data.AIT_CalType);
+                $("#aIT_Amount").val(response.data.AIT_Amount);
+                if (response.data.Status == 'Active') {
+                    $("#active_status").val('true');
+                } else {
+                    $("#active_status").val('false');
+                }
+
+                $("#btnUpdate").show();
+
+                 function AgreementistListReload(unitId,AgreementList_edit) {
+
+        $.ajax({
+            url: '/AssetCategory/Agreementist',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+             data: JSON.stringify({ _unitId: unitId }),
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#AgreementList').html('');
+                    var result = '';
+                    result += "<option value='0'>Agreement Name</option>";
+                     var AgreementListedit = AgreementList_edit;
+                    for (var i = 0; response.length > i; i++) {
+                         if (response[i].Agreement_ID == $('#AgreementList_edit').val()) {
+                             result += "<option selected value='" + response[i].Agreement_ID + "'+ value='" + response[i].External_ID + "'>" + response[i].External_ID + "</option>";
+                              //result += "<option selected id='" + response[i].UNIT_ID + "'  data-STORAGE_ID='" + response[i].EXTERNAL_ID + "' title='" + response[i].UNIT_NAME + "'value='" + response[i].UNIT_ID + "'>" + response[i].UNIT_NAME + "</option>";
+                        }
+                         else {
+                              result += "<option id='" + response[i].Agreement_ID + "'+ value='" + response[i].External_ID + "' >" + response[i].External_ID + "</option>";
+                         }
+                       
+
+                    }
+                }
+                $('select#AgreementList').append(result);
+
+
+            }
+        });
+    }
+                 function AgreementistListReload(unitId,AgreementList_edit) {
+            $.ajax({
+             url: '/AssetCategory/Agreementist',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+             data: JSON.stringify({ _unitId: unitId }),
+            dataType: "json",
+            success: function (response) {
+
+                  if (response.length > 0) {
+                    $('select#AgreementList').html('');
+                    
+                    var result = '';
+                      result += "<option value='0'>Agreement Name</option>";
+                       var AgreementListedit = AgreementList_edit;
+                     for (var i = 0; response.length > i; i++) {
+                       
+                         result += "<option selected value='" + response[i].Agreement_ID + "'+ value='" + response[i].External_ID + "' >" + response[i].External_ID + "</option>";
+                  
+                    }
+                      $('select#AgreementList').append(result);
+                       $('select#AgreementList').val(AgreementListedit);
+                }
+            }
+        });
+                }
+
+
+            }
+        })
+
+
+    }
+
+   $("#submitRentDiscount").click(function () {
+
+      
+        var ProjectList = $('#ProjectList ').val();
+        var UnitList = $('#UnitList').val();
+        var AgreementList = $('#AgreementList').val();
+        var discountId = $('#discountId').val();
+        var discount_Rent_Start_Date = $('#discount_Rent_Start_Date ').val();
+        var discount_Rent_End_Date = $('#discount_Rent_End_Date').val();
+        var rent_Discount_Type = $('#rent_Discount_Type ').val();
+        var rent_Amount = $('#rent_Amount ').val();
+        var advance_Calculate_Type = $('#advance_Calculate_Type ').val();
+        var advance_Amount = $('#advance_Amount').val();
+        var aIT_Calculate_Type = $('#aIT_Calculate_Type ').val();
+        var aIT_Amount = $('#aIT_Amount').val();
+        var activeStatus = $('#active_status').val();
+
+
+        if (ProjectList == '') {
+            alert('Select Project !!');
+            return false;
+        }
+        else if (UnitList == '') {
+            alert('Select Project!!');
+            return false;
+        }
+        else {
+            //ajax passing data to controller
+            $.ajax({
+
+
+                type: "POST",
+                url: '/AssetCategory/SaveDiscount',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //alert("Result" + response);
+                    if (response != null) {
+
+
+                        toastr.success(response, 'Rent Discount', {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": true,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        });
+                        $("#ProjectList").val("");
+                        $("#UnitList").val("");
+                        $("#AgreementList").val("");
+                        // $("#active_status").val(-1);
+                        $('.addnew').show();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 5000);
+                        // $('#datatable').load(document.URL + ' #datatable');
+
+                    }
+
+                },
+                data: JSON.stringify({
+                    discountId: discountId,
+                    ProjectList: ProjectList,
+                    UnitList: UnitList,
+                    AgreementList: AgreementList,
+                    discount_Rent_Start_Date: discount_Rent_Start_Date,
+                    discount_Rent_End_Date: discount_Rent_End_Date,
+                    rent_Discount_Type: rent_Discount_Type,
+                    rent_Amount: rent_Amount,
+                    advance_Calculate_Type: advance_Calculate_Type,
+                    advance_Amount: advance_Amount,
+                    aIT_Calculate_Type: aIT_Calculate_Type,
+                    aIT_Amount: aIT_Amount,
+                    activeStatus: activeStatus
+
+                }),
+                //success: function (result) {
+                //    location.reload(true);
+
+                //    $("h2").css({ color: result[1] });
+                //},
+                error: function () {
+                    alert("error");
+                }
+            });
+        }
+
+    });
+    $("#updateRentDiscount").click(function UpdateData() {
+
+        // var rowStatus = 2;
+
+        //if ($("#projectName").val() != $("#projectName").val().toUpperCase()) {
+
+        //    toastr.error("Enter Your Project Name Uppercase");
+        //    return false;
+        //}
+         var ProjectList = $('#ProjectList ').val();
+        var UnitList = $('#UnitList').val();
+        var AgreementList = $('#AgreementList').val();
+        var discountId = $('#discountId').val();
+        var discount_Rent_Start_Date = $('#discount_Rent_Start_Date ').val();
+        var discount_Rent_End_Date = $('#discount_Rent_End_Date').val();
+        var rent_Discount_Type = $('#rent_Discount_Type ').val();
+        var rent_Amount = $('#rent_Amount ').val();
+        var advance_Calculate_Type = $('#advance_Calculate_Type ').val();
+        var advance_Amount = $('#advance_Amount').val();
+        var aIT_Calculate_Type = $('#aIT_Calculate_Type ').val();
+        var aIT_Amount = $('#aIT_Amount').val();
+        var activeStatus = $('#active_status').val();
+
+
+
+       if (ProjectList == '') {
+            alert('Select Project !!');
+            return false;
+        }
+        else if (UnitList == '') {
+            alert('Select Project!!');
+            return false;
+        }
+        else {
+            //ajax passing data to controller
+            $.ajax({
+                url: '/AssetCategory/updateRentDiscount',
+                type: 'POST',
+                dataType: "json",
+                traditional: true,
+                success: function (response) {
+                    //alert("Result" + response);
+                    if (response != null) {
+
+
+                        toastr.success(response, 'Agreement', {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": true,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        });
+                       $("#ProjectList").val("");
+                        $("#UnitList").val("");
+                        $("#AgreementList").val("");
+                        // $("#active_status").val(-1);
+                        $('.addnew').show();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 5000);
+                        // $('#datatable').load(document.URL + ' #datatable');
+
+                    }
+
+                },
+                data: {
+                      discountId: discountId,
+                    ProjectList: ProjectList,
+                    UnitList: UnitList,
+                    AgreementList: AgreementList,
+                    discount_Rent_Start_Date: discount_Rent_Start_Date,
+                    discount_Rent_End_Date: discount_Rent_End_Date,
+                    rent_Discount_Type: rent_Discount_Type,
+                    rent_Amount: rent_Amount,
+                    advance_Calculate_Type: advance_Calculate_Type,
+                    advance_Amount: advance_Amount,
+                    aIT_Calculate_Type: aIT_Calculate_Type,
+                    aIT_Amount: aIT_Amount,
+                    activeStatus: activeStatus
+
+                },
+                //success: function (response) {
+
+                //    if (response == 'Success') {
+                //        location.reload();
+                //        //getData();
+                //    }
+                //},
+                error: function () {
+                    alert("error");
+                }
+            });
+        }
+
+    });
+
+   
+</script>

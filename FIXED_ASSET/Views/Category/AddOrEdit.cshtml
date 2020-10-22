@@ -1,0 +1,45 @@
+﻿@model POSX.Models.SelectedEmployee
+@{
+    ViewBag.Title = "AddOrEdit";
+}
+<link href="~/Content/css/chosen.min.css" rel="stylesheet" />
+<script src="~/Content/js/jquery.js"></script>
+<script src="~/Content/js/chosen.jquery.min.js"></script>
+<h2>Searchable and MultiSelect DropDown in Mvc</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="form-horizontal">
+        @Html.HiddenFor(model => model.ID)
+
+        <div class="form-group">
+            <label>Select Employee</label>
+            @*Normal DropDown*@
+            @*@Html.DropDownListFor(model => model.SelectedEmployeeIDs, new SelectList(Model.EmployeeCollection, "EmployeeID", "Name"), new { id = "normalDropDown", style = "Width:60%;" })*@
+
+            @*MultiSelect DropDown*@
+            @Html.ListBoxFor(model => model.SelectedIDArray, new MultiSelectList(Model.EmployeeCollection, "EmployeeID", "Name"), new { id = "multiSelectDropDown", multiple = "multiple" })
+
+
+            <input type="submit" name="name" value="Submit" />
+        </div>
+    </div>
+}
+
+@section scripts{
+
+    <script>
+        $(function () {
+            //normal dropdown
+            //$("#normalDropDown").chosen({
+            //    disable_search_threshold : 5
+            //});
+
+            //multiselect DropDown
+            $("#multiSelectDropDown").chosen({
+                width : "100%"
+            });
+        });
+
+    </script>
+}

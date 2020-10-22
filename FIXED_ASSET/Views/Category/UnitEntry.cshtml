@@ -1,0 +1,669 @@
+﻿@using System.Data
+@using System.Collections
+@using FIXED_ASSET.DTO
+@using System.Data
+@using System.Collections
+
+@{
+    ViewBag.Title = "Unit";
+
+    Layout = "~/Views/Shared/_RentLayout.cshtml";
+    List<ViewManufactureDTO> ManufactureGridList = new List<ViewManufactureDTO>();
+
+
+    if (ViewBag.ManufactureGridList != null)
+    {
+        ManufactureGridList = ViewBag.ManufactureGridList;
+    }
+}
+
+
+<link href="~/Content/css/select2.css" rel="stylesheet" />
+<script src="~/Content/js/select2.full.min.js"></script>
+<link href="~/Content/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<script src="~/Content/js/jquery.dataTables.min.js"></script>
+<script src="~/Content/js/dataTables.bootstrap.min.js"></script>
+
+<style type="text/css">
+
+    div.addnew {
+        display: none
+    }
+
+    html {
+        overflow-y: scroll;
+    }
+</style>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        @ViewBag.Title
+        <small>Control panel</small>
+        @ViewData["ProjectName"]
+    
+    <label type="text" class="form-control"  style="font-size:20px; color:cadetblue; margin-top:10px; text-align: center;">@Session["ProjectName"]</label>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Unit</li>
+    </ol>
+</section>
+<div>
+    <a class="btn btn-primary" style="margin-left:20px;" href="/AssetCategory/Outlet">
+        << BACK
+    </a>
+</div>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="center-block col-md-6" style="float: none;">    </div>
+    <div class="box box-primary addnew">
+        <div class="box-header with-border">
+            <h3 class="box-title">@ViewBag.Title</h3>
+            <div class="box-tools pull-right">
+                <button class="btn btn-primary bg-blue-gradient hide-form">Hide</button>
+            </div>
+        </div>
+        <form role="form"></form>
+        <div class="box-body">
+            <div class="panel panel-primary col-md-12 center-block" style="float: none;">
+                <div class="panel-body">
+                    <fieldset>
+                        <legend>Unit</legend>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="ProjectList">Project/Outlet</label>
+                                    <select type="text" class="form-control select2 " style="width:270px;" id="ProjectList"></select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="Shop No">Unit ID</label>
+                                    <input type="text" class="form-control col-sm-4" id="unitId" placeholder="Unit ID">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="unitName">Unit Name</label>
+                                    <input type="text" class="form-control col-sm-4" id="unitName" placeholder="Unit Name">
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="address">Address</label>
+                                    <input type="text" class="form-control" id="address" placeholder="Address">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="space">Space</label>
+                                    <input type="text" class="form-control" id="space" placeholder="Space">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="space">Space Unit</label>
+                                    <input type="text" class="form-control" id="spaceUnit" placeholder="Space">
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="unitType">Unit Type</label>
+                                    <select class="form-control select2" id="unitType" style="width:270px">
+                                        <option selected> Select </option>
+                                        <option value="1">Factory</option>
+                                        <option value="2">Warehouse</option>
+                                        <option value="3">Store</option>
+                                    </select>
+                                    @*<input type="text" class="form-control" id="projectType" placeholder="Project Type">*@
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="remarks">Remarks</label>
+                                    <input type="text" class="form-control" id="remarks" placeholder="Remarks">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="">Status</label>
+                                    <select id="active_status" class="form-control" name="active_status">
+                                        <option value="true">Active</option>
+                                        <option value="false">InActive</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+
+
+                        </div>
+
+
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary" id="submitUnit" onclick="addcat();">Submit</button>
+                            <button class="btn btn-sm btn-primary " id="updateUnit">
+                                <i class="ace-icon fa fa-check"></i> Update
+                            </button>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <!-- /.box -->
+    <!-- Default box -->
+    <div class="box box-primary">
+        <div class="box-header with-border">
+
+            <h3 class="box-title">List All Unit</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool show-form text-info bg-blue-gradient"><i class="fa fa-plus"></i>Add New</button>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="box-body table-responsive no-padding">
+                <table id="datatable" class="table table-bordered table-striped compact hover" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            @*<th>SL</th>*@
+                            <th>Project/Outlet Name</th>
+                            <th>Unit ID</th>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Space</th>
+                            <th>Space Unit</th>
+                            <th>Unit Type</th>
+                            <th>Remarks</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+
+                </table>
+
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <div class="box-footer">
+            Footer
+        </div>
+        <!-- /.box-footer-->
+    </div>
+    <!-- /.box -->
+
+</section>
+<!-- /.content -->
+
+<script>
+
+ 
+    $(document).ready(function () {
+
+  
+        //  $("#UnitList_edit").html( ViewBag.ProjectName);
+        //$("#organization").validate();
+        //statusList();
+        $('.select2').select2();
+        // readImageFile();
+        ProjectList();
+
+
+        $('.addnew').hide();
+        $('.show-form').click(function () {
+            $('.addnew').show();
+            $('.show-form').hide();
+            $('#updateUnit').hide();
+        });
+        $('.hide-form').click(function () {
+            $('.addnew').hide();
+            $('.show-form').show();
+        });
+
+
+
+        $('#address-tab').attr('class', 'disabled');
+
+        $('#address-tab').click(function (event) {
+            if ($(this).hasClass('disabled')) {
+                return false;
+            }
+
+        });
+        //  debugger;
+        getData();
+
+    });
+
+
+    function ProjectList() {
+
+        $.ajax({
+            url: '/AssetCategory/RentProjectList',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.length > 0) {
+                    console.log(response);
+                    $('select#ProjectList').html('');
+                    var result = '';
+                    result += "<option value='0'>Project Name</option>";
+                    for (var i = 0; response.length > i; i++) {
+
+                        result += "<option id='" + response[i].Project_ID + "'  data-STORAGE_ID='" + response[i].External_ID + "' title='" + response[i].Project_Name + "'value='" + response[i].Project_ID + "'>" + response[i].Project_Name + "</option>";
+
+                    }
+                }
+                $('select#ProjectList').append(result);
+
+
+            }
+        });
+    }
+
+    function getData() {
+        
+        var ProjectList = $('#ProjectList ').val();
+        $('#datatable').DataTable({
+            "searching": true,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "language":
+            {
+                "processing": "<div class='overlay custom-loader-background'><i class='fa fa-cog fa-spin custom-loader-color'></i></div>"
+            },
+            "processing": true,
+             
+            "ajax": {
+                "url": "/AssetCategory/RentUnitListView",
+                "type": "GET",
+                "datatype": "json"
+                //   "data": JSON.stringify({
+                //    //  obj: asd
+                //    ProjectList: ProjectList
+
+                //})
+            
+                   
+            },
+
+            "columns": [
+                { "data": "Project_Name", "autoWidth": true },
+                { "data": "EXTERNAL_ID", "autoWidth": true },
+                { "data": "UNIT_NAME", "autoWidth": true },
+                { "data": "ADDRESS", "autoWidth": true },
+                { "data": "SPACE", "autoWidth": true },
+                { "data": "SPACE_UNIT", "autoWidth": true },
+                { "data": "UNIT_TYPE", "autoWidth": true },
+                { "data": "REMARKS", "autoWidth": true },
+                { "data": "STATUS", "autoWidth": true },
+                {
+                    "data": "UNIT_ID", "width": "50px", "render": function (data) {
+                        return '<button type="button" class="btn btn-primary" onclick="getProjectAgreementView(' + data + ')"><i class="glyphicon glyphicon-eye-open"></i></button>'
+                            + '<button type="button" class="btn btn-primary" onclick="editUnit(' + data + ')"><i class="glyphicon glyphicon-pencil"></i></button>';
+                        // return '<div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu"><li><button type="button" class="btn btn-primary" onclick="getbyID(' + data + ')">DETAIL</button></li><li><button type="button" class="btn btn-info" onclick="getOldCategory(' + data + ')"> OLD CATEGORY</button></li><li><button type="button" class="btn btn-info" onclick="getbyInventoryInsert(' + data + ')">INVENTORY INSERT</button></li><li><button type="button" class="btn btn-warning" onclick="getbyInventoryView(' + data+')">INVENTORY VIEW</button></li></ul></div>';
+                    }
+                }
+
+            ]
+            
+        });
+      
+    }
+
+    function getProjectAgreementView(unitId) {
+        $.ajax({
+            type: "POST",
+            url: "/AssetCategory/viewUnitAgreementDetailsInfo",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                //  obj: asd
+                unitId: unitId
+
+            }),
+            success: function (response) {
+                window.location.href = '/AssetCategory/NewAgreement';
+                //window.location.href = ("/AssetChildIndex.cshtml");
+
+            }
+        })
+
+    }
+
+    $("#submitUnit").click(function () {
+        if ($("#unitId").val() == "" || $("#unitName").val() == "" || $("#space").val() == "") {
+
+            toastr.error('Enter Data', 'Department', {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            });
+            return false;
+        }
+
+        //if ($("#unitName").val() != $("#unitName").val().toUpperCase()) {
+
+        //    toastr.error("Enter Your Unit Name Uppercase");
+        //    return false;
+        //}
+
+        if ($.trim($("#unitId").val()).length > 8) {
+            toastr.error('Enter Your Unit ID in 8 digit', 'Manufacture ID!', {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            });
+            return false;
+            //event.preventDefault();
+        }
+
+
+        //var rowStatus = 1;
+
+        var ProjectList = $('#ProjectList ').val();
+        var unitId = $('#unitId ').val();
+        var unitName = $('#unitName').val();
+        var address = $('#address ').val();
+        var space = $('#space ').val();
+        var spaceUnit = $('#spaceUnit ').val();
+        var unitType = $('#unitType').val();
+        var remarks = $('#remarks').val();
+        var activeStatus = $('#active_status').val();
+
+
+        if (unitId == '') {
+            alert('Unit Id  field is empty !!');
+            return false;
+        }
+        else if (unitName == '') {
+            alert('Description field is empty!!');
+            return false;
+        }
+
+        else {
+            //ajax passing data to controller
+            $.ajax({
+                url: '/AssetCategory/SaveUnit',
+                type: 'POST',
+                dataType: "json",
+                traditional: true,
+                success: function (response) {
+                    //alert("Result" + response);
+                    if (response != null) {
+
+
+                        toastr.success(response, 'Unit', {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": true,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        });
+                        $("#unitId").val
+                        $("#ProjectList").val("");
+                        $("#unitName").val("");
+                        $("#address").val("");
+                        $("#space").val("");
+                        $("#projectType").val("");
+                        $("#address").val("");
+                        // $("#active_status").val(-1);
+                        $('.addnew').show();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 5000);
+                        // $('#datatable').load(document.URL + ' #datatable');
+
+                    }
+
+                },
+                data: {
+                    unitId: unitId,
+                    ProjectList: ProjectList,
+                    unitName: unitName,
+                    address: address,
+                    space: space,
+                    spaceUnit: spaceUnit,
+                    unitType: unitType,
+                    remarks: remarks,
+                    activeStatus: activeStatus
+
+                },
+                //success: function (response) {
+
+                //    if (response == 'Success') {
+                //        location.reload();
+                //        //getData();
+                //    }
+                //},
+                error: function () {
+                    alert("error");
+                }
+            });
+        }
+    });
+
+
+    function editUnit(unitId) {
+        $("#ProjectList").prop("disabled", true);
+        $("#unitId").prop("disabled", true);
+        // $("#ClassList").prop("disabled", true);
+        $('.addnew').show();
+        $('#updateUnit').show();
+        $('#submitUnit').hide();
+
+        $.ajax({
+            type: "POST",
+            url: "/AssetCategory/Edit_Unit",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                //  obj: asd
+                unitId: unitId
+
+            }),
+            success: function (response) {
+
+                console.log(response);
+                // alert(response.data.DESCRIPTION);
+
+                $("#unitId").val(response.data.EXTERNAL_ID);
+                // alert(response.data.Project_Name);
+                $("#ProjectList").val(response.data.PROJECT_ID).trigger('change');
+                $("#unitName").val(response.data.UNIT_NAME);
+                $("#address").val(response.data.ADDRESS);
+                $("#space").val(response.data.SPACE);//targetImg
+                $("#spaceUnit").val(response.data.SPACE_UNIT);
+                $("#unitType").val(response.data.UNIT_TYPE).trigger('change');
+                $("#remarks").val(response.data.REMARKS);
+                var UnitList_edit = $("#UnitList_edit").html(response.data.REMARKS);
+                //UnitList_edit
+                if (response.data.STATUS == 'Active') {
+                    $("#active_status").val('true');
+                } else {
+                    $("#active_status").val('false');
+                }
+
+                $("#btnUpdate").show();
+
+
+            }
+        })
+
+
+    }
+
+
+    $("#updateUnit").click(function UpdateData() {
+
+        // var rowStatus = 2;
+
+        if ($("#unitName").val() != $("#unitName").val().toUpperCase()) {
+
+            toastr.error("Enter Your Unit Name Uppercase");
+            return false;
+        }
+        var ProjectList = $('#ProjectList ').val();
+        var unitId = $('#unitId ').val();
+        var unitName = $('#unitName').val();
+        var address = $('#address ').val();
+        var space = $('#space ').val();
+        var spaceUnit = $('#spaceUnit ').val();
+        var unitType = $('#unitType').val();
+        var remarks = $('#remarks').val();
+        var activeStatus = $('#active_status').val();
+
+
+
+        if (unitId == '') {
+            alert('Unit Id  field is empty !!');
+            return false;
+        }
+        else if (unitName == '') {
+            alert('Description field is empty!!');
+            return false;
+        }
+        else {
+            //ajax passing data to controller
+            $.ajax({
+                url: '/AssetCategory/updateUnit',
+                type: 'POST',
+                dataType: "json",
+                traditional: true,
+                success: function (response) {
+                    //alert("Result" + response);
+                    if (response != null) {
+
+
+                        toastr.success(response, 'Unit', {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": true,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        });
+                        $("#unitId").val
+                        $("#ProjectList").val("");
+                        $("#unitName").val("");
+                        $("#address").val("");
+                        $("#space").val("");
+                        $("#projectType").val("");
+                        $("#address").val("");
+                        // $("#active_status").val(-1);
+                        $('.addnew').show();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 5000);
+                        // $('#datatable').load(document.URL + ' #datatable');
+
+                    }
+
+                },
+                data: {
+                    unitId: unitId,
+                    ProjectList: ProjectList,
+                    unitName: unitName,
+                    address: address,
+                    space: space,
+                    spaceUnit: spaceUnit,
+                    unitType: unitType,
+                    remarks: remarks,
+                    activeStatus: activeStatus
+
+                },
+                //success: function (response) {
+
+                //    if (response == 'Success') {
+                //        location.reload();
+                //        //getData();
+                //    }
+                //},
+                error: function () {
+                    alert("error");
+                }
+            });
+        }
+
+    });
+
+    //    function readURL(input) {
+    //    if (input.files && input.files[0]) {
+    //        var reader = new FileReader();
+
+    //        reader.onload = function (e) {
+    //            $('#uploadImage').attr('src', e.target.result);
+    //        }
+
+    //        reader.readAsDataURL(input.files[0]);
+    //    }
+    //}
+
+    //$("#inputFile").change(function () {
+    //    readURL(this);
+    //});
+
+    //   function readImageFile() {
+
+    //    if (this.files && this.files[0]) {
+
+    //        var FR = new FileReader();
+
+    //        FR.addEventListener("load", function (e) {
+    //            document.getElementById("uploadImage").src = e.target.result;
+    //            document.getElementById("uploadImage").value = e.target.result;
+    //            $('#upload_icon').hide();
+    //        });
+
+    //        FR.readAsDataURL(this.files[0]);
+    //    }
+    //}
+</script>

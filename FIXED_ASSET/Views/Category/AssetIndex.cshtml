@@ -1,0 +1,115 @@
+﻿<link href="~/Content/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<script src="~/Content/js/jquery.dataTables.min.js"></script>
+<script src="~/Content/js/dataTables.bootstrap.min.js"></script>
+
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">List All Asset</h3>
+        @*<div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool show-form text-info bg-blue-gradient"><i class="fa fa-plus"></i>Add New</button>
+        </div>*@
+    </div>
+    <div class="col-md-12">
+        <div class="box-body table-responsive no-padding">
+            <table id="Assetdatatable" class="table table-bordered table-striped compact hover" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        @*<th>SL</th>*@
+                        <th style="font-size:15px">Class</th>
+                        <th style="font-size:15px">Category</th>
+                        <th style="font-size:15px">Sub Category</th>
+                        <th style="font-size:15px">Manufacture</th>
+                        <th style="font-size:15px">Asset</th>
+                        <th style="font-size:15px">Model</th>
+                        @*<th style="font-size:15px">Supplier</th>*@
+                        <th style="font-size:15px">Quantity</th>
+                        <th style="font-size:15px">Actions</th>
+                    </tr>
+                </thead>
+                <!--
+                  <tbody>
+
+                              }
+                          }
+                          else
+                          {
+
+                          }
+                      }
+
+                  </tbody> -->
+
+            </table>
+
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <div class="box-footer">
+        Footer
+    </div>
+    <!-- /.box-footer-->
+</div>
+<script>
+    $(document).ready(function () {
+        getAssetData();
+
+    });
+    function getAssetData() {
+
+        $('#Assetdatatable').DataTable({
+            "searching": true,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "language":
+            {
+                "processing": "<div class='overlay custom-loader-background'><i class='fa fa-cog fa-spin custom-loader-color'></i></div>"
+            },
+            "processing": true,
+            "ajax": {
+                "url": "/AssetCategory/AssetGridList",
+                "type": "GET",
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "CLASS_NAME", "autoWidth": true },
+                { "data": "CATEGORY_NAME", "autoWidth": true },
+                { "data": "SEGMENT_NAME", "autoWidth": true },
+                { "data": "MANUFACTURE_NAME", "autoWidth": true },
+                { "data": "MAIN_ASSET", "autoWidth": true },
+                { "data": "MODEL_NAME", "autoWidth": true },
+               // { "data": "SUPPLIER_NAME", "autoWidth": true },
+                { "data": "TOTAL_ASSET", "autoWidth": true },
+                //{ "data": "LOGO_EXT","width": "50px", "autoWidth": true},
+                {
+                    "data": "ASSET_CODE", "width": "50px", "render": function (data) {
+                        return '<button type="button" class="btn btn-primary" onclick="getAssetChild(' + data + ')"><i class="glyphicon glyphicon-eye-open"></button>';
+                        // return '<div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu"><li><button type="button" class="btn btn-primary" onclick="getbyID(' + data + ')">DETAIL</button></li><li><button type="button" class="btn btn-info" onclick="getOldCategory(' + data + ')"> OLD CATEGORY</button></li><li><button type="button" class="btn btn-info" onclick="getbyInventoryInsert(' + data + ')">INVENTORY INSERT</button></li><li><button type="button" class="btn btn-warning" onclick="getbyInventoryView(' + data+')">INVENTORY VIEW</button></li></ul></div>';
+                    }
+                }
+            ]
+        });
+       
+    }
+
+    function getAssetChild(assetCode) {
+             $.ajax({
+            type: "POST",
+            url: "/AssetCategory/viewAssetDetails",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                //  obj: asd
+                assetCode: assetCode
+
+            }),
+            success: function (response) {
+                 window.location.href = '/AssetCategory/AssetChildIndex';
+               //window.location.href = ("~/Views/Category/AssetChildIndex.cshtml");
+
+            }
+        })
+
+    }
+</script>

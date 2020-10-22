@@ -1,0 +1,476 @@
+﻿@using System;
+@using System.Collections.Generic;
+@using System.Linq;
+@using System.Web;
+@using System.Web.Mvc;
+@using System.Web.UI;
+@using System.Globalization
+@using System.Text
+@using POSX.Controllers
+@using System.Data;
+@using POSX.DAL;
+@using POSX.Utilities;
+
+@{
+
+    UserDAL _UserDAL = new UserDAL();
+    string site_lan = "en";
+    HttpCookie cookie = HttpContext.Current.Request.Cookies["Language"];
+    if (cookie != null)
+    {
+        site_lan = cookie.Value;
+    }
+    ViewBag.site_lan = site_lan;
+
+
+
+    if (Session[POSxSession.LoggedUser] == null)
+    {
+        Response.Redirect("/User/Login");
+        return;
+    }
+    else
+    {
+        DataTable dtLoggedUser = (DataTable)Session[POSxSession.LoggedUser];
+        if (dtLoggedUser.Rows.Count>0)
+        {
+            ViewBag.User_Name = dtLoggedUser.Rows[0]["Name"].ToString();
+
+        }
+
+    }
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="author" content="Mehedi Hasan | mehedi_aiub@hotmail.com | www.hasanmehedi.com" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>@POSX.Resource.Resource.Application_Name @ViewBag.Title</title>
+    <link href="../../Content/css/bootstrap.css" rel="stylesheet" type="text/css" />
+
+    <link rel="Shortcut Icon" href="../../images/favicon.ico" />
+    <!-- Font Awesome -->
+    <link href="../../Content/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">*@
+    <link href="../../Content/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- Ionicons -->
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">*@
+    <link href="../../Content/css/ionicons.min.css" rel="stylesheet" />
+    <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />
+
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../..//dist/css/AdminLTE.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+
+    <link rel="stylesheet" href="../..//dist/css/skins/_all-skins.min.css">
+    @*iCheck
+        <link rel="stylesheet" href="../..//plugins/iCheck/flat/blue.css">*@
+    <link rel="stylesheet" href="../../Content/css/animate.css">
+    @*<link href="../../Content/css/custom.css" rel="stylesheet" type="text/css" />*@
+    <link href="~/Content/toastr.css" rel="stylesheet" />
+    <!-- jQuery 3 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    <script src="~/dist/js/jquery.min.js"></script>
+    <!-- Angular -->
+    <script src="~/Scripts/angular.min.js"></script>
+    <script src="~/Scripts/angular-animate.min.js"></script>
+    <script src="~/Scripts/angular-touch.min.js"></script>
+    <script src="~/Scripts/angular-messages.js"></script>
+    <script href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/4.0.7/ui-grid.js"></script>
+    <script src="~/Scripts/ui-grid.js"></script>
+    <script src="~/Scripts/toastr.js"></script>
+    <script src="~/Scripts/Added/autoFitColumns.min.js"></script>
+
+    <link href="~/Content/css/bootstrap-table.css" rel="stylesheet" />
+    <script src="~/Content/js/bootstrap-table.min.js"></script>
+    <script src="~/Content/js/bootstrap-table-en-US.js"></script>
+
+
+
+
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
+    <div class="wrapper">
+        <header class="main-header">
+
+            <a href="~/Home" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><b>P.S-</b>x</span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><b>PoS-</b>x</span>
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <!-- Messages: style can be found in dropdown.less-->
+                        <li class="dropdown messages-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="Email">
+                                <i class="fa fa-envelope-o"></i>
+                                <span class="label label-success" id="labelTotalEmail"><span id="TotalEmail"></span></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="header">You have <span id="TotalEmailheader"></span> messages</li>
+                                <li>
+                                    <ul class="menu" id="EmailMenu"></ul>
+                                    <!-- inner menu: contains the actual data -->
+                                    @*<ul class="menu" id="EmailMenu">
+                                            <li>
+
+                                                <a href="#">
+                                                    <div class="pull-left">
+                                                        <img src="~/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image" />
+                                                    </div>
+                                                    <h4>
+                                                        Support Team
+                                                        <small><i class="fa fa-clock-o"></i> 5 mins</small>
+                                                    </h4>
+                                                    <p>Why not buy a new awesome theme?</p>
+                                                </a>
+                                            </li>
+
+                                        </ul>*@
+                                </li>
+
+                                <li class="footer"><a href="/Home/All_Email">View all Email</a></li>
+                            </ul>
+                        </li>
+                        <!-- Notifications: style can be found in dropdown.less -->
+                        <li class="dropdown notifications-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="Notification">
+                                <i class="fa fa-bell-o"></i>
+                                <span class="label label-warning" id="labelTotalNotification"><span id="TotalNotification"></span></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="header">You have <span id="TotalNotificationheader"></span> notifications</li>
+                                <li>
+                                    <!-- inner menu: contains the actual data -->
+                                    <ul class="menu" id="NotificationMenu"></ul>
+                                </li>
+                                <li class="footer"><a href="/Home/All_Notification">View all</a></li>
+                            </ul>
+                        </li>
+                        <!-- Tasks: style can be found in dropdown.less -->
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="~/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                                <span class="hidden-xs">@ViewBag.User_Name.ToUpper() @*@ViewBag.USER.USER_NAME.ToString().ToUpper()*@  @*@ViewBag.USER_NAME.ToString().ToUpper()*@</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    @*<img src="~/Images/ASD_LOGO.png" class="img-circle" alt="User Image">*@
+                                    <img src="~/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                    <p>
+                                       @ViewBag.User_Name.ToUpper() @*@ViewBag.USER.USER_NAME.ToString().ToUpper()*@
+                                        @*<small>Last LogIn Time -  @ViewBag.LastLoginTime </small>*@
+                                    </p>
+                                </li>
+                                <!-- Menu Body -->
+                                <li class="user-body">
+                                    <div class="row">
+                                        @*<div class="col-xs-4 text-center">
+                                                <a href="#">Followers</a>
+                                            </div>
+                                            <div class="col-xs-4 text-center">
+                                                <a href="#">Sales</a>
+                                            </div>
+                                            <div class="col-xs-4 text-center">
+                                                <a href="#">Friends</a>
+                                            </div>*@
+                                    </div>
+                                    <!-- /.row -->
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="#" class="btn bg-purple btn-flat margin">Profile</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <input type="button" class="btn bg-maroon btn-flat margin" value="Sign out" onclick="location.href='@Url.Action("LogOut", "User")'" />
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Control Sidebar Toggle Button -->
+                        @*<li>
+                                <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                            </li>*@
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <!-- Sidebar user panel -->
+                <div class="user-panel">
+                    <div class="pull-left image">
+                        <img src="~/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                    </div>
+                    <div class="pull-left info">
+                        <p>@*@ViewBag.USER.USER_NAME.ToString().ToUpper()*@ </p>
+                        <a href="#"><i class="fa fa-circle text-danger wow pulse infinite"></i> Online</a>
+                    </div>
+                </div>
+                <!-- search form -->
+                <form action="#" method="get" class="sidebar-form">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="Search...">
+                        <span class="input-group-btn">
+                            <button type="submit" name="search" id="search-btn" class="btn btn-flat">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+                @functions
+{
+                    readonly StringBuilder _subMenu = new StringBuilder();
+                    private int _ParentCount, _childCount;
+
+                    UserDAL _UserDAL = new UserDAL();
+
+
+                    private string GetMenuItems(int parentId)
+                    {
+
+                        DataTable _LoggedUser = (DataTable)Session[POSxSession.LoggedUser];
+                        if (_LoggedUser.Rows.Count > 0)
+                        {
+                            //UserMenuDetails
+
+                            string _UserID = _LoggedUser.Rows[0]["emp_id"].ToString();
+                            string _Device_ID = POSX.Controllers.BaseController._Device_ID;
+                            string _OutLetRegNo = POSX.Controllers.BaseController._OutLetRegNo;
+
+                            DataTable _MenueTable = _UserDAL.UserMenuDetails(_UserID, _Device_ID, _OutLetRegNo);
+
+                            DataRow[] foundRows, foundRows2;
+                            string strExpr = "PARENT_ID =" + parentId;
+
+                            //_childCount = dbContext.t_Menu.Count(m => m.MENU_PARENT_ID == obj.MENU_ID);
+                            foundRows = _MenueTable.Select(strExpr, "");
+                            // _MenueTable.RowFilter = "ProductID = 35";
+                            _ParentCount = foundRows.Count();
+
+
+                            if (foundRows.Length > 0)
+                            {
+                                for (int i = 0; i < foundRows.Length; i++)
+                                {
+                                    int ME_ID = Convert.ToInt32(foundRows[i]["ME_ID"].ToString());
+
+                                    string strExpr2 = "PARENT_ID =" + ME_ID;
+                                    foundRows2 = _MenueTable.Select(strExpr2, "");
+                                    _childCount = foundRows2.Count();
+
+                                    if (_childCount > 0)
+                                    {
+                                        _subMenu.Append("<li class='treeview'><a href='#'><i class='" + foundRows[i]["GLYPHICON"].ToString() + "'></i> <span>"
+                                                      + foundRows[i]["MENAME"].ToString() + "</span><span class='pull-right-container'><i class='fa fa-angle-left pull-right'>"
+                                              + "</i></span></a><ul class='treeview-menu'>");
+
+
+                                        foreach (DataRow row in foundRows2)
+                                        {
+                                            _subMenu.Append("<li><a target='_self' href='..//" + row["CONTROLLER"].ToString()
+                                         + "/" + row["ACTION_URL"].ToString() + "'><i class='" + row["GLYPHICON"].ToString()
+                                         + "'></i><span>" + row["MENAME"].ToString() + "</span></a></li>");
+                                            
+                                        }
+
+
+
+
+
+                                        //GetMenuItems(ME_ID);
+
+
+                                        _subMenu.Append("</ul></li>");
+
+                                    }
+                                    else
+                                    {
+
+
+                                        _subMenu.Append("<li><a target='_self' href='..//" + foundRows[i]["CONTROLLER"].ToString()
+                                            + "/" +foundRows[i]["ACTION_URL"].ToString() + "'><i class='" + foundRows[i]["GLYPHICON"].ToString()
+                                            + "'></i><span>" + foundRows[i]["MENAME"].ToString() + "</span></a></li>");
+                                    }
+                                }
+                            }
+
+                        }
+
+
+                        // DataTable _MenueTable = (DataTable)Session[POSxSession.LoggedUser];
+
+                        return _subMenu.ToString();
+                    }
+
+                    private StringBuilder LoadDynamicMenu()
+                    {
+                        var sbMenu = new StringBuilder();
+                        sbMenu.Append(" <ul class='sidebar-menu'> <li class='header'>MAIN NAVIGATION</li>");
+
+                        string childItems = GetMenuItems(0);
+                        sbMenu.Append(childItems);
+                        sbMenu.Append(" </ul>");
+                        return sbMenu;
+
+                    }
+
+                }
+                @Html.Raw(LoadDynamicMenu())
+
+
+                @*<ul class="sidebar-menu">
+                                       <li class="header">MAIN NAVIGATION</li>
+                                     <li>
+                                         <a href = "~/Home" >
+                                             < i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                                         </a>
+                                     </li>
+                                     <li>
+                                         <script>
+
+                                             function CloseWindow()
+                        {
+                            winPopUp('/Sales/Index');
+
+                            window.close();
+                        }
+
+                                         </script>
+                                         <a href = "#" onclick="CloseWindow()">
+
+                        <i class="fa fa-dashboard"></i> <span>Sales</span>
+                    </a>
+
+                                     </li>
+                                     <li>
+                                         <a href = "~/Organization" >
+                                             < i class="fa fa-dashboard"></i> <span>Organization</span>
+                                         </a>
+                                     </li>
+                                     <li>
+                                         <a href = "~/Company" >
+                                             < i class="fa fa-dashboard"></i> <span>Company</span>
+                                         </a>
+                                     </li>
+                                     <li>
+                                         <a href = "~/BusinessUnit" >
+                                             < i class="fa fa-dashboard"></i> <span>Business Unit</span>
+                                         </a>
+                                     </li>
+                                     <li>
+                                         <a href = "~/Company/Designation" >
+
+
+                                              < i class="fa fa-dashboard"></i> <span>Designation</span>
+                                         </a>
+                                     </li>
+                                     <li>
+                                         <a href = "~/Company/SalesForce" >
+                                             < i class="fa fa-dashboard"></i> <span>Sales Force</span>
+                                         </a>
+                                     </li>
+                                     <li>
+                                         <a href = "~/Company/SalesForceAssign" >
+
+
+                                              < i class="fa fa-dashboard"></i> <span>Sales Force Assign</span>
+                                         </a>
+                                     </li>
+                                     </ul>*@
+
+
+
+
+
+
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+        <!-- Content Wrapper.Contains page content -->
+        <div class="content-wrapper">
+
+            <!-- Main content -->
+            @RenderBody()
+
+            @RenderSection("scripts", required: false)
+
+
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 1.0.1
+
+            </div>
+            <strong>
+                Powered By -
+            </strong>
+            <a href="http://www.lottobangladesh.com">
+            <img src="~/Images/lotto_LOGO.jpg" style="height: 17px;" /></a>
+        </footer>
+
+        <!-- Control Sidebar -->
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed
+             immediately after the control sidebar -->
+        @*<a id = "back-to-top" href="#" class="back-to-top" role="button" title="Click to return on the top page" data-toggle="tooltip" data-placement="left">
+                <span class="glyphicon glyphicon-chevron-up"></span>
+            </a>*@
+
+    </div>
+    <!-- ./wrapper -->
+    <link href="~/Content/Site.css" rel="stylesheet" />
+
+    <script src="~/Scripts/bootstrap.min.js">
+    </script>
+    <!--AdminLTE App -->
+    <script src="../..//dist/js/app.min.js"></script>
+    <script src="~/Content/js/wow.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            new WOW().init();
+
+            $("#back-to-top").tooltip("show");
+
+        });
+        ;
+
+        function winPopUp(URL) {
+            day = new Date();
+            id = day.getTime();
+            str = 'addressbar=0,toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=0,screenX=0,screenY=0,top=0,left=0,maximize=0,'
+            str = str + 'height=' + screen.height + ', width=' + screen.width
+            eval('page' + id + '=window.open(URL, id,str )')
+        }
+    </script>
+    <style>
+        .main-footer {
+            padding: 7px;
+        }
+    </style>
+</body>
+
+</html>

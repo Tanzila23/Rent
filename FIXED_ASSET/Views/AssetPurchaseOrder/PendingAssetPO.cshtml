@@ -1,0 +1,538 @@
+﻿
+@{
+    ViewBag.Title = "PendingAssetPO";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+
+
+
+
+<section id="PurchaseOrder">
+    <div class="form-horizontal">
+        <section class="content-header ">
+            <h1 style="font-weight: bolder;">
+                <span style="font-size: 20px;">Pending Orders <span id="invno" style="color: #428dbd;"></span></span>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Sales</a></li>
+            </ol>
+        </section>
+        <!-- Main content -->
+
+        <section class="content">
+
+            <!-- Main row -->
+            <div class="row">
+                <section class="col-lg-12">
+                    <div class="box box-primary wow fadeInLeft">
+                        <div class="box-body">
+
+
+
+
+                            <br />
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-2 col-md-offset-1">
+                                        <label for="Start_Date">From Date</label>
+                                        <div class="input-group date" data-provide="datepicker">
+                                            <input type="text" data-date-format="mm/dd/yyyy" id="Start_Date" class="form-control datepicker">
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-2 col-md-offset-1">
+                                        <label for="Rack">To Date</label>
+                                        <div class="input-group date" data-provide="datepicker">
+                                            <input type="text" data-date-format="mm/dd/yyyy" id="End_Date" class="form-control datepicker">
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col-md-2 col-md-offset-2">
+
+
+                                        <div class="form-group">
+                                            <label>Class Type:</label>
+                                            <div class="input-group input-group-sm ">
+
+                                                <select style="width: 180px;" type="text" class="form-control items" id="AssetClass"> </select>
+
+
+
+
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col-md-2" style="margin-top:24px;">
+                                        <button type="button" class="btn btn-primary" id="btnSearch" onclick="loadData()">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+
+                        </div>
+                    </div>
+
+
+                    <div class="box box-primary wow fadeInLeft" style="width:100%; ">
+                        <div class="col-lg-12">
+                            <table id="PendingSO" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:center">ORDER NO</th>
+                                        <th style="text-align:center">ORDER TYPE</th>
+                                        <th style="text-align:center">ORDER DATE</th>
+                                        <th style="text-align:center">VENDOR NAME</th>
+                                        @*<th style="text-align:center">EXPIRE DATE</th>*@
+                                        <th style="text-align:center">AMOUNT</th>
+
+
+                                        <th style="text-align:center">VIEW</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="PendingLIST"></tbody>
+                                <tfoot>
+                                    <tr></tr>
+                                </tfoot>
+                            </table>
+
+
+
+
+                        </div>
+                    </div>
+                    @*<div class="btn-group">
+                            <button id="btn_Addart" type="button" class="btn btn-info col-lg-offset-10" onclick="po_temp()">Submit</button>
+                            <button id="btn_Discard" type="button" class="btn btn-info col-lg-offset-10" onclick="PO_Discard()">Discard</button>
+                        </div>*@
+                </section>
+            </div>
+
+        </section>
+
+
+
+    </div>
+
+</section>
+
+
+
+
+
+
+<style>
+    .btn-app-primary {
+        color: #fff;
+        border: 1px solid transparent;
+        background-color: #3c8dbc;
+        border-color: #367fa9;
+    }
+
+    .btn-orange {
+        color: #fff;
+        background-color: #dd4b39;
+        border-color: #d73925;
+    }
+
+    #table_PayButton td {
+        width: 25%;
+    }
+
+
+
+    tr.highlight td {
+        color: black;
+        background-color: red;
+    }
+
+    /*////////////////////////////*/
+    .fixed_headers {
+        table-layout: fixed;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+
+    .fixed_header tbody {
+        display: block;
+        width: 100%;
+        overflow: auto;
+        height: 350px;
+    }
+
+    .fixed_headers th {
+        text-decoration: none;
+    }
+
+    .fixed_headers th,
+    .fixed_headers td {
+        padding: 5px;
+        text-align: left;
+    }
+
+        .fixed_headers td:nth-child(1),
+        .fixed_headers th:nth-child(1) {
+            min-width: 204px;
+        }
+
+        .fixed_headers td:nth-child(2),
+        .fixed_headers th:nth-child(2) {
+            min-width: 66px;
+        }
+
+        .fixed_headers td:nth-child(3),
+        .fixed_headers th:nth-child(3) {
+            width: 129px;
+        }
+
+        .fixed_headers td:nth-child(4),
+        .fixed_headers th:nth-child(4) {
+            width: 140px;
+        }
+
+        .fixed_headers td:nth-child(5),
+        .fixed_headers th:nth-child(5) {
+            width: 130px;
+        }
+
+        .fixed_headers td:nth-child(6),
+        .fixed_headers th:nth-child(6) {
+            width: 166px;
+        }
+
+        .fixed_headers td:nth-child(7),
+        .fixed_headers th:nth-child(7) {
+            width: 144px;
+        }
+
+        .fixed_headers td:nth-child(8),
+        .fixed_headers th:nth-child(8) {
+            width: 203px;
+        }
+
+    .fixed_headers thead {
+        background-color: #3c8dbc;
+        /*background-color: #333333;
+       color: #fdfdfd;*/
+        color: #fdfdfd;
+    }
+
+        .fixed_headers thead tr {
+            display: block;
+            position: relative;
+        }
+
+    .fixed_headers tbody {
+        display: block;
+        overflow: auto;
+        width: 100%;
+        /*height: 374px;*/
+    }
+
+        .fixed_headers tbody tr:nth-child(even) {
+            background-color: #cfddea;
+        }
+
+    .fixed_headers tr {
+        font-weight: bold;
+    }
+
+    /*////////////////////////////////////////*/
+</style>
+
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+<link href="/Content/css/select2.css" rel="stylesheet" />
+<script src="/Content/js/select2.full.min.js"></script>
+<link href="~/Content/css/daterangepicker.css" rel="stylesheet" />
+<script src="~/Content/js/moment.min.js"></script>
+<script src="~/Content/js/daterangepicker.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+
+        //$("body").removeClass("skin-blue sidebar-mini").addClass("skin-blue sidebar-mini sidebar-collapse");
+        $('#reservationtime').daterangepicker()
+        $('.items').select2();
+        //POList();
+
+        AssetClassList();
+
+        $.fn.datepicker.defaults.autoclose = true;
+        $("#Start_Date").datepicker("setDate", new Date());
+        $("#End_Date").datepicker("setDate", new Date());
+
+        $("#myTable").on('click', '#pickbtn', function () {
+            // get the current row
+            var currentRow = $(this).closest("tr");
+
+
+            var order_no = currentRow.find(".order").html();
+
+            var partnername = '' + currentRow.find(".Partnername").html() + '';
+
+            var suppid = currentRow.find(".Partnername").attr("id");
+            var expdt = currentRow.find(".Partner_name").html();
+            var netamt = currentRow.find(".Net_Amt").html();
+            var Order_Date = currentRow.find(".Order_Date").html();
+
+            // get current row 2nd table cell TD value
+            //alert(ordertype + "  "+order_no);
+
+
+            //  return;
+
+            $.ajax({
+                url: "/AssetPurchaseOrder/getPOno",
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(
+                    {
+                        _Order_no: order_no,
+                        _partnername: partnername,
+                        _suppid: suppid,
+                        _expdt: expdt,
+                        _netamt: netamt,
+                        _Order_Date: Order_Date
+                        //_ordertype: ordertype,
+                        //_partnername: partnername
+                    }
+                ),
+                success: function (result) {
+                    //console.log(result);
+
+                    //alert("result is  "+ result);
+
+
+                        document.location.href = '/AssetPurchaseOrder/AssetPurchaseOrderReceive';
+
+
+
+
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+
+
+        });
+
+    });
+
+    $(".js-example-tags").select2({
+        tags: true
+    });
+
+    $('.js-example-basic-single').select2({
+        placeholder: 'Select an option'
+    });
+
+
+    var date_input = $('input[name="date"]'); //our date input has the name "date"
+    var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+    date_input.datepicker({
+        format: 'mm/dd/yyyy',
+        container: container,
+        todayHighlight: true,
+        autoclose: true,
+    })
+
+
+
+
+
+    //function loadData() {
+
+    //    var startDate = $('#reservationtime').data('daterangepicker').startDate.format('MM/DD/YYYY');
+    //    var endDate = $('#reservationtime').data('daterangepicker').endDate.format('MM/DD/YYYY');
+    //    var ord = $('#OrderType').val();
+    //    $.ajax({
+    //        url: "/PurchaseOrder/LoadPOHeader",
+    //        type: "POST",
+    //        contentType: "application/json;charset=utf-8",
+    //        dataType: "json",
+    //        data: JSON.stringify(
+    //            {
+    //                _sdate: startDate,
+
+    //                _edate: endDate,
+
+    //                _ordtype: ord
+
+
+    //            }),
+    //        success: function (result) {
+    //            var html = '';
+    //            $.each(result, function (key, item) {
+    //                console.log(item.Order_No);
+    //                html += '<tr>';
+    //                html += '<td class="order">' + item.Order_No + '</td>';
+    //                html += '<td class="Remarks">' + item.Remarks + '</td>';
+    //                html += '<td class="Partnername" id="' + item.Supplier_Id + '">' + item.PartnerName + '  (' + item.Supplier_Id + ')' + '</td>';
+    //                html += '<td class="Order_Date">' + item.Order_Date + '</td>';
+
+    //                html += '<td class="Partner_name">' + item.Partner_name + '</td>';
+    //                html += '<td class="Net_Amt">' + item.Net_Amt + '</td>';
+
+    //                html += '<td><input type="button" class="btn btn-primary delete" id="pickbtn" value="Receive" /></td>';
+
+    //                html += '</tr>';
+    //            });
+    //            $('.tbody').html(html);
+    //        },
+    //        error: function (errormessage) {
+    //            alert(errormessage.responseText);
+    //        }
+    //    });
+    //}
+
+    function loadData() {
+        //var startDate = $('#reservationtime').data('daterangepicker').startDate.format('MM/DD/YYYY');
+        //var endDate = $('#reservationtime').data('daterangepicker').endDate.format('MM/DD/YYYY');
+
+        var startDate = $("#Start_Date").val();
+        var endDate = $("#End_Date").val();
+        var classtyp = $('#AssetClass').val();
+
+
+        $.ajax({
+            type: "POST",
+            //url: "/PURCHASEORDER/PendingBarcode_view",
+            url: "/AssetPurchaseOrder/LoadAPOHeader",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                _sdate: startDate,
+
+                    _edate: endDate,
+
+                    _classtype: classtyp
+
+
+
+            }),
+            success: function (response) {
+
+                if (response) {
+
+                    $('#PendingLIST').empty();
+                    //$('#PendingDaliveryOrder').empty();
+
+                    var result = "";
+
+                        //$('#PendingSO').hide();
+                        //$('#PendingDO').show();
+                        if (response.length > 0) {
+                            console.log(response)
+                            for (var i = 0; response.length > i; i++) {
+
+                                result += "<tr data-orderno=" + response[i].EXTERNALID + " >";
+                                result += "<td style='text-align: center;'>" + response[i].EXTERNALID + "</td><td style='text-align: center;'>" + response[i].DESCRIPTION + "</td><td style='text-align: center;'>" + response[i].TRN_DATE + "</td><td style='text-align: center;'>" + response[i].NAME + "</td><td style='text-align: center;'>" + response[i].GROSSAMOUNT + "</td><td style = 'text-align: center;'> <button id='TempDataDelete' onclick=PendingPO('" + response[i].REFID + "','" + response[i].CREATED_BY + "','" + response[i].DEVICE_ID + "')> <i class='fa fa-eye'></i></ button></td>";
+                                result += "</tr>";
+
+
+                            }
+                        }
+
+                        // $('#PendingDaliveryOrder').append(result);
+
+
+
+                    $('#PendingSO').append(result);
+                }
+            },
+            failure: function (response) {
+
+                e.preventDefault();
+            },
+            error: function (response) {
+
+                e.preventDefault();
+            }
+
+        });
+
+    };
+
+
+
+    function PendingPO(PORefid,POUser,PODevice) {
+        //alert(PODevice);
+
+        var vrefid = PORefid;
+        var vcreatedby = POUser;
+        var vdeviceid = PODevice;
+        //var vstorage = Storage;
+        $.ajax({
+            url: '/AssetPurchaseOrder/getPOno',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({
+                _refid: vrefid,
+                _createdby: vcreatedby,
+                _deviceid: vdeviceid
+
+
+            }),
+            dataType: "json",
+            success: function (response) {
+                window.location.href = '/AssetPurchaseOrder/AssetPurchaseOrderReceive';
+            }
+        });
+    }
+
+
+    function AssetClassList() {
+
+        $.ajax({
+            url: '/AssetPurchaseOrder/AssetClass',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    $('select#AssetClass').html('');
+                    var result = '';
+                    result += "<option value='0' title='0' selected>--Select--</option>";
+
+                    for (var i = 0; response.length > i; i++) {
+
+
+
+                        result += "<option id='" + response[i].CLASS_ID + "' title='" + response[i].CLASS_ID + "' value='" + response[i].CLASS_ID + "' data-shortname='" + response[i].SUPPLIER_ID + "'>" + response[i].DESCRIPTION + "--------" + response[i].CLASS_ID + "" + "</option>";
+
+
+
+
+                    }
+                    $('select#AssetClass').append(result);
+                }
+
+            }
+        });
+    }
+
+
+</script>
+
